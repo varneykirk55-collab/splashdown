@@ -31,7 +31,8 @@ namespace BikiniWipeout
         /// <summary>True from the moment of impact until control is handed back.</summary>
         public bool IsDown => Phase != KnockdownPhase.Normal;
 
-        public bool IsRagdolled => Phase == KnockdownPhase.Ragdoll;
+        public bool IsRagdolled => machine != null && machine.IsSimulating;
+        public bool RecoveryFaceUp { get; private set; }
         public bool IsImmune => machine != null && machine.IsImmune;
         public float TimeInPhase => machine != null ? machine.TimeInPhase : 0f;
         public KnockdownConfig Config => config;
@@ -98,13 +99,16 @@ namespace BikiniWipeout
             }
 
             // Re-read every frame so the config asset can be tuned live in Play mode.
-            machine.SetTimings(config.timings);
+            var timings = config.timings;
+            if (ragdoll != null) timings.RecoveryDuration = Mathf.Max(timings.RecoveryDuration, ragdoll.Config.poseBlendTime);
+            machine.SetTimings(timings);
 
             bool settled = ragdoll != null && ragdoll.IsActive
-                && ragdoll.RootBoneVelocity.sqrMagnitude <= config.settleSpeed * config.settleSpeed;
+                && ragdoll.IsSettled(config.settleSpeed, config.settleAngularSpeed)
+                && HasNearbySupport(ragdoll.RootBonePosition);
             machine.Tick(dt, settled);
 
-            if (machine.Phase == KnockdownPhase.Ragdoll && machine.WantsRecovery)
+            if (machine.IsSimulating && machine.WantsRecovery)
             {
                 TryRecover();
             }
@@ -145,8 +149,10 @@ namespace BikiniWipeout
                 return true;
             }
 
-            Vector3 launch = pushDirection * result.LaunchSpeed
-                + Vector3.up * (result.LaunchSpeed * config.upwardLaunchRatio);
+            Vector3 impactDirection = impact.Normal.sqrMagnitude > 0.0001f ? impact.Normal.normalized : pushDirection;
+            float horizontalWeight = Vector3.ProjectOnPlane(impactDirection, Vector3.up).magnitude;
+            Vector3 launch = impactDirection * result.LaunchSpeed
+                + Vector3.up * (result.LaunchSpeed * config.upwardLaunchRatio * horizontalWeight);
             if (!StartKnockdown(launch, impact.Point))
             {
                 return false;
@@ -201,7 +207,7 @@ namespace BikiniWipeout
 
         private bool StartKnockdown(Vector3 launchVelocity, Vector3 worldPoint)
         {
-            if (!machine.TryKnockdown())
+            if (ragdoll == null || ragdoll.Bodies.Count == 0 || (motor != null && motor.IsSuspended) || !machine.TryKnockdown())
             {
                 return false;
             }
@@ -228,10 +234,10 @@ namespace BikiniWipeout
         {
             Vector3 bodyPosition = ragdoll != null ? ragdoll.RootBonePosition : transform.position;
 
-            if (TryFindStandPoint(bodyPosition, out Vector3 standPoint))
+            if (HasNearbySupport(bodyPosition) && TryFindStandPoint(bodyPosition, out Vector3 standPoint))
             {
+                RecoveryFaceUp = ragdoll != null && ragdoll.RootBody != null && ragdoll.RootBody.transform.forward.y > 0f;
                 Quaternion facing = ComputeGetUpFacing();
-                machine.BeginRecovery();
 
                 Action relocate = () =>
                 {
@@ -255,6 +261,7 @@ namespace BikiniWipeout
                     relocate();
                 }
 
+                machine.BeginRecovery();
                 return;
             }
 
@@ -363,6 +370,13 @@ namespace BikiniWipeout
             return false;
         }
 
+        private bool HasNearbySupport(Vector3 position)
+        {
+            return Physics.Raycast(position + Vector3.up * 0.1f, Vector3.down, out RaycastHit hit,
+                config.recoverySupportDistance + 0.1f, GameLayers.SafeGroundMask, QueryTriggerInteraction.Ignore)
+                && hit.normal.y >= 0.7f;
+        }
+
         private bool IsStandable(Vector3 candidate, out Vector3 point)
         {
             point = candidate;
@@ -375,7 +389,7 @@ namespace BikiniWipeout
                 return false;
             }
 
-            if (hit.normal.y < 0.7f)
+            if (hit.normal.y < 0.7f || hit.point.y > candidate.y + 0.1f)
             {
                 return false;
             }
@@ -384,14 +398,19 @@ namespace BikiniWipeout
             float height = motor != null ? motor.CapsuleHeight : 1.7f;
             const float lift = 0.06f;
 
-            Vector3 bottom = hit.point + Vector3.up * (radius + lift);
-            Vector3 top = hit.point + Vector3.up * Mathf.Max(height - radius, radius + lift);
-            if (Physics.CheckCapsule(bottom, top, radius * 0.95f, GameLayers.SolidMask, QueryTriggerInteraction.Ignore))
+            Vector3 center = motor != null && motor.Controller != null
+                ? motor.Controller.center : Vector3.up * height * 0.5f;
+            center += hit.point + Vector3.up * lift;
+            float halfSegment = Mathf.Max(0f, height * 0.5f - radius);
+            Vector3 bottom = center - Vector3.up * halfSegment;
+            Vector3 top = center + Vector3.up * halfSegment;
+            float skin = motor != null && motor.Controller != null ? motor.Controller.skinWidth : 0.03f;
+            if (Physics.CheckCapsule(bottom, top, radius + skin, GameLayers.SolidMask, QueryTriggerInteraction.Ignore))
             {
                 return false;
             }
 
-            point = hit.point;
+            point = hit.point + Vector3.up * lift;
             return true;
         }
     }

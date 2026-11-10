@@ -1,3 +1,45 @@
+# Phase 2A — current verification record
+
+Date: 2026-11-10. Branch: `astra/phase-2a-ragdoll-camera`.
+
+| Check | Actual result |
+| --- | --- |
+| Engine-free NUnit tests | **93 passed, 0 failed, 0 skipped**, .NET SDK 8.0.408 / NUnit 3.14 |
+| Offline C# compilation against Unity 6000.6.6f1 | **PASS, 0 errors and 0 warnings**, all six project assembly variants |
+| Unity batch startup | **FAILED, exit 1**; licensing IPC code `0x80000000`, “Licensing initialization failed” |
+| Unity EditMode / generated-content tests | **NOT RUN**; added placeholder mass/joint coverage, compiled only |
+| Unity PlayMode tests | **NOT RUN**; 17 tests compiled, including four new Phase 2A tests |
+| Visual, physics, audio and local playtest | **NOT PERFORMED by this pass** |
+| Whitespace patch check | `git diff --check` passed |
+
+The user reports Foundation 1 was playtested locally. Historical authoring claims below refer to
+Claude's earlier cloud pass, not the user's local session or this branch.
+
+The editor archive was selectively extracted for managed references, packages, binary and shared
+libraries. This is not a complete licensed editor installation. The batch probe also reported
+missing compiler-prewarm files; its licensing client could not initialize. No scene/test run was
+reached. This does not establish whether a fully provisioned licensed cloud editor would work.
+
+Executed commands (tool paths depend on installation):
+
+```sh
+dotnet test Tools/CoreTests/CoreTests.csproj --logger 'trx;LogFileName=phase2a.trx'
+python3 Tools/offline_compile_check.py --unity <Editor/Data> --inputsystem <package/InputSystem>
+Unity -batchmode -nographics -quit -projectPath <Splashdown> -logFile <startup.log>
+git diff --check
+```
+
+New engine-free regressions cover premature recovery rejection, continuous settling and timeout
+preservation, resetting from settling/recovery, non-finite impacts and exact collision thresholds.
+Unity regressions cover all-bone linear/angular settling, camera focus through blend/water delay,
+close-wall camera collision, checkpoint orientation/control restoration from ragdoll, and placeholder
+joint limits. Existing natural-recovery coverage now requires `Recovered`, so rescue cannot count
+as successful recovery. Generated-content tests skip when scenes/prefabs have not been built.
+
+See [PHASE_2A.md](PHASE_2A.md) for defects, settings, assets still missing and exact local instructions.
+
+---
+
 # Foundation 1 — Test Results
 
 Date: 2026-11-10 · Target: Unity 6000.6.6f1 (revision d20c9ac777da)

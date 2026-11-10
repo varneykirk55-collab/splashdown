@@ -85,5 +85,23 @@ namespace BikiniWipeout.Tests
             Assert.LessOrEqual(defaults.MinLaunchSpeed, defaults.MaxLaunchSpeed);
             Assert.Greater(defaults.VelocityTransfer, 0f);
         }
+
+        [TestCase(float.PositiveInfinity, 1f)]
+        [TestCase(1f, float.PositiveInfinity)]
+        [TestCase(float.NegativeInfinity, 1f)]
+        public void NonFiniteImpact_IsIgnored(float speed, float multiplier)
+        {
+            Assert.AreEqual(ImpactOutcome.None, ImpactEvaluator.Evaluate(speed, multiplier, Thresholds).Outcome);
+        }
+
+        [TestCase(0.4999f, ImpactOutcome.None)]
+        [TestCase(0.5f, ImpactOutcome.Shove)]
+        [TestCase(2.4999f, ImpactOutcome.Shove)]
+        [TestCase(2.5f, ImpactOutcome.Knockdown)]
+        public void ExactThresholdBoundaries(float speed, ImpactOutcome expected)
+        {
+            Assert.AreEqual(expected, ImpactEvaluator.Evaluate(speed, 1f, Thresholds).Outcome);
+        }
+
     }
 }

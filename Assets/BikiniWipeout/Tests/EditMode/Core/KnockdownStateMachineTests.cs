@@ -118,7 +118,8 @@ namespace BikiniWipeout.Tests
             Assert.IsTrue(machine.TryKnockdown());
 
             CollectionAssert.AreEqual(
-                new[] { KnockdownPhase.Ragdoll, KnockdownPhase.Recovering, KnockdownPhase.Normal, KnockdownPhase.Ragdoll },
+                new[] { KnockdownPhase.Knockdown, KnockdownPhase.Ragdoll, KnockdownPhase.Settling,
+                    KnockdownPhase.Recovering, KnockdownPhase.Normal, KnockdownPhase.Knockdown, KnockdownPhase.Ragdoll },
                 phases);
         }
 
@@ -146,7 +147,7 @@ namespace BikiniWipeout.Tests
 
             Advance(machine, 0.3f, true);
             Assert.IsTrue(machine.WantsRecovery);
-            Assert.AreEqual(KnockdownPhase.Ragdoll, machine.Phase);
+            Assert.AreEqual(KnockdownPhase.Settling, machine.Phase);
         }
 
         [Test]
@@ -185,10 +186,54 @@ namespace BikiniWipeout.Tests
             Assert.AreEqual(0f, machine.TimeInPhase);
 
             Advance(machine, 2f, true);
-            Assert.AreEqual(2f, machine.TimeInPhase, 0.001f);
+            Assert.AreEqual(1.95f, machine.TimeInPhase, 0.001f);
 
             machine.BeginRecovery();
             Assert.AreEqual(0f, machine.TimeInPhase);
         }
+
+        [Test]
+        public void Recovery_CannotBypassMinimumTime()
+        {
+            var machine = new KnockdownStateMachine(Timings);
+            machine.TryKnockdown();
+            Assert.IsFalse(machine.BeginRecovery());
+            Advance(machine, 0.6f, true);
+            Assert.AreEqual(KnockdownPhase.Settling, machine.Phase);
+            Assert.IsFalse(machine.BeginRecovery());
+        }
+
+        [Test]
+        public void RenewedMotion_ReturnsToRagdoll_WithoutResettingTimeout()
+        {
+            var machine = new KnockdownStateMachine(Timings);
+            machine.TryKnockdown();
+            Advance(machine, 3.7f, false);
+            Advance(machine, 0.1f, true);
+            Assert.AreEqual(KnockdownPhase.Settling, machine.Phase);
+            Advance(machine, 0.3f, false);
+            Assert.AreEqual(KnockdownPhase.Ragdoll, machine.Phase);
+            Assert.IsTrue(machine.WantsRecovery);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Respawn_ClearsSettlingAndRecovery(bool recovering)
+        {
+            var machine = new KnockdownStateMachine(Timings);
+            machine.TryKnockdown();
+            Advance(machine, 1.5f, true);
+            if (recovering) machine.BeginRecovery();
+            machine.ForceReset(1.5f);
+            Assert.AreEqual(KnockdownPhase.Normal, machine.Phase);
+            Assert.IsFalse(machine.IsSimulating);
+            Assert.IsFalse(machine.WantsRecovery);
+            Assert.AreEqual(0f, machine.TimeInPhase);
+            Advance(machine, 1.6f, false);
+            Assert.IsTrue(machine.TryKnockdown());
+            Advance(machine, 0.2f, true);
+            Assert.IsFalse(machine.WantsRecovery, "Old settling time must not survive respawn.");
+        }
+
     }
 }

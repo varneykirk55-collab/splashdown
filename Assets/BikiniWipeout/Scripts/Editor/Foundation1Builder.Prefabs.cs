@@ -133,6 +133,8 @@ namespace BikiniWipeout.EditorTools
             Joint(rightUpperLeg, hipsBody, -20f, 70f, 30f, 10f);
             Joint(rightLowerLeg, rightUpperLegBody, -80f, 0f, 0f, 0f);
 
+            ApplyPhase2ARagdollSettings(root);
+
             // ---- Animation.
             var animationState = model.AddComponent<AnimationStateController>();
             animationState.animator = animator;
@@ -219,6 +221,52 @@ namespace BikiniWipeout.EditorTools
             var box = bone.gameObject.AddComponent<BoxCollider>();
             box.center = center;
             box.size = size;
+        }
+
+        [MenuItem("Bikini Wipeout/Apply Phase 2A Placeholder Physics")]
+        public static void UpgradePhase2APlaceholder()
+        {
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PlayerPrefabPath);
+            if (prefab == null || prefab.GetComponentInChildren<PlaceholderProceduralAnimator>(true) == null)
+            {
+                Debug.LogError("Generate the placeholder first. This command does not modify imported characters.");
+                return;
+            }
+            GameObject contents = PrefabUtility.LoadPrefabContents(PlayerPrefabPath);
+            try
+            {
+                ApplyPhase2ARagdollSettings(contents);
+                PrefabUtility.SaveAsPrefabAsset(contents, PlayerPrefabPath);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(contents); }
+            Debug.Log("Phase 2A placeholder masses and knee limits updated; scenes and configuration assets preserved.");
+        }
+
+        private static void ApplyPhase2ARagdollSettings(GameObject root)
+        {
+            // Preserve the 61 kg total while moving mass from distal limbs into the pelvis/torso.
+            foreach (Rigidbody body in root.GetComponentsInChildren<Rigidbody>(true))
+            {
+                switch (body.name)
+                {
+                    case "Hips": body.mass = 16f; break;
+                    case "Chest": body.mass = 18f; break;
+                    case "LeftUpperLeg": case "RightUpperLeg":
+                        body.mass = 5f;
+                        CharacterJoint hip = body.GetComponent<CharacterJoint>();
+                        if (hip != null) hip.highTwistLimit = new SoftJointLimit { limit = 90f };
+                        break;
+                    case "LeftUpperArm": case "RightUpperArm":
+                        CharacterJoint shoulder = body.GetComponent<CharacterJoint>();
+                        if (shoulder != null) shoulder.highTwistLimit = new SoftJointLimit { limit = 130f };
+                        break;
+                    case "LeftLowerLeg": case "RightLowerLeg":
+                        body.mass = 2f;
+                        CharacterJoint knee = body.GetComponent<CharacterJoint>();
+                        if (knee != null) knee.lowTwistLimit = new SoftJointLimit { limit = -130f };
+                        break;
+                }
+            }
         }
 
         private static Rigidbody Body(Transform bone, float mass)

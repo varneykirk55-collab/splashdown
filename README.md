@@ -1,4 +1,10 @@
-# Bikini Wipeout — Foundation 1
+# Splashdown — Foundation 1 + Phase 2A
+
+Phase 2A refines ragdoll recovery and camera tracking on a separate branch. See
+[the Phase 2A handoff](Docs/PHASE_2A.md) and [current test results](Docs/TEST_RESULTS.md).
+On an existing generated project, run **Bikini Wipeout > Apply Phase 2A Placeholder Physics**
+to update only the placeholder prefab; no course rebuild is required.
+
 
 Third-person, physics-based obstacle-course game-show prototype for Windows PC.
 Unity **6000.6.6f1**, Universal Render Pipeline, Input System, C#.
@@ -6,7 +12,7 @@ Unity **6000.6.6f1**, Universal Render Pipeline, Input System, C#.
 Foundation 1 is the first playable slice: run a short course, get knocked down by obstacles,
 ragdoll, recover, fall in the water, respawn at checkpoints, and finish with a recorded time.
 
-> **Verification status — read this first.** This project was authored in a cloud environment
+> **Historical Foundation 1 authoring status.** This project was authored in a cloud environment
 > with no Unity licence, so the editor was never launched. Every script was compiled against the
 > real Unity 6000.6.6f1 assemblies (0 errors, 0 warnings) and the engine-free gameplay logic
 > passes its unit tests, but **the game has not been run or playtested**. See

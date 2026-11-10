@@ -19,8 +19,10 @@ namespace BikiniWipeout
         [Header("Timing")]
         public KnockdownTimings timings = KnockdownTimings.Default;
 
-        [Tooltip("Hips slower than this (m/s) count as settled.")]
+        [Tooltip("Every bone must be slower than this (m/s) to count as settled.")]
         [Min(0f)] public float settleSpeed = 0.7f;
+        [Min(0f)] public float settleAngularSpeed = 1.5f;
+        [Min(0.1f)] public float recoverySupportDistance = 0.8f;
 
         [Tooltip("Knockdown immunity after a respawn.")]
         [Min(0f)] public float respawnImmunity = 1.5f;

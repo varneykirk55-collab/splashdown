@@ -41,6 +41,8 @@ namespace BikiniWipeout
         private Vector3 initialPosition;
         private Quaternion initialRotation;
 
+        public Vector3 RespawnFocus { get; private set; }
+
         public bool IsRespawning => guard != null && guard.IsRespawnPending;
 
         /// <summary>Raised when the character falls into a hazard (counts as a fall). Argument: world point.</summary>
@@ -109,6 +111,7 @@ namespace BikiniWipeout
                 return false;
             }
 
+            Vector3 lastFocus = character.FocusPosition;
             int activeIndex = checkpoints != null ? checkpoints.CurrentIndex : 0;
             int respawnIndex = guard.BeginRespawn(Time.timeAsDouble, activeIndex);
             if (respawnIndex < 0)
@@ -116,6 +119,7 @@ namespace BikiniWipeout
                 return false;
             }
 
+            RespawnFocus = lastFocus;
             // Freeze and hide the character where it went under.
             if (character.Knockdown != null)
             {
