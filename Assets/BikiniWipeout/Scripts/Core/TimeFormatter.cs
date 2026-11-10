@@ -13,8 +13,9 @@ namespace BikiniWipeout.Core
                 seconds = 0f;
             }
 
-            // Work in whole centiseconds so 59.999 rolls over to 1:00.00 instead of 0:60.00.
-            long totalCentis = (long)Math.Floor(seconds * 100.0 + 0.0001);
+            // Round to whole centiseconds first, so 59.999 rolls over to 1:00.00 instead of 0:60.00
+            // and float inputs such as 67.42f do not display as 1:07.41.
+            long totalCentis = (long)Math.Floor(seconds * 100.0 + 0.5);
             long minutes = totalCentis / 6000;
             long secs = totalCentis / 100 % 60;
             long centis = totalCentis % 100;
