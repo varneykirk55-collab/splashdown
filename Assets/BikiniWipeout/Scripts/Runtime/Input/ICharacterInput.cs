@@ -17,6 +17,15 @@ namespace BikiniWipeout
         /// <summary>True when <see cref="Look"/> is a pointer delta in pixels; false when it is a stick value (-1..1).</summary>
         bool LookIsPointerDelta { get; }
 
+        /// <summary>Camera zoom input. Positive = zoom in, negative = zoom out.</summary>
+        float Zoom { get; }
+
+        /// <summary>
+        /// True when <see cref="Zoom"/> is a mouse-wheel delta for this frame (raw platform units, see
+        /// <c>ZoomController.NormalizeScroll</c>); false when it is a held axis value in -1..1.
+        /// </summary>
+        bool ZoomIsScroll { get; }
+
         bool RunHeld { get; }
         bool JumpHeld { get; }
 

@@ -160,11 +160,22 @@ namespace BikiniWipeout.EditorTools
             foreach (string action in new[]
                      {
                          PlayerInputReader.MoveActionName, PlayerInputReader.LookActionName, PlayerInputReader.JumpActionName,
-                         PlayerInputReader.RunActionName, PlayerInputReader.PauseActionName
+                         PlayerInputReader.RunActionName, PlayerInputReader.PauseActionName, PlayerInputReader.ZoomActionName
                      })
             {
                 InputAction found = map.FindAction(action);
                 Check(report, found != null && found.bindings.Count > 0, $"Input action 'Player/{action}' has bindings");
+                if (action == PlayerInputReader.ZoomActionName && found != null)
+                {
+                    bool wheel = false, dpad = false;
+                    foreach (InputBinding binding in found.bindings)
+                    {
+                        wheel |= binding.path.Contains("scroll");
+                        dpad |= binding.path.Contains("dpad");
+                    }
+
+                    Check(report, wheel && dpad, "Zoom is bound to both the mouse wheel and the gamepad d-pad");
+                }
             }
         }
 

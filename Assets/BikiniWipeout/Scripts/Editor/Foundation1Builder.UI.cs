@@ -186,8 +186,9 @@ namespace BikiniWipeout.EditorTools
                 new Vector2(0f, 60f), new Vector2(900f, 300f));
             controller.messageText = UiText("Message", hud, string.Empty, 80, TextAnchor.MiddleCenter, Color.white, Center,
                 new Vector2(0f, 260f), new Vector2(1200f, 120f));
-            UiText("ControlsHint", hud, "WASD move    MOUSE look    SPACE jump    SHIFT run    ESC pause", 24,
-                TextAnchor.LowerLeft, new Color(1f, 1f, 1f, 0.85f), Vector2.zero, new Vector2(40f, 28f), new Vector2(1200f, 36f));
+            Text hudHint = UiText("ControlsHint", hud, ControlHints.DefaultKeyboardText, 24,
+                TextAnchor.LowerLeft, new Color(1f, 1f, 1f, 0.85f), Vector2.zero, new Vector2(40f, 28f), new Vector2(1700f, 36f));
+            hudHint.gameObject.AddComponent<ControlHints>().target = hudHint;
 
             // ---- Pause menu
             RectTransform pauseDim = UiStretch("PausePanel", root);
@@ -253,9 +254,10 @@ namespace BikiniWipeout.EditorTools
                 new Vector2(0f, 190f), new Vector2(1200f, 50f));
             BuildVolumeControls(root, new Vector2(0f, -220f), 460f);
 
-            UiText("ControlsHint", root, "WASD move    MOUSE look    SPACE jump    SHIFT run    ESC pause", 26,
+            Text menuHint = UiText("ControlsHint", root, ControlHints.DefaultKeyboardText, 26,
                 TextAnchor.MiddleCenter, new Color(0.15f, 0.2f, 0.3f, 1f), new Vector2(0.5f, 0f), new Vector2(0f, 60f),
-                new Vector2(1400f, 40f), false);
+                new Vector2(1800f, 40f), false);
+            menuHint.gameObject.AddComponent<ControlHints>().target = menuHint;
         }
     }
 }
