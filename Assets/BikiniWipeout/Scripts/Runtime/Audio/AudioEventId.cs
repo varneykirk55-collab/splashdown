@@ -28,7 +28,12 @@ namespace BikiniWipeout
 
         /// <summary>Looping crowd bed. Played by <see cref="ArenaAmbience"/>, not as a one-shot.</summary>
         ArenaAmbience = 16,
-        ConfettiPop = 17
+        ConfettiPop = 17,
+        UiBack = 18,
+        UiTransition = 19,
+        UiCourseSelect = 20,
+        UiCharacterConfirm = 21,
+        UiCourseComplete = 22
     }
 
     public enum MusicTrackId

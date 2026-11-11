@@ -337,14 +337,17 @@ namespace BikiniWipeout.EditorTools
             Check(report, File.Exists(Foundation1Builder.CourseScenePath), "Course scene exists");
 
             var enabled = new HashSet<string>();
+            string firstEnabled = null;
             foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
             {
                 if (scene.enabled)
                 {
                     enabled.Add(scene.path);
+                    if (firstEnabled == null) firstEnabled = scene.path;
                 }
             }
 
+            Check(report, firstEnabled == Foundation1Builder.MainMenuScenePath, "Main menu is the startup scene");
             Check(report, enabled.Contains(Foundation1Builder.MainMenuScenePath), "Main menu scene is in Build Settings");
             Check(report, enabled.Contains(Foundation1Builder.CourseScenePath), "Course scene is in Build Settings");
         }

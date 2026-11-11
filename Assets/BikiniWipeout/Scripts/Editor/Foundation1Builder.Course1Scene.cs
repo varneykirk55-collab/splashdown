@@ -99,14 +99,14 @@ namespace BikiniWipeout.EditorTools
                 Step("Course 1 prefabs", 0.35f, () => course1 = BuildCourse1Prefabs(assets, arena));
                 Step("Main menu link", 0.5f, PointMainMenuAtCourse1);
                 Step("Course 1 scene", 0.6f, () => BuildGauntletScene(assets, prefabs, arena, course1));
-                Step("Build settings", 0.95f, () => AddSceneToBuildSettings(GauntletScenePath));
+                Step("Build settings", 0.95f, RegisterScenes);
 
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
 
-                if (!Application.isBatchMode && File.Exists(GauntletScenePath))
+                if (!Application.isBatchMode && File.Exists(MainMenuScenePath))
                 {
-                    EditorSceneManager.OpenScene(GauntletScenePath, OpenSceneMode.Single);
+                    EditorSceneManager.OpenScene(MainMenuScenePath, OpenSceneMode.Single);
                 }
 
                 Debug.Log("[Splashdown] Course 1 is ready. Open '" + GauntletScenePath + "' and press Play.");

@@ -15,6 +15,7 @@ namespace BikiniWipeout
         [SerializeField] internal Text statsText;
         [SerializeField] internal Button restartButton;
         [SerializeField] internal Button mainMenuButton;
+        [SerializeField] internal Button courseSelectButton;
 
         public bool IsShowing => panel != null && panel.activeSelf;
 
@@ -27,6 +28,7 @@ namespace BikiniWipeout
 
             if (restartButton != null) restartButton.onClick.AddListener(OnRestart);
             if (mainMenuButton != null) mainMenuButton.onClick.AddListener(OnMainMenu);
+            if (courseSelectButton != null) courseSelectButton.onClick.AddListener(OnCourseSelect);
         }
 
         private void Start()
@@ -52,6 +54,7 @@ namespace BikiniWipeout
 
         private void OnFinished(CourseResult result)
         {
+            AudioManager.Play(AudioEventId.UiCourseComplete);
             if (timeText != null)
             {
                 timeText.text = "TIME  " + TimeFormatter.Format(result.TimeSeconds);
@@ -66,7 +69,7 @@ namespace BikiniWipeout
 
             if (statsText != null)
             {
-                statsText.text = "WIPEOUTS  " + result.Wipeouts + "     FALLS  " + result.Falls;
+                statsText.text = "CHECKPOINTS  " + (course.Checkpoints != null ? course.Checkpoints.CurrentIndex : 0) + " / " + (course.Checkpoints != null ? Mathf.Max(0, course.Checkpoints.Count - 1) : 0) + "    WIPEOUTS  " + result.Wipeouts + "    FALLS  " + result.Falls;
             }
 
             if (panel != null)
@@ -83,6 +86,12 @@ namespace BikiniWipeout
         private void OnRestart()
         {
             if (course != null) course.RestartCourse();
+        }
+
+        private void OnCourseSelect()
+        {
+            MainMenuController.OpenCourseSelectOnArrival();
+            if (course != null) course.ReturnToMainMenu();
         }
 
         private void OnMainMenu()

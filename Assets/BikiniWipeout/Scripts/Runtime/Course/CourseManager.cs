@@ -47,6 +47,7 @@ namespace BikiniWipeout
 
         private BestTimeRecord bestTime;
         private bool subscribed;
+        private bool sceneTransition;
 
         /// <summary>The course in the active scene, if any.</summary>
         public static CourseManager Current { get; private set; }
@@ -69,6 +70,7 @@ namespace BikiniWipeout
         private void Awake()
         {
             Current = this;
+            GraphicsSettingsController.ApplySaved();
             Time.timeScale = 1f;
             Session = new CourseSession(countdownSeconds);
             bestTime = new BestTimeRecord(new PlayerPrefsStore(), courseId);
@@ -140,7 +142,8 @@ namespace BikiniWipeout
             ICharacterInput input = player != null ? player.Input : null;
             if (input != null && input.PausePressedThisFrame)
             {
-                TogglePause();
+                PauseMenuController pauseMenu = Session.IsPaused ? FindFirstObjectByType<PauseMenuController>() : null;
+                if (pauseMenu == null || !pauseMenu.TryCloseSettings()) TogglePause();
             }
 
             // Scaled time: the session stands still while the game is paused (timeScale 0).
@@ -168,12 +171,16 @@ namespace BikiniWipeout
         /// <summary>Restarts the course from the beginning by reloading the scene.</summary>
         public void RestartCourse()
         {
+            if (sceneTransition) return;
+            sceneTransition = true;
             Time.timeScale = 1f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         public void ReturnToMainMenu()
         {
+            if (sceneTransition || !Application.CanStreamedLevelBeLoaded(SceneNames.MainMenu)) return;
+            sceneTransition = true;
             Time.timeScale = 1f;
             SceneManager.LoadScene(SceneNames.MainMenu);
         }
