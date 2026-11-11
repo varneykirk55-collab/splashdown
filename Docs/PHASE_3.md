@@ -138,7 +138,7 @@ recovery, a spin disc carrying the player, finish → results + confetti + cheer
 ## Remaining issues and risks
 
 **Unverified behaviour (most likely to need fixes on first run)**
-- The Course 1 generator (~1,500 lines of editor code) has never executed. Errors name the failing step.
+- The Course 1 generator (~1,750 lines of editor code) has never executed. Errors name the failing step.
 - Chevron arrow direction depends on Unity's cube UV orientation; if arrows point backwards, set the
   chevron materials' tiling Y to −3.
 - World-space signage uses legacy UI text; size and facing were set by calculation, not by eye.
