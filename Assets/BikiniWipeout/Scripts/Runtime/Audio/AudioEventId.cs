@@ -21,6 +21,19 @@ namespace BikiniWipeout
         CountdownTick = 11,
         CountdownGo = 12,
 
+        // Course 2 (Chaos Cove). Numbered from 40 so they cannot collide with ids other branches append after 17.
+        SpringBounce = 40,
+        WaterJet = 41,
+        BucketWarning = 42,
+        BucketDump = 43,
+        SlideWhoosh = 44,
+        BridgeCrack = 45,
+        BridgeCollapse = 46,
+        InflatableBoing = 47,
+
+        /// <summary>Looping water-park bed for Course 2. Played by <see cref="ArenaAmbience"/>, not as a one-shot.</summary>
+        TropicalAmbience = 48,
+
         // Phase 3 (arena and Course 1)
         BallBounce = 13,
         MechanismWhoosh = 14,

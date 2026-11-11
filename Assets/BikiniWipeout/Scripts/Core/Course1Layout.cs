@@ -20,7 +20,16 @@ namespace BikiniWipeout.Core
         Bridge,
         Rest,
         Checkpoint,
-        Finish
+        Finish,
+
+        // Course 2 (appended; existing values keep their numbers)
+        Seesaw,
+        BouncePad,
+        SlideRamp,
+        Ramp,
+        CollapsingBridge,
+        FloatingArena,
+        BigBall
     }
 
     /// <summary>One straight run of the course. Surfaces are positioned in the leg's local frame (x = sideways, z = forward).</summary>
@@ -76,6 +85,23 @@ namespace BikiniWipeout.Core
         public float MoveX, MoveZ;
 
         public bool IsMoving => MoveX != 0f || MoveZ != 0f;
+
+        // ---- Course 2 additions (all default to 0, so Course 1 data is unaffected)
+
+        /// <summary>Ramps and slides: the far end is this much LOWER than <see cref="Height"/> (negative = it climbs).</summary>
+        public float Drop;
+
+        /// <summary>Unstable surfaces (seesaws, the floating arena): how far the exit edge can dip under load.</summary>
+        public float Sag;
+
+        /// <summary>Bounce pads: upward launch speed (m/s). Zero for ordinary surfaces.</summary>
+        public float LaunchSpeed;
+
+        /// <summary>Big Balls: radius of the sphere itself. <see cref="Radius"/> is the landing cap on top.</summary>
+        public float BodyRadius;
+
+        /// <summary>Height at which the player leaves the surface in the worst case.</summary>
+        public float ExitHeight => Height - Drop - Sag;
     }
 
     /// <summary>

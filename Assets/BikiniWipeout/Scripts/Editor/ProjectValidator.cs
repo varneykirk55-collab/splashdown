@@ -77,6 +77,7 @@ namespace BikiniWipeout.EditorTools
             CheckPrefabs(report);
             CheckScenes(report);
             CheckCourse1(report);
+            CheckCourse2(report);
             return report;
         }
 
@@ -328,6 +329,66 @@ namespace BikiniWipeout.EditorTools
             {
                 Check(report, AssetDatabase.LoadAssetAtPath<Texture2D>(Foundation1Builder.ArenaTextureFolder + "/" + texture + ".png") != null,
                     "Arena texture " + texture);
+            }
+        }
+
+        /// <summary>Course 2 content. Skipped with a warning until Course 2 has been generated.</summary>
+        private static void CheckCourse2(Report report)
+        {
+            if (!Foundation1Builder.IsCourse2Built())
+            {
+                report.Warnings.Add("Course 2 has not been generated yet (Bikini Wipeout > Course 2 > Build Chaos Cove).");
+                return;
+            }
+
+            report.Passed.Add("Course 2 scene exists");
+            bool inBuild = false;
+            foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
+            {
+                inBuild |= scene.enabled && scene.path == Foundation1Builder.ChaosCoveScenePath;
+            }
+
+            Check(report, inBuild, "Course 2 scene is in Build Settings");
+
+            string folder = Foundation1Builder.Course2PrefabFolder + "/";
+            foreach (string name in new[]
+                     {
+                         "CoveMovingPlatform", "CoveSweeper", "CoveDoubleSweeper", "SpinningArms", "GiantArms", "SwingingBall",
+                         "WaterGeyser", "WaterSideJet", "TippingBucket", "SeesawWide", "SeesawNarrow", "BouncePad",
+                         "CollapsingBridgeSegment", "FloatingArena", "CheckpointGate", "BigBall", "PalmTree"
+                     })
+            {
+                Check(report, AssetDatabase.LoadAssetAtPath<GameObject>(folder + name + ".prefab") != null, "Course 2 prefab " + name);
+            }
+
+            var ball = AssetDatabase.LoadAssetAtPath<GameObject>(folder + "BigBall.prefab");
+            if (ball != null)
+            {
+                var slick = ball.GetComponentInChildren<SlipperySurface>(true);
+                Check(report, slick != null && slick.shape == SlipShape.Sphere && slick.surface is SphereCollider,
+                    "Big Ball has a spherical slippery surface");
+                Check(report, ball.GetComponentInChildren<Rigidbody>(true) == null, "Big Ball has no Rigidbody (it is fixed in place)");
+                Check(report, ball.GetComponentsInChildren<MonoBehaviour>(true).Length == 1, "Big Ball has no script that could move it");
+            }
+
+            var library = AssetDatabase.LoadAssetAtPath<AudioLibrary>(Foundation1Builder.AudioLibraryPath);
+            if (library != null)
+            {
+                foreach (AudioEventId id in new[]
+                         {
+                             AudioEventId.SpringBounce, AudioEventId.WaterJet, AudioEventId.BucketWarning, AudioEventId.BucketDump,
+                             AudioEventId.SlideWhoosh, AudioEventId.BridgeCrack, AudioEventId.BridgeCollapse,
+                             AudioEventId.InflatableBoing, AudioEventId.TropicalAmbience
+                         })
+                {
+                    Check(report, library.FindSfx(id) != null, "Audio library has an entry for " + id);
+                }
+            }
+
+            foreach (string texture in new[] { "Rock", "Sand", "Waterfall", "Stripes_PinkYellow", "Stripes_PinkWhite", "Deck_Blue" })
+            {
+                Check(report, AssetDatabase.LoadAssetAtPath<Texture2D>(Foundation1Builder.CoveTextureFolder + "/" + texture + ".png") != null,
+                    "Course 2 texture " + texture);
             }
         }
 

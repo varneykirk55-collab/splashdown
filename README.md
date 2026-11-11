@@ -26,6 +26,15 @@ or via **Bikini Wipeout → Course 1 → Build Splashdown Gauntlet (Missing Only
 Full details, the course map, test status and known risks: [Docs/PHASE_3.md](Docs/PHASE_3.md).
 Like everything else here it compiles and passes its logic tests but **has not yet been run in Unity**.
 
+## Phase 3 — Course 2: Chaos Cove
+
+A second, longer course (six sections, ten checkpoints, about 1.5× the length of Course 1) in a tropical
+water park, with all 13 approved obstacle types including the four stationary Big Balls. It generates
+itself on first open as `Assets/BikiniWipeout/Scenes/Course_ChaosCove.unity`, or via
+**Bikini Wipeout → Course 2 → Build Chaos Cove (Missing Only)**, and is registered with the main menu's course list.
+Details, the course map, tuning, test status and known risks: [Docs/PHASE_3_COURSE2.md](Docs/PHASE_3_COURSE2.md).
+It compiles and passes its logic tests but **has not yet been run or playtested in Unity**.
+
 ## Open and play
 
 1. Install **Unity 6000.6.6f1** (Unity Hub > Installs > Install Editor > Archive) with Windows build support.

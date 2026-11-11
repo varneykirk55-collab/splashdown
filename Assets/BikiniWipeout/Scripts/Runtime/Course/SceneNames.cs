@@ -8,5 +8,8 @@ namespace BikiniWipeout
 
         /// <summary>Course 1: The Splashdown Gauntlet (Phase 3).</summary>
         public const string CourseGauntlet = "Course_SplashdownGauntlet";
+
+        /// <summary>Course 2: Chaos Cove.</summary>
+        public const string CourseChaosCove = "Course_ChaosCove";
     }
 }

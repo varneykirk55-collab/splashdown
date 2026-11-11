@@ -49,6 +49,7 @@ namespace BikiniWipeout
         private float groundYaw;
         private Vector3 platformVelocity;
         private Transform cachedMainCamera;
+        private bool launched;
 
         /// <summary>Raised when a jump starts.</summary>
         public event Action Jumped;
@@ -179,12 +180,17 @@ namespace BikiniWipeout
                 {
                     gravity *= config.fallGravityMultiplier;
                 }
-                else if (!jumpHeld)
+                else if (!jumpHeld && !launched)
                 {
                     gravity *= config.lowJumpGravityMultiplier;
                 }
 
                 verticalVelocity = Mathf.Max(verticalVelocity + gravity * dt, -config.terminalFallSpeed);
+            }
+
+            if (launched && (grounded || verticalVelocity <= 0f))
+            {
+                launched = false;
             }
 
             float damping = grounded ? config.externalGroundDamping : config.externalAirDamping;
@@ -277,6 +283,27 @@ namespace BikiniWipeout
             externalVelocity = Vector3.ClampMagnitude(externalVelocity + velocity, 20f);
         }
 
+        /// <summary>
+        /// Throws the character upwards at <paramref name="upwardSpeed"/> m/s (bounce pads, geysers).
+        /// Horizontal motion and steering are untouched, and the rise is not cut short when the jump
+        /// button is not held, so the height reached depends only on the launch speed.
+        /// </summary>
+        public void Launch(float upwardSpeed)
+        {
+            if (suspended || upwardSpeed <= 0f || controller == null || !controller.enabled)
+            {
+                return;
+            }
+
+            verticalVelocity = Mathf.Max(verticalVelocity, upwardSpeed);
+            launched = true;
+            InheritPlatformMomentum();
+            DetachFromGround();
+            grounded = false;
+            coyoteTimer.Clear();
+            jumpBuffer.Clear();
+        }
+
         /// <summary>Moves the character instantly and clears all motion state.</summary>
         public void Teleport(Vector3 position, Quaternion rotation)
         {
@@ -306,6 +333,7 @@ namespace BikiniWipeout
             verticalVelocity = 0f;
             Velocity = Vector3.zero;
             grounded = false;
+            launched = false;
             coyoteTimer.Clear();
             jumpBuffer.Clear();
             DetachFromGround();
