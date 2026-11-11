@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: 183b7d2787854ffc998b94c4df6a66e2
+ModelImporter:
+  serializedVersion: 24600
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: charD_starsstripes_body_mat
+    second: {fileID: 2100000, guid: c39960161c8d4536b4398268919b803b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: charD_starsstripes_hands_mat
+    second: {fileID: 2100000, guid: eb95b3615f9c48de8f7e0a22ce161abd, type: 2}
+  materials:
+    materialImportMode: 1
+  meshes:
+    globalScale: 1
+    useFileUnits: 1
+    importCameras: 0
+    importLights: 0
+    importBlendShapes: 0
+    optimizeGameObjects: 0
+  importAnimation: 0
+  animationType: 3
+  avatarSetup: 1
