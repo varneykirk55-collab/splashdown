@@ -28,7 +28,20 @@ namespace BikiniWipeout
 
         /// <summary>Looping crowd bed. Played by <see cref="ArenaAmbience"/>, not as a one-shot.</summary>
         ArenaAmbience = 16,
-        ConfettiPop = 17
+        ConfettiPop = 17,
+
+        // Course 2 (Chaos Cove)
+        SpringBounce = 18,
+        WaterJet = 19,
+        BucketWarning = 20,
+        BucketDump = 21,
+        SlideWhoosh = 22,
+        BridgeCrack = 23,
+        BridgeCollapse = 24,
+        InflatableBoing = 25,
+
+        /// <summary>Looping water-park bed for Course 2. Played by <see cref="ArenaAmbience"/>, not as a one-shot.</summary>
+        TropicalAmbience = 26
     }
 
     public enum MusicTrackId
