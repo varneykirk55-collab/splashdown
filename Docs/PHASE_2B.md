@@ -168,7 +168,9 @@ brim, URP material look.
 
 1. Optional clips: a Mixamo **Landing**, plus a jog and a fast run to cut foot sliding. Drop them into
    `Animations/Cowgirl/`, add `ClipDef` entries in `CowgirlIntegration.cs`, re-run the menu command.
-2. **Decision pending (protected setting):** `PlayerMovementConfig.walkSpeed` is 3.2 m/s (jogging pace), so with a
-   keyboard the Female Walk is never shown. About 1.5 m/s would show the walk (brisk, no sliding) on the walk key.
+2. **Done (approved):** `PlayerMovementConfig.walkSpeed` was lowered from 3.2 to 1.5 m/s, so the walk key now plays the Female Walk
+   (brisk child ×1.23; stance foot slide 19%). Sprint is unchanged at 6.5 m/s. This setting is shared, so it also slows the placeholder
+   and the original course. `CoursePlayTests.Player_Walks_Runs_AndCameraFollows` now takes its walk-distance bound from the config.
+   Re-test: EditMode 106/106, PlayMode 22/25 (the same 3 earlier failures). Course timing still needs a playtest.
 3. Decide whether `Course_Foundation1` should use Player_Cowgirl by default. Today only the copy scene does.
 4. Consider the same Any State recovery fix for the placeholder controller.

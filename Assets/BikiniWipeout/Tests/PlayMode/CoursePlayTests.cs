@@ -170,7 +170,8 @@ namespace BikiniWipeout.Tests
             input.Move = new Vector2(0f, 1f);
             yield return new WaitForSeconds(1f);
             float walked = player.transform.position.z - start.z;
-            Assert.Greater(walked, 1.5f, "Should walk forward (camera-relative +Z).");
+            // Bound follows the configured walk speed (1 s minus the ~0.05 s acceleration ramp).
+            Assert.Greater(walked, player.Motor.Config.walkSpeed * 0.75f, "Should walk forward (camera-relative +Z).");
             Assert.Less(walked, 4.5f, "Walking should be slower than running.");
 
             Vector3 mid = player.transform.position;

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using BikiniWipeout.Core;
 using NUnit.Framework;
 using UnityEngine;
@@ -329,14 +330,14 @@ namespace BikiniWipeout.Tests
         {
             yield return WaitForRunStart();
             float walkSpeed = player.Motor.Config.walkSpeed;
-            foreach (float speed in new[] { 1.3f, 1.5f, 1.8f, walkSpeed })
+            foreach (float speed in new[] { 1.3f, 1.5f, 1.8f, walkSpeed }.Where(s => s <= walkSpeed + 0.001f).Distinct())
             {
                 Motion m = default;
                 yield return MeasureMotion(Mathf.Clamp01(speed / walkSpeed), r => m = r);
                 Debug.Log($"[CowgirlWalk] target {speed:F1} m/s: " + m);
                 Assert.Less(m.varusMax, 6f, $"{speed:F1} m/s: knees bowing outward (bow-legged).");
                 Assert.Less(m.kneeYawAbs, 30f, $"{speed:F1} m/s: bent knees should point forward, not sideways.");
-                if (speed <= 1.5f)
+                if (speed <= 1.55f) // includes the walk key at walkSpeed 1.5
                 {
                     Assert.Greater(m.walkWeight, 0.9f, "At a walking pace the Female Walk clip should dominate.");
                     Assert.Greater(m.pelvisYaw, 3f, "Walk: pelvis should rotate with the stride (not locked).");
