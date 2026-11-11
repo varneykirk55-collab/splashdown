@@ -304,6 +304,22 @@ namespace BikiniWipeout
             jumpBuffer.Clear();
         }
 
+        /// <summary>
+        /// Re-anchors the character to the surface it stands on at its current position. Call after moving the
+        /// character directly through <see cref="Controller"/> (e.g. a sliding surface); otherwise the next frame
+        /// carries it back to the point stored before the move and the displacement is lost.
+        /// </summary>
+        public void RebaseGroundAnchor()
+        {
+            if (groundTransform == null)
+            {
+                return;
+            }
+
+            groundLocalPoint = groundTransform.InverseTransformPoint(transform.position);
+            groundYaw = groundTransform.eulerAngles.y;
+        }
+
         /// <summary>Moves the character instantly and clears all motion state.</summary>
         public void Teleport(Vector3 position, Quaternion rotation)
         {
