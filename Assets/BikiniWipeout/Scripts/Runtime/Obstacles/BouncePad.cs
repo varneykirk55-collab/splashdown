@@ -21,6 +21,10 @@ namespace BikiniWipeout
         [SerializeField, Min(0f)] internal float cooldown = 0.2f;
         [SerializeField] internal AudioEventId audioEvent = AudioEventId.SpringBounce;
 
+        [Tooltip("Bounciness given to the pad's colliders, so a ragdoll that lands on it is thrown back up too. 0 = off.")]
+        [SerializeField, Range(0f, 1f)] internal float ragdollBounciness = 0.85f;
+
+        private PhysicsMaterial runtimeMaterial;
         private Vector3 visualScale = Vector3.one;
         private float squash;
         private float nextTime;
@@ -39,6 +43,39 @@ namespace BikiniWipeout
             if (visual != null)
             {
                 visualScale = visual.localScale;
+            }
+        }
+
+        private void Start()
+        {
+            if (ragdollBounciness <= 0f)
+            {
+                return;
+            }
+
+            // Physics materials do not affect the CharacterController, only bodies such as ragdoll bones.
+            runtimeMaterial = new PhysicsMaterial("BouncePad (runtime)")
+            {
+                dynamicFriction = 0.3f,
+                staticFriction = 0.3f,
+                bounciness = ragdollBounciness,
+                bounceCombine = PhysicsMaterialCombine.Maximum
+            };
+
+            foreach (Collider solid in GetComponentsInChildren<Collider>())
+            {
+                if (!solid.isTrigger)
+                {
+                    solid.sharedMaterial = runtimeMaterial;
+                }
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (runtimeMaterial != null)
+            {
+                Destroy(runtimeMaterial);
             }
         }
 

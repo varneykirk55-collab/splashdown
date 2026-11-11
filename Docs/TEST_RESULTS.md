@@ -6,8 +6,9 @@ Date: 2026-11-11. Branch: `claude/splashdown-course-2-asv7gw`. See [PHASE_3_COUR
 | --- | --- |
 | Offline C# compilation against Unity 6000.6.6f1 | **PASS, 0 errors and 0 warnings**, all six project assembly variants |
 | Engine-free NUnit tests | **150 passed, 0 failed, 0 skipped** (.NET SDK 8.0.318, NUnit 3.14): 122 existing + 28 new |
+| Trial merge with `astra/phase-3b-integration` and `codex/terra-splashdown-ui-foundation` | **No conflicts**; merged tree compiles with 0 errors; 150 / 150 engine-free tests; `Tools/UiChecks/check_ui.py` passes |
 | Unity editor: generate Course 2, Validate Project | **NOT RUN** (no licensed editor in the authoring environment) |
-| Unity EditMode `Course2ContentTests` (2) and PlayMode `Course2PlayTests` (12) | **NOT RUN**; compiled only |
+| Unity EditMode `Course2ContentTests` (3) and PlayMode `Course2PlayTests` (12) | **NOT RUN**; compiled only |
 | Course 1 inside Unity after these changes | **NOT RUN**; engine-free Course 1 tests still pass |
 | Interactive playtest, visuals, physics, audio, performance | **NOT PERFORMED** |
 

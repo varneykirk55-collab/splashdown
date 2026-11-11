@@ -31,7 +31,7 @@ Like everything else here it compiles and passes its logic tests but **has not y
 A second, longer course (six sections, ten checkpoints, about 1.5× the length of Course 1) in a tropical
 water park, with all 13 approved obstacle types including the four stationary Big Balls. It generates
 itself on first open as `Assets/BikiniWipeout/Scenes/Course_ChaosCove.unity`, or via
-**Bikini Wipeout → Course 2 → Build Chaos Cove (Missing Only)**; the main menu gets a **COURSE 2** button.
+**Bikini Wipeout → Course 2 → Build Chaos Cove (Missing Only)**, and is registered with the main menu's course list.
 Details, the course map, tuning, test status and known risks: [Docs/PHASE_3_COURSE2.md](Docs/PHASE_3_COURSE2.md).
 It compiles and passes its logic tests but **has not yet been run or playtested in Unity**.
 

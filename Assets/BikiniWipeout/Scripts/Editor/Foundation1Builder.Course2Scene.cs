@@ -57,6 +57,29 @@ namespace BikiniWipeout.EditorTools
             OpenScene(ChaosCoveScenePath);
         }
 
+        /// <summary>
+        /// Re-registers Course 2 with the main menu. Needed only after the MainMenu scene has been rebuilt
+        /// (for example with Bikini Wipeout > UI > Rebuild Main Menu Scene), which resets its course list.
+        /// </summary>
+        [MenuItem("Bikini Wipeout/Course 2/Add Course 2 To Main Menu", priority = 73)]
+        public static void AddCourse2ToMainMenuMenu()
+        {
+            if (!ConfirmEditMode() || !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+            {
+                return;
+            }
+
+            if (!IsCourse2Built())
+            {
+                EditorUtility.DisplayDialog("Course 2", "Build Course 2 first: Bikini Wipeout > Course 2 > Build Chaos Cove.", "OK");
+                return;
+            }
+
+            AddCourse2ButtonToMainMenu();
+            AddSceneToBuildSettings(ChaosCoveScenePath);
+            Debug.Log("[Splashdown] Course 2 is registered with the main menu.");
+        }
+
         /// <summary>Command-line entry point. Exits with code 0 on success, 1 on failure.</summary>
         public static void BuildCourse2Batch()
         {
@@ -575,6 +598,17 @@ namespace BikiniWipeout.EditorTools
                         new Vector3(side * (surface.Width * 0.5f - 0.25f), 0.3f, 0f), sloped, 0.7f,
                         side < 0 ? assets.HotPink : assets.Yellow, GameLayers.Ground, true);
                     rail.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+                }
+
+                // Water feeding the slide at the top and foaming off the bottom lip (two small looping sprays).
+                ParticleSystem feed = WaterSpray("FeedSpray", root, new Vector3(0f, 0.25f, -sloped * 0.5f + 0.3f), Quaternion.identity,
+                    30f, 2.5f, 4.5f, 0.5f, 0.8f, 0.2f, 0.45f, 22f, surface.Width * 0.3f, 0.6f, 36, true, assets.Splash);
+                ParticleSystem lip = WaterSpray("LipSpray", root, new Vector3(0f, 0.2f, sloped * 0.5f - 0.2f), Quaternion.Euler(-35f, 0f, 0f),
+                    26f, 2f, 4f, 0.4f, 0.7f, 0.2f, 0.5f, 30f, surface.Width * 0.3f, 1.2f, 30, true, assets.Splash);
+                foreach (ParticleSystem spray in new[] { feed, lip })
+                {
+                    ParticleSystem.MainModule sprayMain = spray.main;
+                    sprayMain.playOnAwake = true;
                 }
 
                 var slick = deck.AddComponent<SlipperySurface>();

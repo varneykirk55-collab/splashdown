@@ -16,13 +16,15 @@ squares are tipping buckets, red discs are the Big Balls, hollow squares are whe
    in the course — the Big Balls in particular — is inside the character's jump envelope. The scene
    generator, the physics, the visuals and the audio have never executed. Course 2 is ready *for* a
    playtest; expect a first round of fixes and tuning when it first runs.
-2. **Your local character work is not in this repository.** The remote still holds only the Course 1
-   branch as it was pushed; the character integration and the fixes made during your playtests were not
-   available to inspect. Course 2 is therefore strictly additive, exactly like Course 1 was:
-   - it is a new scene, new prefabs (`Prefabs/Course2`), new materials (`Materials/Course2`);
-   - it uses **whatever player prefab your existing course scene uses**, and every obstacle talks to
-     the shared `PlayerCharacter` / `CharacterMotor` / `KnockdownController` interfaces, never to a model;
+2. **Course 2 is strictly additive, and merges cleanly with Astra's and Terra's branches.**
+   - It is a new scene, new prefabs (`Prefabs/Course2`), new materials (`Materials/Course2`).
+   - It uses **whatever player prefab the project's course scenes use** (after merging Astra's branch,
+     that is the cowgirl), and every obstacle talks to the shared `PlayerCharacter` / `CharacterMotor` /
+     `KnockdownController` interfaces, never to a model.
    - Course 1, the Foundation scenes, the player prefab and all config assets are not modified.
+   - A trial merge of this branch with `astra/phase-3b-integration` and
+     `codex/terra-splashdown-ui-foundation` had **no conflicts** and compiles with 0 errors. See
+     "Integration with Astra's and Terra's branches". Those branches were only read, never changed.
 3. **One existing gameplay file is edited:** `CharacterMotor.cs` gains an additive `Launch(float)`
    method (bounce pads and geysers need a way to throw the character upwards; there was none). It is
    30 lines, changes no existing behaviour, and is the only place a merge with local motor changes
@@ -36,12 +38,16 @@ surfaces, 31 placed hazards, 10 checkpoints, 6 sections.
 
 | Section | What it is | Obstacles (sheet no.) | Ends at |
 | --- | --- | --- | --- |
-| **A — Splash Entry** | Two sideways movers, a sweeper island, a diagonal mover. Every gap is clearable at walking speed | Moving platforms (02), rotating sweeper (01) | Checkpoint 1 |
+| **A — Splash Entry** | Two sideways movers, a sweeper island, a diagonal mover. The smallest gaps in the course (1.2–1.6 m) | Moving platforms (02), rotating sweeper (01) | Checkpoint 1 |
 | **B — Timing Terrace** | Bridge filled by two counter-rotating four-arm spinners, a rest pad, a narrow bridge under five swinging balls, checkpoint 2, a geyser walk, three stepping pads with a side jet across the middle one | Spinning arms (08), swinging balls (10), water jets (05) | Checkpoint 3 (corner) |
 | **C — Wobble Wharf** | Two seesaws, a bridge under three tipping buckets that dump in sequence, checkpoint 4, a seven-plank collapsing bridge, a forward mover | Seesaws (03), tipping buckets (06), collapsing bridge (09), moving platform (02) | Checkpoint 5 (corner) |
 | **D — Bounce and Slide** | Four bounce pads climbing 4 m to a canopied tower, a 13 m water slide down, straight into the reach of a giant double sweeper | Bounce pads (04), water slide ramp (07), rotating sweeper (01) | Checkpoint 6 |
 | **E — The Floating Arena** | Combo bridge (spinner + geyser + two swinging balls), checkpoint 7, an 18 m floating raft that leans under you with giant arms in the middle, two geysers on one rim lane and two bouncing balls on the other, then a mover and a bridge with two more swinging balls | Floating arena (11) combining 08, 05 and the Course 1 balls; 10; 02 | Checkpoint 8 (corner) |
 | **F — The Big Balls** | Forward mover, a deck swept by giant arms, a ramp with a bucket that washes you back down, checkpoint 9 on the ball deck, **four Big Balls**, landing pad, finish | Big Balls (13), spinning arms (08), tipping bucket (06), finish gate (12) | Finish arch, confetti, results |
+
+**Sprint is expected throughout**, as on Course 1 with the current character: the approved 1.5 m/s walk
+gives a walking jump of about 0.95 m, so even Section A's gaps need Sprint held. Every gap is sized
+against the *running* jump (6.5 m/s, 1.4 m high), which Astra's integration did not change.
 
 Recovery areas (rest pads or checkpoint platforms) separate every intense sequence. No two checkpoints
 are more than 70 m apart, and one sits directly in front of the Big Balls, so a missed jump costs seconds.
@@ -136,9 +142,10 @@ are course-independent, so later, longer courses can reuse them without touching
 
 ## Audio
 
-Nine new events in the central `AudioLibrary` (appended only if missing): `SpringBounce`, `WaterJet`,
-`BucketWarning`, `BucketDump`, `SlideWhoosh`, `BridgeCrack`, `BridgeCollapse`, `InflatableBoing` and
-the looping `TropicalAmbience`. Rotating machinery, impacts, splashes, checkpoints and the finish reuse
+Nine new events in the central `AudioLibrary` (appended only if missing, so the committed library and
+any tuned entries are kept): `SpringBounce`, `WaterJet`, `BucketWarning`, `BucketDump`, `SlideWhoosh`,
+`BridgeCrack`, `BridgeCollapse`, `InflatableBoing` and the looping `TropicalAmbience`. Their ids are
+40–48, in their own range, because Terra's UI branch uses 18–22 and the ids are serialized. Rotating machinery, impacts, splashes, checkpoints and the finish reuse
 the existing hooks. Each entry has a minimum interval so repeated triggers cannot stack up, and
 everything follows the existing SFX volume slider.
 
@@ -153,13 +160,44 @@ Replace them by assigning new clips in `Settings/AudioLibrary.asset`; no code ch
 | --- | --- |
 | `Runtime/Character/CharacterMotor.cs` | New `Launch(float upwardSpeed)` method and a private flag so a launch is not cut short by the short-hop rule. No existing behaviour changes |
 | `Core/Course1Layout.cs` | Seven `SurfaceKind` values appended; four fields added to `CourseSurface`, all defaulting to 0 |
-| `Runtime/Audio/AudioEventId.cs` | Nine ids appended (18–26) |
+| `Runtime/Audio/AudioEventId.cs` | Nine ids added (40–48), in their own block so they merge cleanly with other branches' additions |
 | `Runtime/Course/SceneNames.cs` | One constant |
 | `Editor/ProjectValidator.cs` | Course 2 checks |
 | `Tools/generate_placeholder_audio.py` | Nine sounds appended; all earlier clips are byte-identical |
-| Generated **MainMenu scene** | A `COURSE 2` button is added beside PLAY, once. PLAY still starts Course 1 |
+| Generated **MainMenu scene** | Course 2 is registered with the menu (see below). Nothing else in the scene changes |
 
-Camera, ragdoll, knockdown, animation, respawn and input code are unchanged.
+Camera, ragdoll, knockdown, animation, respawn, input and UI code are unchanged.
+
+## Integration with Astra's and Terra's branches
+
+Both branches appeared on the remote after the first Course 2 push. They were inspected and
+trial-merged in a scratch copy; nothing was pushed to them and no merge commit is on this branch.
+
+| Check on `course-2` + `astra/phase-3b-integration` + `codex/terra-splashdown-ui-foundation` | Result |
+| --- | --- |
+| `git merge` of both branches | **No conflicts** |
+| Compilation of the merged tree against Unity 6000.6.6f1 | **PASS**, 0 errors (1 deprecation warning in `CourseManager.cs`, from the UI branch) |
+| Engine-free tests on the merged tree | **150 / 150** |
+| Terra's `Tools/UiChecks/check_ui.py` on the merged tree | All checks pass |
+
+What was adjusted so that this holds:
+
+- **Audio ids.** The first Course 2 push used ids 18–26; Terra's branch uses 18–22 for UI sounds. The
+  ids are serialized in `AudioLibrary.asset`, so a collision would have silently swapped sounds. Course 2
+  now uses 40–48, and an EditMode test fails if any two events ever share an id.
+- **Main menu.** Terra's menu has a course registry with a reserved, disabled "COURSE 2" card. The
+  Course 2 generator now fills that entry (title `CHAOS COVE`, scene `Course_ChaosCove`, ready) instead
+  of adding its own button; the card then shows "READY TO PLAY". On a menu without the registry it
+  falls back to a plain COURSE 2 button beside PLAY. The registry is addressed by serialized property
+  name, so the same code compiles and works on either branch.
+  - Rebuilding the menu (**Bikini Wipeout → UI → Rebuild Main Menu Scene**) resets its course list.
+    Afterwards run **Bikini Wipeout → Course 2 → Add Course 2 To Main Menu**.
+- **Character.** Astra's `ResolvePlayerPrefab` change (prefer the cowgirl scene) is picked up
+  automatically by the Course 2 generator after the merge; no Course 2 code refers to a character.
+- **Build settings.** Course 2 appends its scene; MainMenu stays first, as the UI branch requires.
+
+Suggested order when integrating: merge Astra's branch, then Terra's, then this one (any order merges
+cleanly), open the project, let Course 2 generate, then run Validate Project and both test suites.
 
 ## Tests
 
@@ -167,10 +205,11 @@ Camera, ragdoll, knockdown, animation, respawn and input code are unchanged.
 | --- | --- |
 | Compilation of all 6 assemblies against Unity 6000.6.6f1 | **PASS**, 0 errors, 0 warnings |
 | Engine-free unit tests (NUnit, outside Unity) | **PASS 150 / 150** (122 existing + 28 new) |
+| Trial merge with Astra's and Terra's branches: conflicts, compile, engine-free tests, UI checks | **PASS** (see "Integration") |
 | Existing placeholder audio unchanged after regenerating | **PASS** (no existing `.wav` modified) |
 | Top-down map rendered from the layout data | Inspected: closed loop, six sections, hazards on their surfaces |
 | Opening the project / generating Course 2 in Unity | **NOT RUN** |
-| EditMode `Course2ContentTests` (2), PlayMode `Course2PlayTests` (12) | **NOT RUN** (compiled only) |
+| EditMode `Course2ContentTests` (3), PlayMode `Course2PlayTests` (12) | **NOT RUN** (compiled only) |
 | Course 1 regression in Unity | **NOT RUN**; its code is untouched apart from the additive edits above, and its 122 engine-free tests still pass |
 | Interactive playtest, visuals, physics feel, audio, frame rate | **NOT DONE** |
 
@@ -192,7 +231,12 @@ respawn; the bucket warning then knocking down; a geyser launch; seesaw tilt wit
 
 **Most likely to need attention on first run**
 
-- The Course 2 generator (about 1,750 lines of editor code) has never executed. If a step throws, the
+- **The Course 2 scene and prefabs are not in the repository.** They are produced by the generator the
+  first time the project opens in Unity (about a minute), exactly as Course 1 was before Astra generated
+  and committed it. Generating needs a licensed editor, which this environment does not have. Once it has
+  run cleanly on your machine, commit `Scenes/Course_ChaosCove.unity`, `Prefabs/Course2` and
+  `Materials/Course2` so the branch opens ready to play.
+- The Course 2 generator (about 1,900 lines of editor code) has never executed. If a step throws, the
   Console names the step; fix and re-run "Build Chaos Cove (Missing Only)".
 - **Big Ball feel is untuned.** Traction 0.12, bounce 0.6 and the 4.7 m spacing are calculated, not
   felt. If they are too hard, raise `Traction` towards 0.2 before touching the spacing.
@@ -214,9 +258,10 @@ respawn; the bucket warning then knocking down; a geyser launch; seesaw tilt wit
 - Real audio and a tropical music track (the course reuses the existing course loop).
 - Art: primitives throughout; rocks, palms, waterfalls and buckets would benefit most from real meshes.
 - Per-section tint on checkpoint arches; splash effects where jets and buckets land; a slide pose.
+- Section A is not walk-speed friendly with the 1.5 m/s walk (nor is Course 1's). If a true beginner
+  section is wanted, shrink Section A gaps in `Course2Layout.cs` to about 0.8 m.
 - Distance-based sleeping for obstacles far from the player; baked lighting or light probes.
-- A course-select screen (and "next course" on the results screen) instead of a second menu button.
-- A leaderboard id per course already exists (`chaoscove2`); the menu only shows Course 1's best time.
+- A leaderboard id per course already exists (`chaoscove2`); the menu only shows one best time.
 
 ## Launching Course 2 locally
 
@@ -236,7 +281,7 @@ gameplay file both sides may have edited is `CharacterMotor.cs`; keep both sets 
 3. Check the `Player` object in the Hierarchy is your integrated character. If it is the placeholder
    mannequin, replace it exactly as described for Course 1 in [PHASE_3.md](PHASE_3.md#launching-course-1-locally).
 4. Press **Play**. Scene: `Assets/BikiniWipeout/Scenes/Course_ChaosCove.unity`. From the main menu,
-   use the **COURSE 2** button.
+   choose **CHAOS COVE** on the course-select screen (UI branch merged) or the **COURSE 2** button.
 5. Run **Bikini Wipeout → Validate Project**, then the Test Runner (EditMode, then PlayMode).
 
 To regenerate after changing the layout or the generator: **Bikini Wipeout → Course 2 → Rebuild Chaos

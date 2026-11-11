@@ -43,6 +43,32 @@ namespace BikiniWipeout.Tests
             }
         }
 
+        /// <summary>
+        /// Audio event ids are serialized in the AudioLibrary asset, so two events must never share a number
+        /// (several branches append to this enum). Course 2 ids live in their own range for that reason.
+        /// </summary>
+        [Test]
+        public void AudioEventIds_AreUnique_AndCourse2IdsStayInTheirOwnRange()
+        {
+            var seen = new System.Collections.Generic.Dictionary<int, string>();
+            foreach (string name in System.Enum.GetNames(typeof(AudioEventId)))
+            {
+                int value = (int)System.Enum.Parse(typeof(AudioEventId), name);
+                Assert.IsFalse(seen.ContainsKey(value), name + " shares id " + value + " with " + (seen.ContainsKey(value) ? seen[value] : ""));
+                seen[value] = name;
+            }
+
+            foreach (AudioEventId id in new[]
+                     {
+                         AudioEventId.SpringBounce, AudioEventId.WaterJet, AudioEventId.BucketWarning, AudioEventId.BucketDump,
+                         AudioEventId.SlideWhoosh, AudioEventId.BridgeCrack, AudioEventId.BridgeCollapse,
+                         AudioEventId.InflatableBoing, AudioEventId.TropicalAmbience
+                     })
+            {
+                Assert.GreaterOrEqual((int)id, 40, id + " must stay in the Course 2 range (40+).");
+            }
+        }
+
         [Test]
         public void Course2Prefabs_AreBuiltOnTheSharedSystems()
         {

@@ -118,6 +118,7 @@ namespace BikiniWipeout.EditorTools
             }
 
             SlideTower(root, assets, cove);
+            FinishDressing(root, assets, arena, cove);
             Scenery(root, new Vector3(centerX, 0f, centerZ), arena);
             StartDressing(root, assets, arena);
             MarkStatic(root);
@@ -314,6 +315,50 @@ namespace BikiniWipeout.EditorTools
             sway.height = 0f;
             sway.swayDegrees = 7f;
             sway.period = 2.4f;
+        }
+
+        /// <summary>Inflatable towers and pennants around the finish platform, so the end of the course is visible from the Big Balls.</summary>
+        private static void FinishDressing(Transform parent, ContentAssets assets, ArenaAssets arena, CoveAssets cove)
+        {
+            CourseSurface finish = Course2Layout.Find("FinishPlatform");
+            if (finish == null)
+            {
+                return;
+            }
+
+            LegFrame frame = Frame2(finish.Leg);
+            var dressing = new GameObject("FinishDressing");
+            dressing.transform.SetParent(parent, false);
+            dressing.transform.SetPositionAndRotation(frame.Point(finish.X, finish.Height, finish.Z), frame.Rotation);
+            Transform root = dressing.transform;
+
+            float farEdge = finish.Length * 0.5f;
+            for (int side = -1; side <= 1; side += 2)
+            {
+                float x = side * (finish.Width * 0.5f + 2.2f);
+                Primitive(PrimitiveType.Cylinder, "Tower", root, new Vector3(x, 1.5f, farEdge - 1f), new Vector3(2.2f, 6f, 2.2f),
+                    cove.StripesPink, GameLayers.Default, false);
+                Primitive(PrimitiveType.Sphere, "TowerBall", root, new Vector3(x, 8.6f, farEdge - 1f), Vector3.one * 3f, arena.BallRed,
+                    GameLayers.Default, false);
+
+                for (int i = 0; i < 3; i++)
+                {
+                    float z = -farEdge + 2f + i * 4f;
+                    Primitive(PrimitiveType.Cylinder, "Pole", root, new Vector3(x - side * 1.6f, 2f, z), new Vector3(0.12f, 2f, 0.12f),
+                        assets.White, GameLayers.Default, false);
+                    GameObject pennant = Primitive(PrimitiveType.Cube, "Pennant", root, new Vector3(x - side * 1.6f, 3.6f, z + 0.6f),
+                        new Vector3(0.05f, 0.7f, 1.2f), i % 2 == 0 ? assets.HotPink : assets.Yellow, GameLayers.Default, false);
+                    var sway = pennant.AddComponent<Bobbing>();
+                    sway.height = 0f;
+                    sway.swayDegrees = 6f;
+                    sway.period = 2f + i * 0.3f;
+                    sway.phase = i * 0.3f + (side > 0 ? 0.5f : 0f);
+                }
+            }
+
+            // A back rail (solid) so a celebrating player does not run straight off the end.
+            CapsuleBar("Rail_End", root, new Vector3(0f, 0.45f, farEdge - 0.35f), finish.Width, 0.7f, arena.PanelsYellow,
+                GameLayers.Ground, true);
         }
 
         /// <summary>Flags plain scenery for static batching. Anything animated by a script, a particle system or an LOD group is left alone.</summary>
