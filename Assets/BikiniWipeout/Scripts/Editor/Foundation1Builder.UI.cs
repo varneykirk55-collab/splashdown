@@ -167,6 +167,7 @@ namespace BikiniWipeout.EditorTools
             Transform root = canvas.transform;
 
             // ---- HUD
+            UiText("CourseName", root, course.courseId == GauntletCourseId ? "THE SPLASHDOWN GAUNTLET" : "FOUNDATION COURSE", 26, TextAnchor.UpperCenter, AccentColor, new Vector2(0.5f, 1f), new Vector2(0f, -155f), new Vector2(800f, 40f));
             RectTransform hud = UiStretch("HUD", root);
             var topCenter = new Vector2(0.5f, 1f);
             var topLeft = new Vector2(0f, 1f);
@@ -223,8 +224,9 @@ namespace BikiniWipeout.EditorTools
                 new Vector2(0f, 40f), new Vector2(860f, 60f));
             results.statsText = UiText("Stats", resultsBox, "WIPEOUTS  0     FALLS  0", 44, TextAnchor.MiddleCenter, Color.white,
                 Center, new Vector2(0f, -30f), new Vector2(860f, 60f));
-            results.restartButton = UiButton("RestartButton", resultsBox, "RESTART COURSE", new Vector2(0f, -150f), new Vector2(460f, 84f));
-            results.mainMenuButton = UiButton("MainMenuButton", resultsBox, "MAIN MENU", new Vector2(0f, -250f), new Vector2(460f, 84f));
+            results.restartButton = UiButton("RestartButton", resultsBox, "RESTART COURSE", new Vector2(0f, -135f), new Vector2(460f, 72f));
+            results.courseSelectButton = UiButton("CourseSelectButton", resultsBox, "COURSE SELECT", new Vector2(0f, -220f), new Vector2(460f, 72f));
+            results.mainMenuButton = UiButton("MainMenuButton", resultsBox, "MAIN MENU", new Vector2(0f, -305f), new Vector2(460f, 72f));
 
             // Panels start hidden; their controllers live on the always-active canvas.
             pauseDim.gameObject.SetActive(false);
@@ -235,29 +237,41 @@ namespace BikiniWipeout.EditorTools
         {
             GameObject canvas = CreateCanvas("UI");
             Transform root = canvas.transform;
-
-            RectTransform background = UiStretch("Background", root);
-            UiImage(background, new Color(0.07f, 0.62f, 0.80f, 1f), false);
-            RectTransform sand = UiRect("SandBand", root, Vector2.zero, new Vector2(1f, 0f), new Vector2(0.5f, 0f), Vector2.zero,
-                new Vector2(0f, 150f));
-            UiImage(sand, new Color(0.98f, 0.85f, 0.55f, 1f), false);
-
-            UiText("Title", root, "BIKINI WIPEOUT", 150, TextAnchor.MiddleCenter, AccentColor, Center, new Vector2(0f, 360f),
-                new Vector2(1600f, 180f));
-            UiText("Subtitle", root, "FOUNDATION 1 PROTOTYPE", 40, TextAnchor.MiddleCenter, Color.white, Center,
-                new Vector2(0f, 250f), new Vector2(1200f, 60f));
-
+            UiImage(UiStretch("Ocean", root), new Color(0.02f, 0.55f, 0.73f), false);
             var menu = canvas.AddComponent<MainMenuController>();
-            menu.playButton = UiButton("PlayButton", root, "PLAY", new Vector2(0f, 110f), new Vector2(460f, 96f));
-            menu.quitButton = UiButton("QuitButton", root, "QUIT", new Vector2(0f, -4f), new Vector2(460f, 84f));
-            menu.bestTimeText = UiText("BestTime", root, "NO RUN RECORDED YET", 34, TextAnchor.MiddleCenter, Color.white, Center,
-                new Vector2(0f, 190f), new Vector2(1200f, 50f));
-            BuildVolumeControls(root, new Vector2(0f, -220f), 460f);
+            RectTransform main = UiStretch("Main", root); menu.mainPanel = main.gameObject;
+            UiText("Title", main, "SPLASHDOWN", 150, TextAnchor.MiddleCenter, AccentColor, Center, new Vector2(0f, 330f), new Vector2(1600f, 180f));
+            UiText("Subtitle", main, "THE ULTIMATE OBSTACLE COURSE", 36, TextAnchor.MiddleCenter, Color.white, Center, new Vector2(0f, 220f), new Vector2(1200f, 60f));
+            menu.playButton = UiButton("Play", main, "PLAY", new Vector2(0f, 100f), new Vector2(520f, 90f));
+            menu.characterButton = UiButton("Character", main, "CHARACTER SELECT", new Vector2(0f, -5f), new Vector2(520f, 90f));
+            menu.settingsButton = UiButton("Settings", main, "SETTINGS", new Vector2(0f, -110f), new Vector2(520f, 90f));
+            menu.quitButton = UiButton("Quit", main, "QUIT GAME", new Vector2(0f, -215f), new Vector2(520f, 90f));
 
-            Text menuHint = UiText("ControlsHint", root, ControlHints.DefaultKeyboardText, 26,
-                TextAnchor.MiddleCenter, new Color(0.15f, 0.2f, 0.3f, 1f), new Vector2(0.5f, 0f), new Vector2(0f, 60f),
-                new Vector2(1800f, 40f), false);
-            menuHint.gameObject.AddComponent<ControlHints>().target = menuHint;
+            RectTransform courses = UiStretch("CourseSelect", root); menu.coursePanel = courses.gameObject;
+            UiText("Title", courses, "CHOOSE A COURSE", 92, TextAnchor.MiddleCenter, AccentColor, Center, new Vector2(0f, 350f), new Vector2(1500f, 120f));
+            menu.courseOneButton = UiButton("Course1", courses, "THE SPLASHDOWN GAUNTLET", new Vector2(0f, 130f), new Vector2(1050f, 140f));
+            menu.courseOneLabel = menu.courseOneButton.GetComponentInChildren<Text>();
+            menu.courseTwoButton = UiButton("Course2", courses, "COURSE 2  •  COMING SOON", new Vector2(0f, -50f), new Vector2(1050f, 140f));
+            menu.courseTwoLabel = menu.courseTwoButton.GetComponentInChildren<Text>();
+            menu.courseBackButton = UiButton("Back", courses, "BACK", new Vector2(0f, -260f), new Vector2(460f, 84f));
+
+            RectTransform character = UiStretch("CharacterSelect", root); menu.characterPanel = character.gameObject;
+            UiText("Title", character, "CHOOSE YOUR PLAYER", 88, TextAnchor.MiddleCenter, AccentColor, Center, new Vector2(0f, 350f), new Vector2(1500f, 120f));
+            menu.characterLabel = UiText("Character", character, "CURRENT PLAYER", 52, TextAnchor.MiddleCenter, Color.white, Center, new Vector2(0f, 100f), new Vector2(1000f, 200f));
+            menu.confirmButton = UiButton("Confirm", character, "CONFIRM SELECTION", new Vector2(0f, -110f), new Vector2(600f, 90f));
+            menu.characterBackButton = UiButton("Back", character, "BACK", new Vector2(0f, -220f), new Vector2(460f, 84f));
+
+            RectTransform settings = UiStretch("Settings", root); menu.settingsPanel = settings.gameObject;
+            UiText("Title", settings, "SETTINGS", 88, TextAnchor.MiddleCenter, AccentColor, Center, new Vector2(0f, 420f), new Vector2(1400f, 100f));
+            BuildVolumeControls(settings, new Vector2(-450f, 170f), 500f);
+            menu.qualityButton = UiButton("Quality", settings, "CHANGE QUALITY", new Vector2(430f, 210f), new Vector2(600f, 75f));
+            menu.resolutionButton = UiButton("Resolution", settings, "CHANGE RESOLUTION", new Vector2(430f, 115f), new Vector2(600f, 75f));
+            menu.fullscreenButton = UiButton("Fullscreen", settings, "FULLSCREEN / WINDOWED", new Vector2(430f, 20f), new Vector2(600f, 75f));
+            menu.settingsLabel = UiText("Graphics", settings, "", 30, TextAnchor.MiddleCenter, Color.white, Center, new Vector2(0f, -120f), new Vector2(1600f, 50f));
+            UiText("Keyboard", settings, ControlHints.DefaultKeyboardText, 25, TextAnchor.MiddleCenter, Color.white, Center, new Vector2(0f, -190f), new Vector2(1700f, 45f));
+            UiText("Gamepad", settings, ControlHints.DefaultGamepadText, 25, TextAnchor.MiddleCenter, Color.white, Center, new Vector2(0f, -235f), new Vector2(1700f, 45f));
+            menu.settingsBackButton = UiButton("Back", settings, "BACK", new Vector2(0f, -345f), new Vector2(460f, 84f));
+            courses.gameObject.SetActive(false); character.gameObject.SetActive(false); settings.gameObject.SetActive(false);
         }
     }
 }

@@ -47,6 +47,7 @@ namespace BikiniWipeout
 
         private BestTimeRecord bestTime;
         private bool subscribed;
+        private bool sceneTransition;
 
         /// <summary>The course in the active scene, if any.</summary>
         public static CourseManager Current { get; private set; }
@@ -168,12 +169,16 @@ namespace BikiniWipeout
         /// <summary>Restarts the course from the beginning by reloading the scene.</summary>
         public void RestartCourse()
         {
+            if (sceneTransition) return;
+            sceneTransition = true;
             Time.timeScale = 1f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         public void ReturnToMainMenu()
         {
+            if (sceneTransition || !Application.CanStreamedLevelBeLoaded(SceneNames.MainMenu)) return;
+            sceneTransition = true;
             Time.timeScale = 1f;
             SceneManager.LoadScene(SceneNames.MainMenu);
         }

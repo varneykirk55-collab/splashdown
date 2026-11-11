@@ -67,6 +67,28 @@ namespace BikiniWipeout.EditorTools
             BuildAll(true);
         }
 
+        [MenuItem("Bikini Wipeout/UI/Rebuild Main Menu Scene", priority = 10)]
+        public static void RebuildMainMenuOnly()
+        {
+            if (!ConfirmEditMode() || !EditorUtility.DisplayDialog("Rebuild main menu",
+                "This replaces the generated MainMenu scene, including any manual edits to it. Other scenes and prefabs are kept.", "Rebuild", "Cancel") ||
+                !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            try
+            {
+                overwriteGenerated = false;
+                EnsureFolders();
+                var assets = BuildSharedAssets();
+                var prefabs = BuildPrefabs(assets);
+                overwriteGenerated = true;
+                BuildMainMenuScene(assets, prefabs);
+                RegisterScenes();
+                AssetDatabase.SaveAssets();
+                EditorSceneManager.OpenScene(MainMenuScenePath, OpenSceneMode.Single);
+            }
+            catch (Exception exception) { Debug.LogError("[Splashdown] Menu rebuild failed: " + exception); }
+            finally { overwriteGenerated = false; }
+        }
+
         [MenuItem("Bikini Wipeout/Open Course Scene", priority = 20)]
         public static void OpenCourseScene()
         {
@@ -120,9 +142,9 @@ namespace BikiniWipeout.EditorTools
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
 
-                if (!Application.isBatchMode && File.Exists(CourseScenePath))
+                if (!Application.isBatchMode && File.Exists(MainMenuScenePath))
                 {
-                    EditorSceneManager.OpenScene(CourseScenePath, OpenSceneMode.Single);
+                    EditorSceneManager.OpenScene(MainMenuScenePath, OpenSceneMode.Single);
                 }
 
                 Debug.Log("[Bikini Wipeout] Foundation 1 content is ready. Open '" + CourseScenePath + "' and press Play.");

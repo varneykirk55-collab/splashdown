@@ -297,15 +297,16 @@ namespace BikiniWipeout.EditorTools
 
         private static void RegisterScenes()
         {
-            var scenes = new List<EditorBuildSettingsScene>();
-            foreach (string path in new[] { MainMenuScenePath, CourseScenePath })
+            var scenes = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
+            scenes.RemoveAll(scene => scene.path == MainMenuScenePath);
+            if (File.Exists(MainMenuScenePath)) scenes.Insert(0, new EditorBuildSettingsScene(MainMenuScenePath, true));
+            foreach (string path in new[] { CourseScenePath, GauntletScenePath })
             {
-                if (File.Exists(path))
-                {
-                    scenes.Add(new EditorBuildSettingsScene(path, true));
-                }
+                if (!File.Exists(path)) continue;
+                var existing = scenes.Find(scene => scene.path == path);
+                if (existing != null) existing.enabled = true;
+                else scenes.Add(new EditorBuildSettingsScene(path, true));
             }
-
             EditorBuildSettings.scenes = scenes.ToArray();
         }
     }
