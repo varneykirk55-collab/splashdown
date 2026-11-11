@@ -186,6 +186,8 @@ namespace BikiniWipeout
             // A plain displacement through the CharacterController: it collides and slides like any
             // other move, so the character can never be pushed through geometry or teleported.
             motor.Controller.Move(slideDirection * (slideSpeed * dt));
+            // The motor carries the character back to its stored ground point each frame; keep this displacement.
+            motor.RebaseGroundAnchor();
 
             if (slideSpeed > 2.5f && Time.time >= nextSlideSoundTime)
             {
