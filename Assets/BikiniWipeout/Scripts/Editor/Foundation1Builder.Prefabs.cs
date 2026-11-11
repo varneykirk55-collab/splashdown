@@ -363,11 +363,11 @@ namespace BikiniWipeout.EditorTools
             const float radius = 1.1f;
 
             GameObject root = Primitive(PrimitiveType.Sphere, "BouncingBall", null, Vector3.zero,
-                Vector3.one * (radius * 2f), assets.Orange, GameLayers.Obstacle, true);
+                Vector3.one * (radius * 2f), assets.Red, GameLayers.Obstacle, true);
 
             // A contrasting band so the rolling motion is visible.
             Primitive(PrimitiveType.Cylinder, "Band", root.transform, Vector3.zero,
-                new Vector3(1.01f, 0.07f, 1.01f), assets.White, GameLayers.Obstacle, false);
+                new Vector3(1.01f, 0.07f, 1.01f), assets.Red, GameLayers.Obstacle, false);
 
             var body = root.AddComponent<Rigidbody>();
             body.mass = 8f;

@@ -302,6 +302,9 @@ namespace BikiniWipeout.EditorTools
 
             GameObject water = InstantiatePrefab(c1.Water, environment,
                 new Vector3((CoveMinX + CoveMaxX) * 0.5f, Course2Layout.WaterLevel, (CoveMinZ + CoveMaxZ) * 0.5f), Quaternion.identity);
+            var waterSurface = water.GetComponentInChildren<MeshRenderer>();
+            waterSurface.sharedMaterial = AssetDatabase.LoadAssetAtPath<Material>(BroadcastFolder + "CoveWater.mat");
+            RecordOverrides(waterSurface);
             var hazard = water.GetComponent<WaterHazard>();
             hazard.surfaceHeight = Course2Layout.WaterLevel;
             RecordOverrides(hazard);

@@ -47,7 +47,7 @@ namespace BikiniWipeout.EditorTools
                 Purple = LitMaterial("Purple", new Color(0.14f, 0.23f, 0.48f), 0.62f),
                 White = LitMaterial("White", new Color(0.96f, 0.96f, 0.96f), 0.4f),
                 Dark = LitMaterial("DarkSupport", new Color(0.13f, 0.19f, 0.26f), 0.55f),
-                Red = LitMaterial("FinishRed", new Color(0.95f, 0.18f, 0.22f), 0.55f),
+                Red = LitMaterial("FinishRed", new Color(0.95f, 0.18f, 0.22f), 0.89f),
                 Skin = LitMaterial("PlaceholderSkin", new Color(0.87f, 0.63f, 0.48f), 0.3f),
                 Suit = LitMaterial("PlaceholderSuit", new Color(1.00f, 0.20f, 0.52f), 0.45f),
                 Hair = LitMaterial("PlaceholderHair", new Color(0.33f, 0.19f, 0.11f), 0.35f),

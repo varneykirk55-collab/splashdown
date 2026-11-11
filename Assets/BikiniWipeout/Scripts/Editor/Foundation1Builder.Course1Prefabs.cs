@@ -115,7 +115,7 @@ namespace BikiniWipeout.EditorTools
 
             // Opaque, textured and gently animated: reads as bright stylized water at almost no cost.
             GameObject surface = Primitive(PrimitiveType.Plane, "Surface", root.transform, Vector3.zero,
-                new Vector3(size / 10f, 1f, size / 10f), AssetDatabase.LoadAssetAtPath<Material>(BroadcastFolder + "EventWater.mat"), 4 /* built-in Water layer */, false);
+                new Vector3(size / 10f, 1f, size / 10f), AssetDatabase.LoadAssetAtPath<Material>(BroadcastFolder + "GauntletWater.mat"), 4 /* built-in Water layer */, false);
             var renderer = surface.GetComponent<MeshRenderer>();
             renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             var scroll = surface.AddComponent<ScrollingSurface>();

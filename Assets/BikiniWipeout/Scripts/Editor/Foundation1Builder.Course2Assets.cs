@@ -35,12 +35,12 @@ namespace BikiniWipeout.EditorTools
                 SlideWater = CoveTextured("CoveSlideWater", "Waterfall", new Vector2(2f, 4f), new Color(0.55f, 0.86f, 1f), 0.9f),
                 StripesPink = CoveTextured("CoveStripesPinkYellow", "Stripes_PinkYellow", new Vector2(2f, 1f), Color.white, 0.6f),
                 RoofStripes = CoveTextured("CoveRoofStripes", "Stripes_PinkWhite", new Vector2(6f, 1f), Color.white, 0.4f),
-                DeckBlue = CoveTextured("CoveDeckBlue", "Deck_Blue", new Vector2(2f, 2f), Color.white, 0.6f),
+                DeckBlue = CoveTextured("CoveDeckBlue", "Deck_Blue", new Vector2(2f, 2f), Color.white, 0.8f),
                 Grass = CoveLit("CoveGrass", new Color(0.30f, 0.74f, 0.28f), 0.08f),
                 PalmTrunk = CoveLit("CovePalmTrunk", new Color(0.62f, 0.44f, 0.26f), 0.1f),
                 PalmLeaf = CoveLit("CovePalmLeaf", new Color(0.22f, 0.72f, 0.24f), 0.25f),
                 Flower = CoveLit("CoveFlower", new Color(1f, 0.33f, 0.62f), 0.4f),
-                PillarBlue = CoveLit("CovePillarBlue", new Color(0.16f, 0.36f, 0.86f), 0.55f),
+                PillarBlue = CoveLit("CovePillarBlue", new Color(0.16f, 0.36f, 0.86f), 0.84f),
                 BucketYellow = CoveLit("CoveBucketYellow", new Color(1f, 0.80f, 0.10f), 0.7f),
                 Spring = CoveLit("CoveSpring", new Color(0.14f, 0.30f, 0.80f), 0.75f)
             };

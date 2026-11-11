@@ -32,10 +32,10 @@ namespace BikiniWipeout.EditorTools
             var arena = new ArenaAssets
             {
                 Water = TexturedMaterial("ArenaWater", "Water_Caustics", new Vector2(40f, 40f), Color.white, 0.82f),
-                PanelsPink = TexturedMaterial("PanelsPinkPurple", "Panels_PinkPurple", new Vector2(2f, 2f), Color.white, 0.55f),
-                PanelsBlue = TexturedMaterial("PanelsBlueTeal", "Panels_BlueTeal", new Vector2(2f, 2f), Color.white, 0.55f),
+                PanelsPink = TexturedMaterial("PanelsPinkPurple", "Panels_PinkPurple", new Vector2(2f, 2f), Color.white, 0.82f),
+                PanelsBlue = TexturedMaterial("PanelsBlueTeal", "Panels_BlueTeal", new Vector2(2f, 2f), Color.white, 0.81f),
                 PanelsYellow = TexturedMaterial("PanelsYellowOrange", "Panels_YellowOrange", new Vector2(2f, 2f), Color.white, 0.55f),
-                PanelsRainbow = TexturedMaterial("PanelsRainbow", "Panels_Rainbow", new Vector2(1f, 1f), Color.white, 0.55f),
+                PanelsRainbow = TexturedMaterial("PanelsRainbow", "Panels_Rainbow", new Vector2(1f, 1f), Color.white, 0.76f),
                 ChevronPink = TexturedMaterial("ChevronPinkWhite", "Chevron_PinkWhite", new Vector2(1f, 3f), Color.white, 0.5f),
                 ChevronBlue = TexturedMaterial("ChevronBlueYellow", "Chevron_BlueYellow", new Vector2(1f, 3f), Color.white, 0.5f),
                 Target = TexturedMaterial("TargetRings", "Target_Rings", Vector2.one, Color.white, 0.5f),
@@ -44,7 +44,7 @@ namespace BikiniWipeout.EditorTools
                 StripesBlue = TexturedMaterial("StripesBlueYellow", "Stripes_BlueYellow", new Vector2(2f, 1f), Color.white, 0.6f),
                 Crowd = TexturedMaterial("Crowd", "Crowd", new Vector2(6f, 1f), Color.white, 0.05f),
                 Floodlight = EmissiveMaterial("Floodlight", "Floodlight", new Color(1f, 0.97f, 0.85f) * 1.6f),
-                BallRed = TexturedMaterial("BallRed", "Ball_Shell", Vector2.one, Color.white, 0.75f),
+                BallRed = TexturedMaterial("BallRed", "Ball_Shell", Vector2.one, Color.white, 0.94f),
                 Cloud = ArenaLit("Cloud", new Color(1f, 1f, 1f), 0.05f),
                 Hill = ArenaLit("Hill", new Color(0.36f, 0.78f, 0.36f), 0.05f),
                 Screen = TexturedMaterial("Screen", "Scoreboard_Pixels", Vector2.one, Color.white, 0.76f),

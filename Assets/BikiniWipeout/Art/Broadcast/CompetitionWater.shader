@@ -2,7 +2,8 @@ Shader "Splashdown/Competition Water"
 {
     Properties
     {
-        _BaseMap ("Caustic pattern", 2D) = "white" {}
+        _BaseMap ("Ripple and crest field", 2D) = "gray" {}
+        _SetColors ("Course colour reflection mask", 2D) = "black" {}
     }
     SubShader
     {
@@ -21,6 +22,8 @@ Shader "Splashdown/Competition Water"
 
             TEXTURE2D(_BaseMap);
             SAMPLER(sampler_BaseMap);
+            TEXTURE2D(_SetColors);
+            SAMPLER(sampler_SetColors);
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
             CBUFFER_END
@@ -62,14 +65,24 @@ Shader "Splashdown/Competition Water"
                 half4 sky = SAMPLE_TEXTURECUBE_LOD(unity_SpecCube0, samplerunity_SpecCube0, reflected, 3);
                 half3 horizon = lerp(half3(0.20, 0.41, 0.56), half3(0.08, 0.27, 0.55), saturate(reflected.y));
                 half3 skyColor = max(horizon, DecodeHDREnvironment(sky, unity_SpecCube0_HDR));
-                float2 uv = p * 0.115 + _BaseMap_ST.zw + slope * 0.20;
-                half caustic = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv).r;
-                half swell = 0.5h + 0.5h * sin(dot(p, float2(0.18, 0.13)) + slope.y + t * 0.34);
-                half3 body = lerp(half3(0.009, 0.085, 0.24), half3(0.015, 0.31, 0.43), swell);
-                body += half3(0.08, 0.19, 0.15) * caustic * facing;
-                half glint = pow(saturate(dot(normal, SafeNormalize(view + sun.direction))), 110.0h);
-                body *= lerp(0.68h, 1.0h, sun.shadowAttenuation);
-                half3 color = lerp(body, skyColor, fresnel) + sun.color * sun.shadowAttenuation * glint * 1.7h;
+                float2 uv = p * float2(0.17, 0.29) + _BaseMap_ST.zw;
+                half2 ripple = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv + slope * 0.14).rg;
+                half crossing = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv.yx * 0.73 - t * float2(0.018, 0.026)).g;
+                half crest = smoothstep(0.55h, 0.82h, ripple.g * 0.64h + crossing * 0.36h);
+                half3 body = lerp(half3(0.004, 0.18, 0.58), half3(0.005, 0.64, 0.82), crossing);
+                body += half3(0.09, 0.23, 0.18) * ripple.r * facing;
+                // Look up the fixed set in the reflected view direction. Wind breaks its colour into streaks.
+                float2 reflectedPoint = p + reflected.xz * min(9.0, 2.4 / max(0.20, reflected.y)) + slope * 4.0;
+                float2 maskUV = (reflectedPoint + float2(40.0, 44.0)) / float2(192.0, 256.0);
+                half2 paint = SAMPLE_TEXTURE2D(_SetColors, sampler_SetColors, maskUV).rg;
+                half strength = saturate(paint.r + paint.g);
+                half3 setTint = (half3(0.91, 0.036, 0.24) * paint.r + half3(0.025, 0.09, 0.68) * paint.g)
+                                / max(0.02h, strength);
+                body = lerp(body, setTint, strength * crest * 0.70h);
+                half glint = pow(saturate(dot(normal, SafeNormalize(view + sun.direction))), 80.0h);
+                body *= lerp(0.76h, 1.0h, sun.shadowAttenuation);
+                half3 color = lerp(body, skyColor, fresnel * 0.78h) + sun.color * sun.shadowAttenuation * glint * 1.45h;
+                color += half3(0.18, 0.28, 0.30) * smoothstep(0.76h, 0.93h, crossing * ripple.g);
                 return half4(MixFog(color, input.fog), 1);
             }
             ENDHLSL

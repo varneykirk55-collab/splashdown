@@ -381,7 +381,7 @@ namespace BikiniWipeout.EditorTools
             var sunObject = new GameObject("Sun");
             var sun = sunObject.AddComponent<Light>();
             sun.type = LightType.Directional;
-            sun.color = new Color(1f, 0.96f, 0.84f);
+            sun.color = new Color(1f, 0.97f, 0.92f);
             sun.intensity = 1.45f;
             sun.shadows = LightShadows.Soft;
             sun.shadowStrength = 0.75f;

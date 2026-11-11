@@ -76,7 +76,7 @@ def deck(size=256, n=2):
     v = (yy % cell) / cell
     puff = (np.sin(u * np.pi) * np.sin(v * np.pi)) ** 0.3
     idx = ((xx // cell) + (yy // cell)) % 2
-    colour = np.where(idx[..., None] == 1, np.array([29, 91, 158]), np.array([42, 122, 188])).astype(float)
+    colour = np.where(idx[..., None] == 1, np.array([21, 65, 215]), np.array([36, 92, 239])).astype(float)
     save("Deck_Blue", colour * (0.74 + 0.32 * puff[..., None]))
 
 

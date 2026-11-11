@@ -51,7 +51,7 @@ def chevron(size=256, bg=(192, 28, 57), fg=(255, 255, 255), name="Chevron_PinkWh
 
 
 def target(size=256):
-    img = Image.new("RGB", (size, size), (15, 80, 161))
+    img = Image.new("RGB", (size, size), (21, 70, 227))
     d = ImageDraw.Draw(img)
     c = size / 2
     for r, col in [(0.47, (255, 255, 255)), (0.38, (226, 39, 55)), (0.27, (255, 255, 255)), (0.17, (226, 39, 55)),
@@ -80,12 +80,11 @@ def panels(name, colors, size=256, n=2):
     for i, col in enumerate(colors):
         mask = (idx == i)[..., None]
         img += mask * np.array(col, dtype=float)
-    # Weld line with intermittent stitches, plus a fine embossed vinyl grain.
+    # Smooth vinyl panels with a narrow heat-welded seam and a bright bevel.
     rim = np.minimum.reduce([u, v, 1 - u, 1 - v])
-    seam = np.exp(-((rim - 0.045) / 0.012) ** 2)
-    stitch = ((xx + yy) % 12 < 7) * seam
-    grain = 0.008 * np.cos(xx * np.pi / 2) * np.sin(yy * np.pi / 2)
-    img *= (0.75 + 0.27 * puff + 0.16 * stitch + grain)[..., None]
+    weld = np.exp(-(rim / 0.016) ** 2)
+    edge = np.exp(-((rim - 0.039) / 0.018) ** 2)
+    img *= (0.88 + 0.12 * puff - 0.17 * weld + 0.08 * edge)[..., None]
     save(name, Image.fromarray(np.clip(img, 0, 255).astype("uint8"), "RGB"))
 
 
@@ -96,8 +95,8 @@ def stripes(name, a, b, size=256, n=4):
     save(name, Image.fromarray(rgb, "RGB"))
 
 
-def crowd(size=512, rows=16, cols=40):
-    """Abstract spectators: rows of colourful round heads/shoulders on dark seating. Tileable horizontally."""
+def crowd(size=512, rows=6, cols=29):
+    """Abstract spectators: rows of fans in bright shirts on dark seating. Tileable horizontally."""
     img = Image.new("RGB", (size, size), (52, 44, 92))
     d = ImageDraw.Draw(img)
     palette = [(255, 80, 150), (255, 210, 50), (70, 160, 255), (255, 140, 40), (120, 230, 120), (240, 240, 250),
@@ -113,19 +112,27 @@ def crowd(size=512, rows=16, cols=40):
             x = (c + 0.5 + (0.5 if r % 2 else 0)) * cw % size
             y = r * rh + rh * 0.5 + rng.uniform(-1.5, 1.5)
             col = palette[rng.integers(len(palette))]
-            d.ellipse([x - cw * 0.46, y - rh * 0.02, x + cw * 0.46, y + rh * 0.62], fill=col)
-            d.ellipse([x - cw * 0.26, y - rh * 0.40, x + cw * 0.26, y + rh * 0.06], fill=skin[rng.integers(len(skin))])
+            tone = skin[rng.integers(len(skin))]
+            head_y = y - rh * 0.20
+            torso = [(x - cw * 0.22, y), (x + cw * 0.22, y), (x + cw * 0.38, y + rh * 0.12),
+                     (x + cw * 0.30, y + rh * 0.36), (x - cw * 0.30, y + rh * 0.36), (x - cw * 0.38, y + rh * 0.12)]
+            d.polygon(torso, fill=col)
+            arm_y = y - rh * 0.12 if (r + c) % 4 == 0 else y + rh * 0.22
+            d.line((x - cw * 0.32, y + rh * 0.10, x - cw * 0.49, arm_y), fill=tone, width=3)
+            d.ellipse((x - cw * 0.23, head_y, x + cw * 0.23, y + rh * 0.04), fill=tone)
+            d.pieslice((x - cw * 0.24, head_y - 1, x + cw * 0.24, head_y + rh * 0.14),
+                       180, 360, fill=(57, 43, 44))
     save("Crowd", img.filter(ImageFilter.GaussianBlur(0.6)))
 
 
-def lights(size=128, n=4):
-    img = Image.new("RGB", (size, size), (40, 44, 60))
-    d = ImageDraw.Draw(img)
-    cell = size / n
-    for i in range(n):
-        for j in range(n):
-            d.ellipse([i * cell + cell * 0.14, j * cell + cell * 0.14, (i + 1) * cell - cell * 0.14, (j + 1) * cell - cell * 0.14],
-                      fill=(255, 252, 235))
+def lights(size=128):
+    """Four warm square lamps behind a single graphic lens plate."""
+    img = Image.new("RGB", (size, size), (28, 35, 61))
+    draw = ImageDraw.Draw(img)
+    for y in (4, 68):
+        for x in (4, 68):
+            for inset, colour in [(0, "#8699b9"), (3, "#353951"), (6, "#ffbc79"), (9, "#fff3d5")]:
+                draw.rounded_rectangle((x + inset, y + inset, x + 55 - inset, y + 55 - inset), radius=4, fill=colour)
     save("Floodlight", img)
 
 
@@ -155,15 +162,15 @@ if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
     water()
     chevron()
-    chevron(bg=(15, 80, 161), fg=(224, 241, 251), name="Chevron_BlueYellow")
+    chevron(bg=(21, 70, 227), fg=(248, 252, 255), name="Chevron_BlueYellow")
     target()
     checker()
-    panels("Panels_PinkPurple", [(224, 33, 59), (166, 22, 48)])
-    panels("Panels_BlueTeal", [(20, 96, 182), (33, 135, 203)])
+    panels("Panels_PinkPurple", [(246, 23, 53), (221, 21, 48)])
+    panels("Panels_BlueTeal", [(24, 67, 224), (31, 91, 244)])
     panels("Panels_YellowOrange", [(246, 173, 40), (235, 109, 26)])
-    panels("Panels_Rainbow", [(20, 73, 143), (30, 126, 196), (225, 237, 245), (216, 36, 57)], n=4)
+    panels("Panels_Rainbow", [(21, 64, 222), (23, 86, 239), (245, 247, 252), (240, 26, 53)], n=4)
     stripes("Stripes_RedWhite", (235, 40, 50), (250, 250, 250))
-    stripes("Stripes_BlueYellow", (23, 85, 167), (224, 241, 251))
+    stripes("Stripes_BlueYellow", (23, 85, 167), (248, 252, 255))
     crowd()
     lights()
     soft_dot()
