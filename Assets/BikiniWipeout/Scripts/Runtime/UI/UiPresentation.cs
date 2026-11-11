@@ -20,7 +20,7 @@ namespace BikiniWipeout
             if (button)
             {
                 var image = GetComponent<Image>();
-                if (image != null) { image.sprite = RoundedSprite(); image.type = Image.Type.Sliced; }
+                if (image != null && GetComponent<UiSkinTag>() == null) { image.sprite = RoundedSprite(); image.type = Image.Type.Sliced; }
             }
             else group = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>();
         }
