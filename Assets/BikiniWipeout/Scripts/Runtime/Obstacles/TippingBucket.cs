@@ -45,6 +45,7 @@ namespace BikiniWipeout
         private float elapsed;
         private HazardPhase phase = HazardPhase.Idle;
         private bool hitThisDump;
+        private bool hasDumped;
 
         public HazardPhase Phase => phase;
 
@@ -84,6 +85,7 @@ namespace BikiniWipeout
                 else if (phase == HazardPhase.Active)
                 {
                     hitThisDump = false;
+                    hasDumped = true;
                     AudioManager.Play(dumpEvent, transform.position);
                     if (waterEffect != null)
                     {
@@ -131,6 +133,7 @@ namespace BikiniWipeout
             elapsed = 0f;
             phase = HazardPhase.Idle;
             hitThisDump = false;
+            hasDumped = false;
             if (bucket != null)
             {
                 bucket.localRotation = bucketRest;
@@ -204,7 +207,7 @@ namespace BikiniWipeout
                     break;
                 default:
                     // Swing back upright early in the idle phase while it "refills".
-                    angle = tipAngle * (1f - Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(progress * 4f)));
+                    angle = hasDumped ? tipAngle * (1f - Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(progress * 4f))) : 0f;
                     break;
             }
 

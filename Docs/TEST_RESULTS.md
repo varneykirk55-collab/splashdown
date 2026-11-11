@@ -1,3 +1,24 @@
+# Course 2 (Chaos Cove) — current verification record
+
+Date: 2026-11-11. Branch: `claude/splashdown-course-2-asv7gw`. See [PHASE_3_COURSE2.md](PHASE_3_COURSE2.md#tests).
+
+| Check | Actual result |
+| --- | --- |
+| Offline C# compilation against Unity 6000.6.6f1 | **PASS, 0 errors and 0 warnings**, all six project assembly variants |
+| Engine-free NUnit tests | **150 passed, 0 failed, 0 skipped** (.NET SDK 8.0.318, NUnit 3.14): 122 existing + 28 new |
+| Unity editor: generate Course 2, Validate Project | **NOT RUN** (no licensed editor in the authoring environment) |
+| Unity EditMode `Course2ContentTests` (2) and PlayMode `Course2PlayTests` (12) | **NOT RUN**; compiled only |
+| Course 1 inside Unity after these changes | **NOT RUN**; engine-free Course 1 tests still pass |
+| Interactive playtest, visuals, physics, audio, performance | **NOT PERFORMED** |
+
+```sh
+dotnet test Tools/CoreTests/CoreTests.csproj
+python3 Tools/offline_compile_check.py --unity <Editor/Data> --inputsystem <package/InputSystem>
+git diff --check
+```
+
+---
+
 # Phase 3 — current verification record
 
 See [PHASE_3.md](PHASE_3.md#tests). Summary: all six assemblies compile against Unity 6000.6.6f1 with
