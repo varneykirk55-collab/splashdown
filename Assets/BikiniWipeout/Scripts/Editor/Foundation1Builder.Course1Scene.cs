@@ -371,6 +371,7 @@ namespace BikiniWipeout.EditorTools
             CreateEventSystem();
             BuildCourseUi(course);
 
+            DressSplashdownGauntlet();
             SaveScene(scene, GauntletScenePath);
         }
 
@@ -394,8 +395,8 @@ namespace BikiniWipeout.EditorTools
 
             RenderSettings.ambientMode = AmbientMode.Trilight;
             RenderSettings.ambientSkyColor = new Color(0.78f, 0.90f, 1f);
-            RenderSettings.ambientEquatorColor = new Color(0.86f, 0.84f, 0.80f);
-            RenderSettings.ambientGroundColor = new Color(0.30f, 0.62f, 0.66f);
+            RenderSettings.ambientEquatorColor = new Color(0.64f, 0.73f, 0.82f);
+            RenderSettings.ambientGroundColor = new Color(0.25f, 0.35f, 0.45f);
             RenderSettings.fog = true;
             RenderSettings.fogMode = FogMode.Linear;
             RenderSettings.fogColor = new Color(0.70f, 0.88f, 1f);

@@ -76,7 +76,7 @@ def deck(size=256, n=2):
     v = (yy % cell) / cell
     puff = (np.sin(u * np.pi) * np.sin(v * np.pi)) ** 0.3
     idx = ((xx // cell) + (yy // cell)) % 2
-    colour = np.where(idx[..., None] == 1, np.array([58, 128, 240]), np.array([76, 150, 250])).astype(float)
+    colour = np.where(idx[..., None] == 1, np.array([29, 91, 158]), np.array([42, 122, 188])).astype(float)
     save("Deck_Blue", colour * (0.74 + 0.32 * puff[..., None]))
 
 
@@ -85,6 +85,6 @@ if __name__ == "__main__":
     rock()
     sand()
     waterfall()
-    stripes("Stripes_PinkYellow", (255, 60, 150), (255, 214, 40))
-    stripes("Stripes_PinkWhite", (255, 70, 160), (250, 250, 250))
+    stripes("Stripes_PinkYellow", (198, 24, 49), (255, 192, 65))
+    stripes("Stripes_PinkWhite", (201, 31, 54), (239, 247, 250))
     deck()

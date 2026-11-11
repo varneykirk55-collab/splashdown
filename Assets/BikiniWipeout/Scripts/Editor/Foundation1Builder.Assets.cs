@@ -39,14 +39,14 @@ namespace BikiniWipeout.EditorTools
             {
                 // Temporary tropical palette: saturated inflatable colours with clear contrast between surfaces.
                 Sand = LitMaterial("Sand", new Color(0.98f, 0.85f, 0.55f), 0.25f),
-                Turquoise = LitMaterial("Turquoise", new Color(0.13f, 0.80f, 0.76f), 0.5f),
-                HotPink = LitMaterial("HotPink", new Color(1.00f, 0.24f, 0.58f), 0.6f),
+                Turquoise = LitMaterial("Turquoise", new Color(0.06f, 0.39f, 0.78f), 0.67f),
+                HotPink = LitMaterial("HotPink", new Color(0.85f, 0.095f, 0.17f), 0.72f),
                 Yellow = LitMaterial("SunYellow", new Color(1.00f, 0.84f, 0.12f), 0.6f),
                 Orange = LitMaterial("Orange", new Color(1.00f, 0.52f, 0.10f), 0.6f),
                 Lime = LitMaterial("Lime", new Color(0.52f, 0.90f, 0.22f), 0.55f),
-                Purple = LitMaterial("Purple", new Color(0.60f, 0.34f, 0.95f), 0.6f),
+                Purple = LitMaterial("Purple", new Color(0.14f, 0.23f, 0.48f), 0.62f),
                 White = LitMaterial("White", new Color(0.96f, 0.96f, 0.96f), 0.4f),
-                Dark = LitMaterial("DarkSupport", new Color(0.20f, 0.27f, 0.36f), 0.2f),
+                Dark = LitMaterial("DarkSupport", new Color(0.13f, 0.19f, 0.26f), 0.55f),
                 Red = LitMaterial("FinishRed", new Color(0.95f, 0.18f, 0.22f), 0.55f),
                 Skin = LitMaterial("PlaceholderSkin", new Color(0.87f, 0.63f, 0.48f), 0.3f),
                 Suit = LitMaterial("PlaceholderSuit", new Color(1.00f, 0.20f, 0.52f), 0.45f),

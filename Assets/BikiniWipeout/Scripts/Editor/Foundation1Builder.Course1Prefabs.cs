@@ -115,7 +115,7 @@ namespace BikiniWipeout.EditorTools
 
             // Opaque, textured and gently animated: reads as bright stylized water at almost no cost.
             GameObject surface = Primitive(PrimitiveType.Plane, "Surface", root.transform, Vector3.zero,
-                new Vector3(size / 10f, 1f, size / 10f), arena.Water, 4 /* built-in Water layer */, false);
+                new Vector3(size / 10f, 1f, size / 10f), AssetDatabase.LoadAssetAtPath<Material>(BroadcastFolder + "EventWater.mat"), 4 /* built-in Water layer */, false);
             var renderer = surface.GetComponent<MeshRenderer>();
             renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             var scroll = surface.AddComponent<ScrollingSurface>();
@@ -138,9 +138,7 @@ namespace BikiniWipeout.EditorTools
 
             var ringObject = new GameObject("FoamRing");
             ringObject.transform.SetParent(root.transform, false);
-            ringObject.transform.localPosition = Vector3.zero;
-            // The root points its cone upwards; undo that so the ring lies flat on the water.
-            ringObject.transform.rotation = Quaternion.identity;
+            ringObject.transform.localPosition = Vector3.up * 0.055f;
 
             var ring = ringObject.AddComponent<ParticleSystem>();
             ring.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);

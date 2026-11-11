@@ -400,6 +400,7 @@ namespace BikiniWipeout.EditorTools
             CreateEventSystem();
             BuildCourseUi(course);
 
+            DressChaosCove();
             SaveScene(scene, ChaosCoveScenePath);
         }
 

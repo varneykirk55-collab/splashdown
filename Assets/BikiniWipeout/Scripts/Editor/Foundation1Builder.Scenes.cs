@@ -148,6 +148,7 @@ namespace BikiniWipeout.EditorTools
             CreateEventSystem();
             BuildCourseUi(course);
 
+            DressFoundation1();
             SaveScene(scene, CourseScenePath);
         }
 
@@ -165,8 +166,8 @@ namespace BikiniWipeout.EditorTools
             RenderSettings.sun = sun;
             RenderSettings.ambientMode = AmbientMode.Trilight;
             RenderSettings.ambientSkyColor = new Color(0.72f, 0.86f, 1f);
-            RenderSettings.ambientEquatorColor = new Color(0.82f, 0.80f, 0.70f);
-            RenderSettings.ambientGroundColor = new Color(0.30f, 0.42f, 0.50f);
+            RenderSettings.ambientEquatorColor = new Color(0.64f, 0.73f, 0.82f);
+            RenderSettings.ambientGroundColor = new Color(0.25f, 0.35f, 0.45f);
             RenderSettings.fog = false;
         }
 

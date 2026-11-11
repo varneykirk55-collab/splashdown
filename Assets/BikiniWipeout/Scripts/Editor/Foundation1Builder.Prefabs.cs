@@ -481,7 +481,7 @@ namespace BikiniWipeout.EditorTools
 
             // Plane primitive is 10 x 10 units.
             Primitive(PrimitiveType.Plane, "Surface", root.transform, Vector3.zero,
-                new Vector3(size / 10f, 1f, size / 10f), assets.Water, 4 /* built-in Water layer */, false);
+                new Vector3(size / 10f, 1f, size / 10f), AssetDatabase.LoadAssetAtPath<Material>(BroadcastFolder + "EventWater.mat"), 4 /* built-in Water layer */, false);
 
             var hazard = root.AddComponent<WaterHazard>();
             hazard.splashPrefab = splashPrefab;
@@ -491,8 +491,7 @@ namespace BikiniWipeout.EditorTools
         private static GameObject CreateSplash(ContentAssets assets)
         {
             var root = new GameObject("SplashEffect");
-            // Particle cones emit along local +Z; point it straight up.
-            root.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+            // The hazard spawns with identity rotation. Aim the emitter itself upwards.
 
             var particles = root.AddComponent<ParticleSystem>();
             particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
@@ -515,11 +514,12 @@ namespace BikiniWipeout.EditorTools
 
             ParticleSystem.ShapeModule shape = particles.shape;
             shape.shapeType = ParticleSystemShapeType.Cone;
-            shape.angle = 34f;
+            shape.rotation = new Vector3(-90f, 0f, 0f);
+            shape.angle = 46f;
             shape.radius = 0.35f;
 
             var renderer = root.GetComponent<ParticleSystemRenderer>();
-            renderer.sharedMaterial = assets.Splash;
+            renderer.sharedMaterial = AssetDatabase.LoadAssetAtPath<Material>(BroadcastFolder + "SprayDrop.mat");
             renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
             root.AddComponent<SplashEffect>();
