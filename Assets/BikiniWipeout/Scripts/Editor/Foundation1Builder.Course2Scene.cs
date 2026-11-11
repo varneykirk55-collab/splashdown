@@ -128,8 +128,11 @@ namespace BikiniWipeout.EditorTools
         }
 
         /// <summary>
-        /// Adds a "COURSE 2" button to the main menu, next to PLAY (which keeps starting Course 1).
-        /// Nothing else in the menu scene is changed, and the button is only added once.
+        /// Makes Course 2 reachable from the main menu without replacing the menu.
+        /// If the menu has a course registry (the UI foundation's serialized "courses" array), the reserved
+        /// Course 2 entry is pointed at this scene and marked ready; otherwise a COURSE 2 button is added
+        /// beside PLAY. The registry is addressed by serialized property name, so this builder compiles and
+        /// works with either version of the menu. Nothing else in the menu scene is changed.
         /// </summary>
         private static void AddCourse2ButtonToMainMenu()
         {
@@ -147,20 +150,96 @@ namespace BikiniWipeout.EditorTools
                     continue;
                 }
 
-                foreach (CourseLaunchButton existing in root.GetComponentsInChildren<CourseLaunchButton>(true))
+                bool changed = RegisterCourse2InMenuRegistry(menu, out bool hasRegistry);
+                if (!hasRegistry)
                 {
-                    if (existing.sceneName == SceneNames.CourseChaosCove)
-                    {
-                        return;
-                    }
+                    changed = AddStandaloneCourse2Button(menu, root);
                 }
 
-                Button button = UiButton("Course2Button", menu.transform, "COURSE 2", new Vector2(430f, 110f), new Vector2(360f, 96f));
-                button.gameObject.AddComponent<CourseLaunchButton>().sceneName = SceneNames.CourseChaosCove;
-                EditorSceneManager.MarkSceneDirty(scene);
-                EditorSceneManager.SaveScene(scene);
+                if (changed)
+                {
+                    EditorSceneManager.MarkSceneDirty(scene);
+                    EditorSceneManager.SaveScene(scene);
+                }
+
                 return;
             }
+        }
+
+        private static bool RegisterCourse2InMenuRegistry(MainMenuController menu, out bool hasRegistry)
+        {
+            var serialized = new SerializedObject(menu);
+            SerializedProperty courses = serialized.FindProperty("courses");
+            hasRegistry = courses != null && courses.isArray;
+            if (!hasRegistry)
+            {
+                return false;
+            }
+
+            // Prefer an entry that already names this scene, then the reserved (scene-less) slot, then a new entry.
+            int target = -1;
+            for (int i = 0; i < courses.arraySize && target < 0; i++)
+            {
+                SerializedProperty sceneName = courses.GetArrayElementAtIndex(i).FindPropertyRelative("sceneName");
+                if (sceneName != null && sceneName.stringValue == SceneNames.CourseChaosCove)
+                {
+                    target = i;
+                }
+            }
+
+            for (int i = 0; i < courses.arraySize && target < 0; i++)
+            {
+                SerializedProperty sceneName = courses.GetArrayElementAtIndex(i).FindPropertyRelative("sceneName");
+                if (sceneName != null && string.IsNullOrEmpty(sceneName.stringValue))
+                {
+                    target = i;
+                }
+            }
+
+            if (target < 0)
+            {
+                target = courses.arraySize;
+                courses.InsertArrayElementAtIndex(target);
+            }
+
+            SerializedProperty entry = courses.GetArrayElementAtIndex(target);
+            SerializedProperty title = entry.FindPropertyRelative("title");
+            SerializedProperty scene = entry.FindPropertyRelative("sceneName");
+            SerializedProperty ready = entry.FindPropertyRelative("ready");
+            if (title == null || scene == null || ready == null)
+            {
+                Debug.LogWarning("[Splashdown] The menu's course registry has an unexpected shape; Course 2 was not registered. " +
+                                 "Add it by hand: scene '" + SceneNames.CourseChaosCove + "'.");
+                return false;
+            }
+
+            if (title.stringValue == "CHAOS COVE" && scene.stringValue == SceneNames.CourseChaosCove && ready.boolValue)
+            {
+                return false;
+            }
+
+            title.stringValue = "CHAOS COVE";
+            scene.stringValue = SceneNames.CourseChaosCove;
+            ready.boolValue = true;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(menu);
+            return true;
+        }
+
+        private static bool AddStandaloneCourse2Button(MainMenuController menu, GameObject root)
+        {
+            foreach (CourseLaunchButton existing in root.GetComponentsInChildren<CourseLaunchButton>(true))
+            {
+                if (existing.sceneName == SceneNames.CourseChaosCove)
+                {
+                    return false;
+                }
+            }
+
+            Transform parent = menu.playButton != null ? menu.playButton.transform.parent : menu.transform;
+            Button button = UiButton("Course2Button", parent, "COURSE 2", new Vector2(430f, 110f), new Vector2(360f, 96f));
+            button.gameObject.AddComponent<CourseLaunchButton>().sceneName = SceneNames.CourseChaosCove;
+            return true;
         }
 
         // ------------------------------------------------------------------ frames
