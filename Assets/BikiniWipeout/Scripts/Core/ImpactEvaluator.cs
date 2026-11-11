@@ -63,7 +63,8 @@ namespace BikiniWipeout.Core
         /// <param name="forceMultiplier">Per-obstacle tuning value. 1 = natural, 0 = harmless.</param>
         public static ImpactResult Evaluate(float closingSpeed, float forceMultiplier, ImpactThresholds thresholds)
         {
-            if (float.IsNaN(closingSpeed) || float.IsNaN(forceMultiplier) || forceMultiplier <= 0f)
+            if (float.IsNaN(closingSpeed) || float.IsNaN(forceMultiplier) || float.IsInfinity(closingSpeed)
+                || float.IsInfinity(forceMultiplier) || closingSpeed <= 0f || forceMultiplier <= 0f)
             {
                 return new ImpactResult(ImpactOutcome.None, 0f);
             }

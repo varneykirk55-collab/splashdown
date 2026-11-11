@@ -36,7 +36,8 @@ namespace BikiniWipeout
         {
             get
             {
-                if (ragdoll != null && ragdoll.IsActive)
+                if (respawner != null && respawner.IsRespawning) return respawner.RespawnFocus;
+                if (ragdoll != null && (ragdoll.IsActive || ragdoll.IsBlending))
                 {
                     return ragdoll.RootBonePosition;
                 }

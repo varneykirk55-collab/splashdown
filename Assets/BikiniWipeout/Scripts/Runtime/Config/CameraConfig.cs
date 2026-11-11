@@ -51,6 +51,7 @@ namespace BikiniWipeout
 
         [Header("Follow")]
         [Min(0f)] public float followSmoothTime = 0.07f;
+        [Min(0.1f)] public float maxFocusLag = 0.8f;
 
         [Header("Collision")]
         [Min(0.01f)] public float collisionRadius = 0.25f;

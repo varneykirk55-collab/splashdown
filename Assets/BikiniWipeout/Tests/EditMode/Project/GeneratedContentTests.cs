@@ -90,5 +90,22 @@ namespace BikiniWipeout.Tests
                 Assert.IsNull(prefab.GetComponentInChildren<KnockdownController>(true), path);
             }
         }
+
+        [Test]
+        public void Phase2APlaceholder_JointsAccommodateProceduralPoses()
+        {
+            var player = AssetDatabase.LoadAssetAtPath<GameObject>(Foundation1Builder.PlayerPrefabPath);
+            float mass = 0f;
+            foreach (Rigidbody body in player.GetComponentsInChildren<Rigidbody>(true)) mass += body.mass;
+            Assert.AreEqual(61f, mass, 0.01f);
+            foreach (CharacterJoint joint in player.GetComponentsInChildren<CharacterJoint>(true))
+            {
+                if (joint.name.EndsWith("LowerLeg"))
+                    Assert.LessOrEqual(joint.lowTwistLimit.limit, -120f, "Run Apply Phase 2A Placeholder Physics.");
+                if (joint.name.EndsWith("UpperLeg")) Assert.GreaterOrEqual(joint.highTwistLimit.limit, 80f);
+                if (joint.name.EndsWith("UpperArm")) Assert.GreaterOrEqual(joint.highTwistLimit.limit, 125f);
+            }
+        }
+
     }
 }

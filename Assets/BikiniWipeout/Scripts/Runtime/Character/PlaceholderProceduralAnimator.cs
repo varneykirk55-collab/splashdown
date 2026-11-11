@@ -160,7 +160,7 @@ namespace BikiniWipeout
             float cycleLength = Mathf.Lerp(2.2f, 3.6f, runAmount);
             phase = Mathf.Repeat(phase + speed / cycleLength * dt * Mathf.PI * 2f, Mathf.PI * 2f);
 
-            float amplitude = Mathf.Lerp(24f, 44f, runAmount);
+            float amplitude = Mathf.Lerp(24f, 44f, runAmount) * Mathf.Clamp01(speed / walkSpeed);
             float swing = Mathf.Sin(phase);
 
             target[LeftThigh] = -swing * amplitude;

@@ -1,3 +1,7 @@
+> **Phase 2A update:** See [PHASE_2A.md](PHASE_2A.md) for the implemented changes and local
+> upgrade/playtest procedure. The architecture map below describes the original foundation;
+> Phase 2A adds explicit Settling, whole-body stability, safe recovery and continuous camera focus.
+
 # Astra Integration Guide — Physics and Animation Refinement
 
 Foundation 1 delivers working, deliberately simple versions of movement, knockdown, ragdoll,

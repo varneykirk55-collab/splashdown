@@ -43,3 +43,7 @@ sysinfo.txt
 # OS
 .DS_Store
 Thumbs.db
+
+!Tools/CoreTests/CoreTests.csproj
+Tools/CoreTests/bin/
+Tools/CoreTests/obj/

@@ -5,13 +5,19 @@ namespace BikiniWipeout.Core
     public enum KnockdownPhase
     {
         /// <summary>Player-controlled.</summary>
-        Normal,
+        Normal = 0,
+
+        /// <summary>Atomic handoff into physics.</summary>
+        Knockdown = 3,
 
         /// <summary>Physics owns the body.</summary>
-        Ragdoll,
+        Ragdoll = 1,
+
+        /// <summary>Physics remains active while stability is measured.</summary>
+        Settling = 4,
 
         /// <summary>Getting back up; input still disabled.</summary>
-        Recovering
+        Recovering = 2
     }
 
     [Serializable]
@@ -43,13 +49,15 @@ namespace BikiniWipeout.Core
     }
 
     /// <summary>
-    /// Engine-free knockdown / recovery flow: Normal -> Ragdoll -> Recovering -> Normal (+ immunity).
+    /// Engine-free knockdown / recovery flow: Normal -> Knockdown -> Ragdoll -> Settling -> Recovering -> Normal (+ immunity).
     /// It owns timing and re-trigger protection only; the physical ragdoll lives in <c>RagdollController</c>.
     /// </summary>
     public sealed class KnockdownStateMachine
     {
         private KnockdownTimings timings;
         private float settledFor;
+        private float ragdollElapsed;
+        public bool IsSimulating => Phase == KnockdownPhase.Ragdoll || Phase == KnockdownPhase.Settling;
         private float recoveryHoldoff;
 
         public KnockdownStateMachine(KnockdownTimings timings)
@@ -87,8 +95,10 @@ namespace BikiniWipeout.Core
             }
 
             settledFor = 0f;
+            ragdollElapsed = 0f;
             recoveryHoldoff = 0f;
             WantsRecovery = false;
+            SetPhase(KnockdownPhase.Knockdown);
             SetPhase(KnockdownPhase.Ragdoll);
             return true;
         }
@@ -113,15 +123,19 @@ namespace BikiniWipeout.Core
                     break;
 
                 case KnockdownPhase.Ragdoll:
+                case KnockdownPhase.Settling:
+                    ragdollElapsed += deltaTime;
+                    if (bodySettled && Phase != KnockdownPhase.Settling) SetPhase(KnockdownPhase.Settling);
+                    else if (!bodySettled && Phase == KnockdownPhase.Settling) SetPhase(KnockdownPhase.Ragdoll);
                     settledFor = bodySettled ? settledFor + deltaTime : 0f;
                     if (recoveryHoldoff > 0f)
                     {
                         recoveryHoldoff -= deltaTime;
                     }
 
-                    bool minElapsed = TimeInPhase >= timings.MinRagdollTime;
+                    bool minElapsed = ragdollElapsed >= timings.MinRagdollTime;
                     bool settled = settledFor >= timings.SettleTime;
-                    bool timedOut = TimeInPhase >= timings.MaxRagdollTime;
+                    bool timedOut = ragdollElapsed >= timings.MaxRagdollTime;
                     WantsRecovery = recoveryHoldoff <= 0f && minElapsed && (settled || timedOut);
                     break;
 
@@ -136,10 +150,10 @@ namespace BikiniWipeout.Core
             }
         }
 
-        /// <summary>Ragdoll -> Recovering. Returns false when not in the ragdoll phase.</summary>
+        /// <summary>Enters recovery only when the simulation has requested it.</summary>
         public bool BeginRecovery()
         {
-            if (Phase != KnockdownPhase.Ragdoll)
+            if (!IsSimulating || !WantsRecovery)
             {
                 return false;
             }
@@ -152,7 +166,7 @@ namespace BikiniWipeout.Core
         /// <summary>No safe place to stand yet: keep the ragdoll and ask again after <paramref name="delay"/>.</summary>
         public void DeferRecovery(float delay)
         {
-            if (Phase != KnockdownPhase.Ragdoll)
+            if (!IsSimulating)
             {
                 return;
             }
@@ -166,6 +180,7 @@ namespace BikiniWipeout.Core
         {
             WantsRecovery = false;
             settledFor = 0f;
+            ragdollElapsed = 0f;
             recoveryHoldoff = 0f;
             ImmunityRemaining = Math.Max(0f, immunitySeconds);
             SetPhase(KnockdownPhase.Normal);

@@ -301,7 +301,10 @@ namespace BikiniWipeout.Tests
         {
             yield return WaitForRunStart();
 
-            Assert.IsTrue(player.Knockdown.ForceKnockdown(new Vector3(0f, 2f, -4f), player.FocusPosition));
+            bool recovered = false;
+            player.Knockdown.Recovered += () => recovered = true;
+            int fallsBefore = course.Session.Falls;
+            Assert.IsTrue(player.Knockdown.ForceKnockdown(new Vector3(0f, 0.5f, 0.75f), player.FocusPosition));
             Assert.IsTrue(player.Ragdoll.IsActive, "Ragdoll should be simulated.");
             Assert.IsFalse(player.Motor.ControlEnabled, "Input is disabled while down.");
             Assert.IsFalse(player.Knockdown.ForceKnockdown(Vector3.forward * 5f, player.FocusPosition),
@@ -327,6 +330,8 @@ namespace BikiniWipeout.Tests
             }
 
             Assert.IsFalse(player.Knockdown.IsDown, "Player should recover.");
+            Assert.IsTrue(recovered, "Checkpoint rescue must not masquerade as successful recovery.");
+            Assert.AreEqual(fallsBefore, course.Session.Falls);
             Assert.IsFalse(player.Ragdoll.IsActive);
             Assert.IsTrue(player.Motor.ControlEnabled, "Control returns after recovery.");
             Assert.IsTrue(player.Knockdown.IsImmune, "Brief immunity prevents chain knockdowns.");
@@ -449,5 +454,90 @@ namespace BikiniWipeout.Tests
             Assert.AreEqual(0, after.Checkpoints.CurrentIndex);
             Assert.AreEqual(1f, Time.timeScale);
         }
+
+        [UnityTest]
+        public IEnumerator Settling_RequiresEveryBoneAndAngularVelocity()
+        {
+            yield return WaitForRunStart();
+            player.Knockdown.ForceKnockdown(Vector3.zero, player.FocusPosition);
+            foreach (Rigidbody body in player.Ragdoll.Bodies)
+            {
+                body.linearVelocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
+            }
+            Assert.IsTrue(player.Ragdoll.IsSettled(0.7f, 1.5f));
+            Rigidbody limb = player.Ragdoll.Bodies[player.Ragdoll.Bodies.Count - 1];
+            limb.angularVelocity = Vector3.up * 3f;
+            Assert.IsFalse(player.Ragdoll.IsSettled(0.7f, 1.5f));
+            limb.angularVelocity = Vector3.zero;
+            limb.linearVelocity = Vector3.right * 2f;
+            Assert.IsFalse(player.Ragdoll.IsSettled(0.7f, 1.5f));
+        }
+
+        [UnityTest]
+        public IEnumerator CameraFocus_FollowsRecoveryPose_AndFreezesAtWaterEntry()
+        {
+            yield return WaitForRunStart();
+            player.Knockdown.ForceKnockdown(Vector3.zero, player.FocusPosition);
+            yield return new WaitForFixedUpdate();
+            Assert.Less(Vector3.Distance(player.FocusPosition, player.Ragdoll.RootBonePosition), 0.001f);
+            player.Ragdoll.Deactivate(true);
+            Assert.IsTrue(player.Ragdoll.IsBlending);
+            Assert.Less(Vector3.Distance(player.FocusPosition, player.Ragdoll.RootBonePosition), 0.001f);
+            Vector3 focus = player.FocusPosition;
+            Assert.IsTrue(player.Respawner.OnHazardEntered(focus));
+            Assert.Less(Vector3.Distance(player.FocusPosition, focus), 0.001f);
+            yield return new WaitForSeconds(0.2f);
+            Assert.Less(Vector3.Distance(player.FocusPosition, focus), 0.001f);
+            Assert.IsFalse(player.Respawner.OnHazardEntered(focus), "Duplicate bone triggers must be ignored.");
+        }
+
+        [UnityTest]
+        public IEnumerator Camera_CloseWallDoesNotForceMinimumDistanceThroughWall()
+        {
+            yield return WaitForRunStart();
+            ThirdPersonCamera rig = Camera.main.GetComponent<ThirdPersonCamera>();
+            rig.SnapBehindTarget();
+            Vector3 pivot = player.FocusPosition + Vector3.up * rig.config.pivotHeightOffset;
+            GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            try
+            {
+                wall.layer = GameLayers.Boundary;
+                wall.transform.SetPositionAndRotation(pivot - rig.transform.forward * 0.7f, rig.transform.rotation);
+                wall.transform.localScale = new Vector3(4f, 4f, 0.1f);
+                Physics.SyncTransforms();
+                yield return new WaitForEndOfFrame();
+                float behindPivot = Vector3.Dot(rig.transform.position - pivot, -rig.transform.forward);
+                Assert.Less(behindPivot, 0.65f, "Camera must stay on the player side of the wall.");
+                Assert.IsFalse(Physics.CheckSphere(rig.transform.position, rig.config.collisionRadius * 0.9f,
+                    GameLayers.CameraObstructionMask, QueryTriggerInteraction.Ignore));
+            }
+            finally { Object.Destroy(wall); }
+        }
+
+        [UnityTest]
+        public IEnumerator RagdollRespawn_RestoresCheckpointOrientationAndMouseLook()
+        {
+            yield return WaitForRunStart();
+            Checkpoint checkpoint = course.Checkpoints.GetCheckpoint(1);
+            player.Motor.Teleport(checkpoint.transform.position + Vector3.up * 0.1f, Quaternion.identity);
+            yield return WaitUntil(() => course.Checkpoints.CurrentIndex == 1, 3f, "checkpoint activation");
+            player.Knockdown.ForceKnockdown(Vector3.up, player.FocusPosition);
+            Assert.IsTrue(player.Respawner.RespawnAtCheckpoint());
+            yield return WaitUntil(() => !player.Respawner.IsRespawning, 3f, "ragdoll respawn");
+            Assert.IsTrue(player.Motor.Controller.enabled);
+            Assert.IsFalse(player.Motor.IsSuspended);
+            Assert.IsFalse(player.Ragdoll.IsBlending);
+            Assert.IsTrue(player.Motor.ControlEnabled);
+            Assert.Less(Quaternion.Angle(player.transform.rotation, checkpoint.SpawnRotation), 1f);
+            foreach (Rigidbody body in player.Ragdoll.Bodies) Assert.IsTrue(body.isKinematic);
+            ThirdPersonCamera rig = Camera.main.GetComponent<ThirdPersonCamera>();
+            float yaw = rig.Yaw;
+            input.Look = new Vector2(30f, 0f);
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            Assert.Greater(Mathf.Abs(Mathf.DeltaAngle(yaw, rig.Yaw)), 0.1f);
+        }
+
     }
 }

@@ -35,6 +35,7 @@ namespace BikiniWipeout
         public static readonly int VerticalSpeedParam = Animator.StringToHash("VerticalSpeed");
         public static readonly int GroundedParam = Animator.StringToHash("Grounded");
         public static readonly int KnockedDownParam = Animator.StringToHash("KnockedDown");
+        public static readonly int RecoveryFaceUpParam = Animator.StringToHash("RecoveryFaceUp");
         public static readonly int RecoveringParam = Animator.StringToHash("Recovering");
         public static readonly int JumpParam = Animator.StringToHash("Jump");
         public static readonly int LandParam = Animator.StringToHash("Land");
@@ -122,7 +123,7 @@ namespace BikiniWipeout
         private CharacterAnimState Evaluate()
         {
             KnockdownPhase phase = knockdown != null ? knockdown.Phase : KnockdownPhase.Normal;
-            if (phase == KnockdownPhase.Ragdoll)
+            if (knockdown != null && knockdown.IsRagdolled)
             {
                 return CharacterAnimState.Knockdown;
             }
@@ -155,7 +156,8 @@ namespace BikiniWipeout
 
             PlayerMovementConfig config = motor.Config;
             float runThreshold = config != null ? (config.walkSpeed + config.runSpeed) * 0.5f : 4.5f;
-            return speed < runThreshold ? CharacterAnimState.Walk : CharacterAnimState.Run;
+            float hysteresis = CurrentState == CharacterAnimState.Run ? -0.15f : 0.15f;
+            return speed < runThreshold + hysteresis ? CharacterAnimState.Walk : CharacterAnimState.Run;
         }
 
         private void WriteAnimatorParameters(float dt)
@@ -179,6 +181,7 @@ namespace BikiniWipeout
             SetBool(GroundedParam, motor == null || motor.IsGrounded);
             SetBool(KnockedDownParam, CurrentState == CharacterAnimState.Knockdown);
             SetBool(RecoveringParam, CurrentState == CharacterAnimState.Recover);
+            SetBool(RecoveryFaceUpParam, knockdown != null && knockdown.RecoveryFaceUp);
         }
 
         private float ComputeMotionBlend(float speed)
@@ -205,6 +208,7 @@ namespace BikiniWipeout
 
         private void OnLanded(float impactSpeed)
         {
+            if (knockdown != null && knockdown.IsDown) return;
             landTimer = landDuration;
             SetTrigger(LandParam);
         }

@@ -7,6 +7,7 @@ namespace BikiniWipeout
     /// Simple orbit camera: mouse / right-stick look, smoothed follow, collision avoidance, and a
     /// wider, lazier framing while the character is ragdolled. All tuning lives in <see cref="CameraConfig"/>.
     /// </summary>
+    [DefaultExecutionOrder(200)]
     [DisallowMultipleComponent]
     public sealed class ThirdPersonCamera : MonoBehaviour
     {
@@ -24,6 +25,7 @@ namespace BikiniWipeout
         private Vector3 pivot;
         private Vector3 pivotVelocity;
         private bool initialized;
+        private SphereCollider collisionProbe;
 
         /// <summary>When false, look input is ignored (pause, menus, results).</summary>
         public bool LookEnabled { get; set; } = true;
@@ -59,6 +61,9 @@ namespace BikiniWipeout
 
         private void Awake()
         {
+            collisionProbe = gameObject.AddComponent<SphereCollider>();
+            collisionProbe.enabled = false;
+            collisionProbe.hideFlags = HideFlags.HideInInspector;
             if (config == null)
             {
                 config = ScriptableObject.CreateInstance<CameraConfig>();
@@ -110,7 +115,7 @@ namespace BikiniWipeout
             ReadLookInput();
             UpdateZoom(dt);
 
-            bool wipeout = target.Knockdown != null && target.Knockdown.IsRagdolled;
+            bool wipeout = target.Knockdown != null && target.Knockdown.IsDown;
             wipeoutBlend = Mathf.MoveTowards(wipeoutBlend, wipeout ? 1f : 0f, config.wipeoutBlendSpeed * dt);
 
             Vector3 desiredPivot = target.FocusPosition + Vector3.up * config.pivotHeightOffset;
@@ -124,15 +129,20 @@ namespace BikiniWipeout
                 pivot = desiredPivot;
             }
 
+            // Bound lag during fast falls so the contestant cannot drop out of frame.
+            pivot = desiredPivot + Vector3.ClampMagnitude(pivot - desiredPivot, config.maxFocusLag);
+            pivot = ResolveOverlap(pivot);
             Quaternion rotation = Quaternion.Euler(pitch, yaw, 0f);
             Vector3 backward = rotation * Vector3.back;
 
-            float wantedDistance = zoom.Current * Mathf.Lerp(1f, config.wipeoutDistanceMultiplier, wipeoutBlend);
+            // Player zoom (Phase 1 polish) combined with Astra's wipeout framing and minimum distance.
+            float wantedDistance = Mathf.Max(config.minDistance,
+                zoom.Current * Mathf.Lerp(1f, config.wipeoutDistanceMultiplier, wipeoutBlend));
             float allowedDistance = wantedDistance;
             if (Physics.SphereCast(pivot, config.collisionRadius, backward, out RaycastHit hit, wantedDistance,
                     GameLayers.CameraObstructionMask, QueryTriggerInteraction.Ignore))
             {
-                allowedDistance = Mathf.Max(config.minDistance, hit.distance);
+                allowedDistance = Mathf.Max(0f, hit.distance - 0.05f);
             }
 
             // Pull in immediately when blocked, ease back out when the view clears.
@@ -145,7 +155,10 @@ namespace BikiniWipeout
                 currentDistance = Mathf.MoveTowards(currentDistance, allowedDistance, config.distanceRecoverSpeed * dt);
             }
 
-            transform.SetPositionAndRotation(pivot + backward * currentDistance, rotation);
+            Vector3 cameraPosition = pivot + backward * currentDistance;
+            // Sphere casts do not report an initially overlapping pivot. Resolve the endpoint too.
+            cameraPosition = ResolveOverlap(cameraPosition);
+            transform.SetPositionAndRotation(cameraPosition, rotation);
 
             if (controlledCamera != null)
             {
@@ -174,6 +187,28 @@ namespace BikiniWipeout
 
             Quaternion rotation = Quaternion.Euler(pitch, yaw, 0f);
             transform.SetPositionAndRotation(pivot + rotation * Vector3.back * currentDistance, rotation);
+        }
+
+        private Vector3 ResolveOverlap(Vector3 position)
+        {
+            collisionProbe.radius = config.collisionRadius;
+            for (int pass = 0; pass < 4; pass++)
+            {
+                bool moved = false;
+                foreach (Collider obstacle in Physics.OverlapSphere(position, config.collisionRadius,
+                    GameLayers.CameraObstructionMask, QueryTriggerInteraction.Ignore))
+                {
+                    if (Physics.ComputePenetration(collisionProbe, position, Quaternion.identity,
+                        obstacle, obstacle.transform.position, obstacle.transform.rotation,
+                        out Vector3 direction, out float depth))
+                    {
+                        position += direction * (depth + 0.01f);
+                        moved = true;
+                    }
+                }
+                if (!moved) break;
+            }
+            return position;
         }
 
         private void ReadLookInput()

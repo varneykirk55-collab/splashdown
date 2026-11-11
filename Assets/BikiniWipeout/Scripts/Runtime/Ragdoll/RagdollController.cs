@@ -54,6 +54,15 @@ namespace BikiniWipeout
         public RagdollConfig Config => config;
 
         public Vector3 RootBonePosition => rootBody != null ? rootBody.transform.position : transform.position;
+        public bool IsSettled(float linearSpeed, float angularSpeed)
+        {
+            if (!IsActive || bodies.Length == 0) return false;
+            foreach (Rigidbody body in bodies)
+                if (body.linearVelocity.sqrMagnitude > linearSpeed * linearSpeed
+                    || body.angularVelocity.sqrMagnitude > angularSpeed * angularSpeed) return false;
+            return true;
+        }
+
         public Vector3 RootBoneVelocity => IsActive && rootBody != null ? rootBody.linearVelocity : Vector3.zero;
 
         /// <summary>Raised when a bone hits something hard enough: (impact speed, world point).</summary>
@@ -154,6 +163,8 @@ namespace BikiniWipeout
             }
 
             SetBehavioursEnabled(false);
+            Physics.SyncTransforms();
+            ApplyBodySettings();
             SetSimulated(true);
 
             for (int i = 0; i < bodies.Length; i++)
@@ -178,6 +189,7 @@ namespace BikiniWipeout
                 return;
             }
 
+            velocityChange = Vector3.ClampMagnitude(velocityChange, config.maxLinearVelocity);
             Rigidbody nearest = null;
             float nearestSqr = float.MaxValue;
             for (int i = 0; i < bodies.Length; i++)
@@ -200,7 +212,8 @@ namespace BikiniWipeout
             Vector3 direction = flat.normalized;
             if (nearest != null && config.hitBoneExtraSpeed > 0f)
             {
-                nearest.AddForce(direction * config.hitBoneExtraSpeed, ForceMode.VelocityChange);
+                nearest.AddForceAtPosition(direction * Mathf.Min(config.hitBoneExtraSpeed, velocityChange.magnitude * 0.25f),
+                    nearest.ClosestPointOnBounds(worldPoint), ForceMode.VelocityChange);
             }
 
             if (rootBody != null && config.tumbleSpin > 0f)
@@ -373,6 +386,11 @@ namespace BikiniWipeout
                 }
                 else
                 {
+                    if (!body.isKinematic)
+                    {
+                        body.linearVelocity = Vector3.zero;
+                        body.angularVelocity = Vector3.zero;
+                    }
                     // Continuous modes are not valid on kinematic bodies; switch back before going kinematic.
                     body.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     body.interpolation = RigidbodyInterpolation.None;
