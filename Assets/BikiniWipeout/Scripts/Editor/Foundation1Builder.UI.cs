@@ -11,7 +11,7 @@ namespace BikiniWipeout.EditorTools
         private const int UiLayer = 5;
         private static readonly Color PanelColor = new Color(0.05f, 0.12f, 0.2f, 0.92f);
         private static readonly Color DimColor = new Color(0f, 0f, 0f, 0.55f);
-        private static readonly Color ButtonColor = new Color(1f, 0.24f, 0.58f, 1f);
+        private static readonly Color ButtonColor = new Color(1f, 0.36f, 0.04f, 1f);
         private static readonly Color AccentColor = new Color(1f, 0.84f, 0.12f, 1f);
         private static readonly Vector2 Center = new Vector2(0.5f, 0.5f);
 
@@ -111,6 +111,7 @@ namespace BikiniWipeout.EditorTools
             Text text = UiText("Label", rect, label, 40, TextAnchor.MiddleCenter, Color.white, Center, Vector2.zero, size);
             text.raycastTarget = false;
             rect.gameObject.AddComponent<UiButtonSound>();
+            rect.gameObject.AddComponent<UiPresentation>().button = true;
             return button;
         }
 
@@ -202,10 +203,26 @@ namespace BikiniWipeout.EditorTools
             var pause = canvas.AddComponent<PauseMenuController>();
             pause.course = course;
             pause.panel = pauseDim.gameObject;
+            pause.pauseContent = pauseBox.gameObject;
             pause.resumeButton = UiButton("ResumeButton", pauseBox, "RESUME", new Vector2(0f, 220f), new Vector2(460f, 84f));
             pause.restartButton = UiButton("RestartButton", pauseBox, "RESTART COURSE", new Vector2(0f, 120f), new Vector2(460f, 84f));
             pause.mainMenuButton = UiButton("MainMenuButton", pauseBox, "MAIN MENU", new Vector2(0f, 20f), new Vector2(460f, 84f));
-            BuildVolumeControls(pauseBox, new Vector2(0f, -230f), 460f);
+            pause.settingsButton = UiButton("SettingsButton", pauseBox, "SETTINGS", new Vector2(0f, -80f), new Vector2(460f, 84f));
+            RectTransform pauseSettings = UiStretch("PauseSettings", pauseDim);
+            UiImage(pauseSettings, new Color(0.02f, 0.18f, 0.29f, 0.98f), true);
+            pause.settingsPanel = pauseSettings.gameObject;
+            UiText("Title", pauseSettings, "SETTINGS", 88, TextAnchor.MiddleCenter, AccentColor, Center, new Vector2(0f, 420f), new Vector2(1400f, 100f));
+            BuildVolumeControls(pauseSettings, new Vector2(-450f, 170f), 500f);
+            var pauseGraphics = pauseSettings.gameObject.AddComponent<GraphicsSettingsController>();
+            pauseGraphics.qualityButton = UiButton("Quality", pauseSettings, "CHANGE QUALITY", new Vector2(430f, 210f), new Vector2(600f, 75f));
+            pauseGraphics.resolutionButton = UiButton("Resolution", pauseSettings, "CHANGE RESOLUTION", new Vector2(430f, 115f), new Vector2(600f, 75f));
+            pauseGraphics.fullscreenButton = UiButton("Fullscreen", pauseSettings, "FULLSCREEN / WINDOWED", new Vector2(430f, 20f), new Vector2(600f, 75f));
+            pauseGraphics.label = UiText("Graphics", pauseSettings, "", 30, TextAnchor.MiddleCenter, Color.white, Center, new Vector2(0f, -120f), new Vector2(1600f, 50f));
+            UiText("Keyboard", pauseSettings, ControlHints.DefaultKeyboardText, 25, TextAnchor.MiddleCenter, Color.white, Center, new Vector2(0f, -190f), new Vector2(1700f, 45f));
+            UiText("Gamepad", pauseSettings, ControlHints.DefaultGamepadText, 25, TextAnchor.MiddleCenter, Color.white, Center, new Vector2(0f, -235f), new Vector2(1700f, 45f));
+            pause.settingsBackButton = UiButton("Back", pauseSettings, "BACK", new Vector2(0f, -345f), new Vector2(460f, 84f));
+            pauseSettings.gameObject.AddComponent<UiPresentation>();
+            pauseSettings.gameObject.SetActive(false);
 
             // ---- Completion screen
             RectTransform resultsDim = UiStretch("ResultsPanel", root);
@@ -218,6 +235,7 @@ namespace BikiniWipeout.EditorTools
             var results = canvas.AddComponent<ResultsScreenController>();
             results.course = course;
             results.panel = resultsDim.gameObject;
+            resultsBox.gameObject.AddComponent<UiPresentation>();
             results.timeText = UiText("Time", resultsBox, "TIME  0:00.00", 96, TextAnchor.MiddleCenter, Color.white, Center,
                 new Vector2(0f, 140f), new Vector2(860f, 120f));
             results.bestText = UiText("Best", resultsBox, "BEST  --", 44, TextAnchor.MiddleCenter, AccentColor, Center,
@@ -238,6 +256,9 @@ namespace BikiniWipeout.EditorTools
             GameObject canvas = CreateCanvas("UI");
             Transform root = canvas.transform;
             UiImage(UiStretch("Ocean", root), new Color(0.02f, 0.55f, 0.73f), false);
+            RectTransform sun = UiRect("Sun", root, new Vector2(1f, 1f), new Vector2(1f, 1f), Center, new Vector2(-170f, -140f), new Vector2(250f, 250f));
+            UiImage(sun, new Color(1f, .78f, .15f, .35f), false);
+            sun.gameObject.AddComponent<MenuBackgroundMotion>();
             var menu = canvas.AddComponent<MainMenuController>();
             RectTransform main = UiStretch("Main", root); menu.mainPanel = main.gameObject;
             UiText("Title", main, "SPLASHDOWN", 150, TextAnchor.MiddleCenter, AccentColor, Center, new Vector2(0f, 330f), new Vector2(1600f, 180f));
@@ -253,10 +274,16 @@ namespace BikiniWipeout.EditorTools
             menu.courseOneLabel = menu.courseOneButton.GetComponentInChildren<Text>();
             menu.courseTwoButton = UiButton("Course2", courses, "COURSE 2  •  COMING SOON", new Vector2(0f, -50f), new Vector2(1050f, 140f));
             menu.courseTwoLabel = menu.courseTwoButton.GetComponentInChildren<Text>();
+            menu.previousCourseButton = UiButton("PreviousPage", courses, "<", new Vector2(-620f, 35f), new Vector2(100f, 84f));
+            menu.nextCourseButton = UiButton("NextPage", courses, ">", new Vector2(620f, 35f), new Vector2(100f, 84f));
             menu.courseBackButton = UiButton("Back", courses, "BACK", new Vector2(0f, -260f), new Vector2(460f, 84f));
 
             RectTransform character = UiStretch("CharacterSelect", root); menu.characterPanel = character.gameObject;
             UiText("Title", character, "CHOOSE YOUR PLAYER", 88, TextAnchor.MiddleCenter, AccentColor, Center, new Vector2(0f, 350f), new Vector2(1500f, 120f));
+            RectTransform preview = UiRect("Preview", character, Center, Center, Center, new Vector2(0f, 100f), new Vector2(900f, 250f));
+            UiImage(preview, PanelColor, false);
+            menu.previousCharacterButton = UiButton("PreviousCharacter", character, "<", new Vector2(-600f, 100f), new Vector2(100f, 84f));
+            menu.nextCharacterButton = UiButton("NextCharacter", character, ">", new Vector2(600f, 100f), new Vector2(100f, 84f));
             menu.characterLabel = UiText("Character", character, "CURRENT PLAYER", 52, TextAnchor.MiddleCenter, Color.white, Center, new Vector2(0f, 100f), new Vector2(1000f, 200f));
             menu.confirmButton = UiButton("Confirm", character, "CONFIRM SELECTION", new Vector2(0f, -110f), new Vector2(600f, 90f));
             menu.characterBackButton = UiButton("Back", character, "BACK", new Vector2(0f, -220f), new Vector2(460f, 84f));
@@ -270,7 +297,12 @@ namespace BikiniWipeout.EditorTools
             menu.settingsLabel = UiText("Graphics", settings, "", 30, TextAnchor.MiddleCenter, Color.white, Center, new Vector2(0f, -120f), new Vector2(1600f, 50f));
             UiText("Keyboard", settings, ControlHints.DefaultKeyboardText, 25, TextAnchor.MiddleCenter, Color.white, Center, new Vector2(0f, -190f), new Vector2(1700f, 45f));
             UiText("Gamepad", settings, ControlHints.DefaultGamepadText, 25, TextAnchor.MiddleCenter, Color.white, Center, new Vector2(0f, -235f), new Vector2(1700f, 45f));
+            var graphics = settings.gameObject.AddComponent<GraphicsSettingsController>();
+            graphics.qualityButton = menu.qualityButton; graphics.resolutionButton = menu.resolutionButton;
+            graphics.fullscreenButton = menu.fullscreenButton; graphics.label = menu.settingsLabel;
             menu.settingsBackButton = UiButton("Back", settings, "BACK", new Vector2(0f, -345f), new Vector2(460f, 84f));
+            main.gameObject.AddComponent<UiPresentation>(); courses.gameObject.AddComponent<UiPresentation>();
+            character.gameObject.AddComponent<UiPresentation>(); settings.gameObject.AddComponent<UiPresentation>();
             courses.gameObject.SetActive(false); character.gameObject.SetActive(false); settings.gameObject.SetActive(false);
         }
     }

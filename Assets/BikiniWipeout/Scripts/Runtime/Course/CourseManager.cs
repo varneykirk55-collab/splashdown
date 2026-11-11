@@ -70,6 +70,7 @@ namespace BikiniWipeout
         private void Awake()
         {
             Current = this;
+            GraphicsSettingsController.ApplySaved();
             Time.timeScale = 1f;
             Session = new CourseSession(countdownSeconds);
             bestTime = new BestTimeRecord(new PlayerPrefsStore(), courseId);
@@ -141,7 +142,8 @@ namespace BikiniWipeout
             ICharacterInput input = player != null ? player.Input : null;
             if (input != null && input.PausePressedThisFrame)
             {
-                TogglePause();
+                PauseMenuController pauseMenu = Session.IsPaused ? FindFirstObjectByType<PauseMenuController>() : null;
+                if (pauseMenu == null || !pauseMenu.TryCloseSettings()) TogglePause();
             }
 
             // Scaled time: the session stands still while the game is paused (timeScale 0).

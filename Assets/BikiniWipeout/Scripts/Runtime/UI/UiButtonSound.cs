@@ -5,9 +5,14 @@ namespace BikiniWipeout
 {
     /// <summary>Plays UI audio events for hover / select and click / submit on any selectable.</summary>
     [DisallowMultipleComponent]
-    public sealed class UiButtonSound : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, ISubmitHandler
+    public sealed class UiButtonSound : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, ISubmitHandler, ISelectHandler
     {
         public void OnPointerEnter(PointerEventData eventData)
+        {
+            AudioManager.Play(AudioEventId.UiHover);
+        }
+
+        public void OnSelect(BaseEventData eventData)
         {
             AudioManager.Play(AudioEventId.UiHover);
         }

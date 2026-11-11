@@ -54,6 +54,7 @@ namespace BikiniWipeout
 
         private void OnFinished(CourseResult result)
         {
+            AudioManager.Play(AudioEventId.UiCourseComplete);
             if (timeText != null)
             {
                 timeText.text = "TIME  " + TimeFormatter.Format(result.TimeSeconds);

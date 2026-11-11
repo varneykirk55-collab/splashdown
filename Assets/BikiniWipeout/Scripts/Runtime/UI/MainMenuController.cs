@@ -15,6 +15,14 @@ namespace BikiniWipeout
         public bool Available => ready && !string.IsNullOrEmpty(sceneName) && Application.CanStreamedLevelBeLoaded(sceneName);
     }
 
+    [Serializable]
+    public sealed class CharacterEntry
+    {
+        public string id;
+        public string displayName;
+        public bool ready;
+    }
+
     [DisallowMultipleComponent]
     public sealed class MainMenuController : MonoBehaviour
     {
@@ -28,6 +36,8 @@ namespace BikiniWipeout
         [SerializeField] internal Button courseOneButton, courseTwoButton, courseBackButton, confirmButton, characterBackButton, settingsBackButton;
         [SerializeField] internal Text courseOneLabel, courseTwoLabel, characterLabel, settingsLabel;
         [SerializeField] internal Button qualityButton, resolutionButton, fullscreenButton;
+        [SerializeField] internal Button previousCharacterButton, nextCharacterButton, previousCourseButton, nextCourseButton;
+        [SerializeField] internal CharacterEntry[] characters = { new CharacterEntry { id = "existing-player", displayName = "CURRENT PLAYER", ready = true } };
         [SerializeField] internal CourseEntry[] courses = {
             new CourseEntry { title = "THE SPLASHDOWN GAUNTLET", sceneName = SceneNames.CourseGauntlet, ready = true },
             new CourseEntry { title = "COURSE 2", sceneName = "", ready = false }
@@ -35,8 +45,7 @@ namespace BikiniWipeout
         private const string CharacterKey = "Splashdown.Character";
         private bool startingCourse, loading;
         private int selectedCourse;
-        private int resolutionIndex;
-        private Resolution[] resolutions;
+        private int characterIndex, coursePage;
         private static bool openCourses;
 
         public static void OpenCourseSelectOnArrival() { openCourses = true; }
@@ -46,15 +55,16 @@ namespace BikiniWipeout
             if (quitButton != null) quitButton.onClick.AddListener(Quit);
             if (characterButton != null) characterButton.onClick.AddListener(ShowCharacterDirect);
             if (settingsButton != null) settingsButton.onClick.AddListener(ShowSettings);
-            if (courseOneButton != null) courseOneButton.onClick.AddListener(() => SelectCourse(0));
-            if (courseTwoButton != null) courseTwoButton.onClick.AddListener(() => SelectCourse(1));
-            if (courseBackButton != null) courseBackButton.onClick.AddListener(ShowMain);
+            if (courseOneButton != null) courseOneButton.onClick.AddListener(() => SelectCourse(coursePage * 2));
+            if (courseTwoButton != null) courseTwoButton.onClick.AddListener(() => SelectCourse(coursePage * 2 + 1));
+            if (courseBackButton != null) courseBackButton.onClick.AddListener(BackToMain);
             if (characterBackButton != null) characterBackButton.onClick.AddListener(CharacterBack);
             if (confirmButton != null) confirmButton.onClick.AddListener(ConfirmCharacter);
-            if (settingsBackButton != null) settingsBackButton.onClick.AddListener(ShowMain);
-            if (qualityButton != null) qualityButton.onClick.AddListener(CycleQuality);
-            if (resolutionButton != null) resolutionButton.onClick.AddListener(CycleResolution);
-            if (fullscreenButton != null) fullscreenButton.onClick.AddListener(ToggleFullscreen);
+            if (settingsBackButton != null) settingsBackButton.onClick.AddListener(BackToMain);
+            if (previousCharacterButton != null) previousCharacterButton.onClick.AddListener(() => ChangeCharacter(-1));
+            if (nextCharacterButton != null) nextCharacterButton.onClick.AddListener(() => ChangeCharacter(1));
+            if (previousCourseButton != null) previousCourseButton.onClick.AddListener(() => ChangePage(-1));
+            if (nextCourseButton != null) nextCourseButton.onClick.AddListener(() => ChangePage(1));
         }
         private void Start()
         {
@@ -62,16 +72,15 @@ namespace BikiniWipeout
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             AudioManager.PlayMusic(music);
-            resolutions = Screen.resolutions;
-            int quality = Mathf.Clamp(PlayerPrefs.GetInt("Splashdown.Quality", QualitySettings.GetQualityLevel()), 0, QualitySettings.names.Length - 1);
-            QualitySettings.SetQualityLevel(quality);
-            int width = PlayerPrefs.GetInt("Splashdown.Width", Screen.width);
-            int height = PlayerPrefs.GetInt("Splashdown.Height", Screen.height);
-            bool fullscreen = PlayerPrefs.GetInt("Splashdown.Fullscreen", Screen.fullScreen ? 1 : 0) != 0;
-            Screen.SetResolution(width, height, fullscreen);
-            if (resolutions != null) for (int i = 0; i < resolutions.Length; i++) if (resolutions[i].width == width && resolutions[i].height == height) resolutionIndex = i;
-            // Only the existing generated player is currently supported.
-            PlayerPrefs.SetString(CharacterKey, "existing-player");
+            GraphicsSettingsController.ApplySaved();
+            string saved = PlayerPrefs.GetString(CharacterKey, "existing-player");
+            characterIndex = -1;
+            if (characters != null) for (int i = 0; i < characters.Length; i++)
+            {
+                if (!IsCharacterAvailable(i)) continue;
+                if (characterIndex < 0) characterIndex = i;
+                if (characters[i].id == saved) { characterIndex = i; break; }
+            }
             if (openCourses) { openCourses = false; ShowCourses(); } else ShowMain();
         }
         private void Update()
@@ -80,10 +89,11 @@ namespace BikiniWipeout
                         (Gamepad.current != null && Gamepad.current.buttonEast.wasPressedThisFrame);
             if (!back) return;
             if (characterPanel != null && characterPanel.activeSelf) CharacterBack();
-            else if ((coursePanel != null && coursePanel.activeSelf) || (settingsPanel != null && settingsPanel.activeSelf)) ShowMain();
+            else if ((coursePanel != null && coursePanel.activeSelf) || (settingsPanel != null && settingsPanel.activeSelf)) BackToMain();
         }
         private void Show(GameObject panel, Button first)
         {
+            AudioManager.Play(AudioEventId.UiTransition);
             if (mainPanel != null) mainPanel.SetActive(panel == mainPanel);
             if (coursePanel != null) coursePanel.SetActive(panel == coursePanel);
             if (characterPanel != null) characterPanel.SetActive(panel == characterPanel);
@@ -91,33 +101,61 @@ namespace BikiniWipeout
             if (first != null && first.interactable) first.Select();
         }
         public void ShowMain() { Show(mainPanel, playButton); }
+        private void BackToMain() { AudioManager.Play(AudioEventId.UiBack); ShowMain(); }
         public void ShowCourses()
         {
-            if (courses != null && courses.Length > 0 && courseOneButton != null) { courseOneButton.interactable = courses[0].Available; if (courseOneLabel != null) courseOneLabel.text = courses[0].title + (courses[0].Available ? "  •  PLAY" : "  •  UNAVAILABLE"); }
-            if (courses != null && courses.Length > 1 && courseTwoButton != null) { courseTwoButton.interactable = courses[1].Available; if (courseTwoLabel != null) courseTwoLabel.text = courses[1].title + (courses[1].Available ? "  •  PLAY" : "  •  COMING SOON"); }
-            Show(coursePanel, courseOneButton != null && courseOneButton.interactable ? courseOneButton : courseBackButton);
+            SetCourseCard(coursePage * 2, courseOneButton, courseOneLabel);
+            SetCourseCard(coursePage * 2 + 1, courseTwoButton, courseTwoLabel);
+            if (previousCourseButton != null) previousCourseButton.interactable = coursePage > 0;
+            if (nextCourseButton != null) nextCourseButton.interactable = courses != null && (coursePage + 1) * 2 < courses.Length;
+            Show(coursePanel, courseOneButton != null && courseOneButton.gameObject.activeSelf && courseOneButton.interactable ? courseOneButton : courseBackButton);
         }
+        private void SetCourseCard(int index, Button button, Text label)
+        {
+            if (button == null) return;
+            bool exists = courses != null && index < courses.Length && courses[index] != null;
+            button.gameObject.SetActive(exists);
+            if (!exists) return;
+            button.interactable = courses[index].Available;
+            if (label != null) label.text = courses[index].title + (courses[index].Available ? "\nREADY TO PLAY" : (courses[index].ready ? "\nUNAVAILABLE" : "\nCOMING SOON"));
+        }
+        private void ChangePage(int delta) { coursePage = Mathf.Max(0, coursePage + delta); ShowCourses(); }
         private void SelectCourse(int index)
         {
-            if (courses == null || index < 0 || index >= courses.Length || !courses[index].Available) return;
+            if (courses == null || index < 0 || index >= courses.Length || courses[index] == null || !courses[index].Available) return;
+            AudioManager.Play(AudioEventId.UiCourseSelect);
             selectedCourse = index; startingCourse = true; ShowCharacter();
         }
         private void ShowCharacterDirect() { startingCourse = false; ShowCharacter(); }
-        private void ShowCharacter() { if (characterLabel != null) characterLabel.text = "CURRENT PLAYER\n\nREADY TO SPLASH!"; Show(characterPanel, confirmButton); }
-        private void CharacterBack() { if (startingCourse) ShowCourses(); else ShowMain(); }
+        private bool IsCharacterAvailable(int index) { return characters != null && index >= 0 && index < characters.Length && characters[index] != null && characters[index].ready && characters[index].id == "existing-player"; }
+        private void ShowCharacter() { RefreshCharacter(); Show(characterPanel, confirmButton); }
+        private void RefreshCharacter()
+        {
+            bool valid = IsCharacterAvailable(characterIndex);
+            if (characterLabel != null) characterLabel.text = valid ? characters[characterIndex].displayName + "\n\nSELECTED\nPREVIEW UNAVAILABLE" : "NO PLAYER AVAILABLE";
+            if (confirmButton != null) confirmButton.interactable = valid;
+            int count = 0; if (characters != null) for (int i = 0; i < characters.Length; i++) if (IsCharacterAvailable(i)) count++;
+            if (previousCharacterButton != null) previousCharacterButton.interactable = count > 1;
+            if (nextCharacterButton != null) nextCharacterButton.interactable = count > 1;
+        }
+        private void ChangeCharacter(int direction)
+        {
+            if (characters == null || characters.Length == 0) return;
+            for (int i = 1; i <= characters.Length; i++) { int candidate = (characterIndex + direction * i + characters.Length * i) % characters.Length; if (IsCharacterAvailable(candidate)) { characterIndex = candidate; break; } }
+            RefreshCharacter();
+        }
+        private void CharacterBack() { AudioManager.Play(AudioEventId.UiBack); if (startingCourse) ShowCourses(); else ShowMain(); }
         private void ConfirmCharacter()
         {
-            PlayerPrefs.SetString(CharacterKey, "existing-player"); PlayerPrefs.Save();
+            if (!IsCharacterAvailable(characterIndex)) return;
+            AudioManager.Play(AudioEventId.UiCharacterConfirm);
+            PlayerPrefs.SetString(CharacterKey, characters[characterIndex].id); PlayerPrefs.Save();
             if (!startingCourse) { ShowMain(); return; }
-            if (loading || courses == null || selectedCourse >= courses.Length || !courses[selectedCourse].Available) { ShowCourses(); return; }
+            if (loading || courses == null || selectedCourse < 0 || selectedCourse >= courses.Length || courses[selectedCourse] == null || !courses[selectedCourse].Available) { ShowCourses(); return; }
             loading = true; Time.timeScale = 1f; SceneManager.LoadScene(courses[selectedCourse].sceneName);
         }
         public void StartCourse() { ShowCourses(); }
-        private void ShowSettings() { RefreshSettings(); Show(settingsPanel, settingsBackButton); }
-        private void CycleQuality() { QualitySettings.SetQualityLevel((QualitySettings.GetQualityLevel() + 1) % QualitySettings.names.Length); PlayerPrefs.SetInt("Splashdown.Quality", QualitySettings.GetQualityLevel()); PlayerPrefs.Save(); RefreshSettings(); }
-        private void CycleResolution() { if (resolutions == null || resolutions.Length == 0) return; resolutionIndex = (resolutionIndex + 1) % resolutions.Length; var r = resolutions[resolutionIndex]; Screen.SetResolution(r.width, r.height, Screen.fullScreen); PlayerPrefs.SetInt("Splashdown.Width", r.width); PlayerPrefs.SetInt("Splashdown.Height", r.height); PlayerPrefs.Save(); RefreshSettings(); }
-        private void ToggleFullscreen() { bool value = !Screen.fullScreen; Screen.fullScreen = value; PlayerPrefs.SetInt("Splashdown.Fullscreen", value ? 1 : 0); PlayerPrefs.Save(); RefreshSettings(); }
-        private void RefreshSettings() { if (settingsLabel != null) settingsLabel.text = "QUALITY: " + QualitySettings.names[QualitySettings.GetQualityLevel()] + "    RESOLUTION: " + Screen.width + " × " + Screen.height + "    " + (Screen.fullScreen ? "FULLSCREEN" : "WINDOWED"); }
+        private void ShowSettings() { Show(settingsPanel, settingsBackButton); }
         public void Quit() {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
