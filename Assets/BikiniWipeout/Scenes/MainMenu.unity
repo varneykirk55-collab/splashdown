@@ -1297,10 +1297,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: BikiniWipeout.Runtime::BikiniWipeout.MainMenuController
   playButton: {fileID: 69570490}
   quitButton: {fileID: 1792698952}
+  characterButton: {fileID: 0}
+  settingsButton: {fileID: 0}
   bestTimeText: {fileID: 1540685520}
   courseSceneName: Course_SplashdownGauntlet
   courseId: gauntlet1
   music: 1
+  mainPanel: {fileID: 0}
+  coursePanel: {fileID: 0}
+  characterPanel: {fileID: 0}
+  settingsPanel: {fileID: 0}
+  courseOneButton: {fileID: 0}
+  courseTwoButton: {fileID: 0}
+  courseBackButton: {fileID: 0}
+  confirmButton: {fileID: 0}
+  characterBackButton: {fileID: 0}
+  settingsBackButton: {fileID: 0}
+  courseOneLabel: {fileID: 0}
+  courseTwoLabel: {fileID: 0}
+  characterLabel: {fileID: 0}
+  settingsLabel: {fileID: 0}
+  qualityButton: {fileID: 0}
+  resolutionButton: {fileID: 0}
+  fullscreenButton: {fileID: 0}
+  previousCharacterButton: {fileID: 0}
+  nextCharacterButton: {fileID: 0}
+  previousCourseButton: {fileID: 0}
+  nextCourseButton: {fileID: 0}
+  characters:
+  - id: existing-player
+    displayName: CURRENT PLAYER
+    ready: 1
+    sceneSuffix: 
+  - id: charD
+    displayName: STARS & STRIPES
+    ready: 1
+    sceneSuffix: _StarsStripes
+  courses:
+  - title: THE SPLASHDOWN GAUNTLET
+    sceneName: Course_SplashdownGauntlet
+    ready: 1
+  - title: CHAOS COVE
+    sceneName: Course_ChaosCove
+    ready: 1
 --- !u!114 &1027944124
 MonoBehaviour:
   m_ObjectHideFlags: 0

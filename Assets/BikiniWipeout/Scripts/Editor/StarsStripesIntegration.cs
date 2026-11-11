@@ -41,10 +41,76 @@ namespace BikiniWipeout.EditorTools
             config.timings.RecoveryDuration = CowgirlIntegration.RecoveryDuration;
             EditorUtility.SetDirty(config);
             GameObject prefab = BuildPrefab(avatar, controller, config);
-            BuildScene(prefab);
+            BuildScene(prefab, SourceScenePath, ScenePath);
+            BuildCourseVariants(prefab);
             AssetDatabase.SaveAssets();
             Debug.Log("[charD] Integration complete: " + PrefabPath);
         }
+
+        /// <summary>Scene suffix the main menu appends to a course scene name when charD is selected.</summary>
+        public const string SceneSuffix = "_StarsStripes";
+
+        /// <summary>Stars &amp; Stripes copies of Course 1 (Gauntlet) and Course 2 (Chaos Cove), made from the
+        /// generated course scenes (which hold the cowgirl) by swapping the player and re-pointing references.</summary>
+        public static void BuildCourseVariants(GameObject prefab = null)
+        {
+            prefab = prefab != null ? prefab : AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
+            foreach (string course in new[] { "Course_SplashdownGauntlet", "Course_ChaosCove" })
+            {
+                string source = Root + "/Scenes/" + course + ".unity";
+                if (AssetDatabase.LoadAssetAtPath<SceneAsset>(source) == null) { Debug.LogWarning("[charD] Missing course scene, no variant: " + source); continue; }
+                BuildScene(prefab, source, Root + "/Scenes/" + course + SceneSuffix + ".unity");
+            }
+
+            RegisterInBuildSettings();
+            RegisterInMainMenu();
+        }
+
+        private static void RegisterInBuildSettings()
+        {
+            var scenes = EditorBuildSettings.scenes.ToList();
+            foreach (string path in new[] { ScenePath, Root + "/Scenes/Course_SplashdownGauntlet" + SceneSuffix + ".unity", Root + "/Scenes/Course_ChaosCove" + SceneSuffix + ".unity" })
+            {
+                if (!File.Exists(path) || scenes.Any(e => e.path == path)) continue;
+                scenes.Add(new EditorBuildSettingsScene(path, true));
+            }
+
+            EditorBuildSettings.scenes = scenes.ToArray();
+        }
+
+        /// <summary>Makes sure the generated MainMenu lists both playable characters.</summary>
+        private static void RegisterInMainMenu()
+        {
+            const string menuPath = Root + "/Scenes/MainMenu.unity";
+            if (!File.Exists(menuPath)) return;
+            Scene scene = EditorSceneManager.OpenScene(menuPath, OpenSceneMode.Single);
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                MainMenuController menu = root.GetComponentInChildren<MainMenuController>(true);
+                if (menu == null) continue;
+                var serialized = new SerializedObject(menu);
+                SerializedProperty list = serialized.FindProperty("characters");
+                int index = -1;
+                for (int i = 0; i < list.arraySize; i++)
+                    if (list.GetArrayElementAtIndex(i).FindPropertyRelative("id").stringValue == CharacterId) index = i;
+                if (index < 0) { index = list.arraySize; list.arraySize++; }
+                SerializedProperty entry = list.GetArrayElementAtIndex(index);
+                entry.FindPropertyRelative("id").stringValue = CharacterId;
+                entry.FindPropertyRelative("displayName").stringValue = DisplayName.ToUpperInvariant();
+                entry.FindPropertyRelative("ready").boolValue = true;
+                entry.FindPropertyRelative("sceneSuffix").stringValue = SceneSuffix;
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+                EditorSceneManager.MarkSceneDirty(scene);
+                EditorSceneManager.SaveScene(scene);
+                Debug.Log("[charD] Registered in the main menu character list.");
+                return;
+            }
+        }
+
+        [MenuItem("Bikini Wipeout/Characters/Build Stars & Stripes Course Variants")]
+        public static void BuildCourseVariantsMenu() { BuildCourseVariants(); AssetDatabase.SaveAssets(); }
+
+        public static void BuildCourseVariantsBatch() { BuildCourseVariants(); AssetDatabase.SaveAssets(); }
 
         private static T CopyAsset<T>(string source, string destination) where T : Object
         {
@@ -423,15 +489,15 @@ namespace BikiniWipeout.EditorTools
             }
         }
 
-        private static void BuildScene(GameObject prefab)
+        private static void BuildScene(GameObject prefab, string sourceScenePath, string scenePath)
         {
-            if (AssetDatabase.LoadAssetAtPath<SceneAsset>(SourceScenePath) == null)
-                throw new FileNotFoundException(SourceScenePath);
-            CopyAsset<SceneAsset>(SourceScenePath, ScenePath);
+            if (AssetDatabase.LoadAssetAtPath<SceneAsset>(sourceScenePath) == null)
+                throw new FileNotFoundException(sourceScenePath);
+            CopyAsset<SceneAsset>(sourceScenePath, scenePath);
 
-            Scene scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            Scene scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
             PlayerCharacter old = scene.GetRootGameObjects().Select(g => g.GetComponent<PlayerCharacter>()).FirstOrDefault(p => p != null);
-            if (old == null) throw new System.InvalidOperationException("No PlayerCharacter in " + ScenePath);
+            if (old == null) throw new System.InvalidOperationException("No PlayerCharacter in " + scenePath);
             GameObject oldObject = old.gameObject;
 
             var player = (GameObject)PrefabUtility.InstantiatePrefab(prefab, scene);
@@ -482,7 +548,7 @@ namespace BikiniWipeout.EditorTools
             Object.DestroyImmediate(oldObject);
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
-            Debug.Log($"[charD] Scene copy saved with {remapped} player references re-pointed: {ScenePath}");
+            Debug.Log($"[charD] Scene copy saved with {remapped} player references re-pointed: {scenePath}");
         }
     }
 }

@@ -14,5 +14,17 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/BikiniWipeout/Scenes/Course_SplashdownGauntlet.unity
     guid: 8cc2aacbec7d2264496b3ce622b4261c
+  - enabled: 1
+    path: Assets/BikiniWipeout/Scenes/Course_ChaosCove.unity
+    guid: 675899ee77c37af4c8e0b1f624d82d92
+  - enabled: 1
+    path: Assets/BikiniWipeout/Scenes/Course_Foundation1_StarsStripes.unity
+    guid: 59c804ac9c32f6144a46f00a9746e28b
+  - enabled: 1
+    path: Assets/BikiniWipeout/Scenes/Course_SplashdownGauntlet_StarsStripes.unity
+    guid: 40d2dd47a8ce29c4c89d6c8d9243e92c
+  - enabled: 1
+    path: Assets/BikiniWipeout/Scenes/Course_ChaosCove_StarsStripes.unity
+    guid: 1e77051e8c2db194c954a55b237d0163
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: e8ae06260405a9a22eeaa02688a4e784, type: 3}

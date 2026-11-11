@@ -134,6 +134,69 @@ MonoBehaviour:
     pitchRange: {x: 0.95, y: 1.05}
     spatialBlend: 0.2
     minInterval: 0.3
+  - id: 40
+    clips:
+    - {fileID: 8300000, guid: 2a13cea829caad14c8c38b0c71dfce3d, type: 3}
+    volume: 0.7
+    pitchRange: {x: 0.92, y: 1.1}
+    spatialBlend: 0.5
+    minInterval: 0.1
+  - id: 41
+    clips:
+    - {fileID: 8300000, guid: 205e2dc085b25824cb1e8c584321da32, type: 3}
+    volume: 0.5
+    pitchRange: {x: 0.9, y: 1.1}
+    spatialBlend: 0.85
+    minInterval: 0.25
+  - id: 42
+    clips:
+    - {fileID: 8300000, guid: 54ba190e34ab4bf44ae1558671c5364c, type: 3}
+    volume: 0.55
+    pitchRange: {x: 0.95, y: 1.05}
+    spatialBlend: 0.8
+    minInterval: 0.3
+  - id: 43
+    clips:
+    - {fileID: 8300000, guid: ff4fe455f464e73499ccf70a4e860a15, type: 3}
+    volume: 0.75
+    pitchRange: {x: 0.92, y: 1.06}
+    spatialBlend: 0.8
+    minInterval: 0.3
+  - id: 44
+    clips:
+    - {fileID: 8300000, guid: 757aa896948a0884e843af81e84cd6c5, type: 3}
+    volume: 0.45
+    pitchRange: {x: 0.9, y: 1.1}
+    spatialBlend: 0.2
+    minInterval: 0.5
+  - id: 45
+    clips:
+    - {fileID: 8300000, guid: 7172013130d88b44589901729203ebc0, type: 3}
+    volume: 0.6
+    pitchRange: {x: 0.9, y: 1.12}
+    spatialBlend: 0.6
+    minInterval: 0.08
+  - id: 46
+    clips:
+    - {fileID: 8300000, guid: 3e8934baa4be3dc42aa5ca4aee12a7a6, type: 3}
+    volume: 0.7
+    pitchRange: {x: 0.9, y: 1.1}
+    spatialBlend: 0.6
+    minInterval: 0.1
+  - id: 47
+    clips:
+    - {fileID: 8300000, guid: b30a679e44d4244499369a258e7eb342, type: 3}
+    volume: 0.65
+    pitchRange: {x: 0.9, y: 1.12}
+    spatialBlend: 0.4
+    minInterval: 0.1
+  - id: 48
+    clips:
+    - {fileID: 8300000, guid: 3514f7e332b246d4b85568b138ebca56, type: 3}
+    volume: 0.32
+    pitchRange: {x: 1, y: 1}
+    spatialBlend: 0
+    minInterval: 0
   music:
   - id: 1
     clip: {fileID: 8300000, guid: 8237e89ccfc3f0748ad4a8a37eba44ec, type: 3}

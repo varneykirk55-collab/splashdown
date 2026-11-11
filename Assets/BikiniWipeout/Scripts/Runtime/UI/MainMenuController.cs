@@ -21,6 +21,8 @@ namespace BikiniWipeout
         public string id;
         public string displayName;
         public bool ready;
+        /// <summary>Appended to a course scene name to load this character's copy of the course (empty = the course scene itself).</summary>
+        public string sceneSuffix;
     }
 
     [DisallowMultipleComponent]
@@ -37,7 +39,10 @@ namespace BikiniWipeout
         [SerializeField] internal Text courseOneLabel, courseTwoLabel, characterLabel, settingsLabel;
         [SerializeField] internal Button qualityButton, resolutionButton, fullscreenButton;
         [SerializeField] internal Button previousCharacterButton, nextCharacterButton, previousCourseButton, nextCourseButton;
-        [SerializeField] internal CharacterEntry[] characters = { new CharacterEntry { id = "existing-player", displayName = "CURRENT PLAYER", ready = true } };
+        [SerializeField] internal CharacterEntry[] characters = {
+            new CharacterEntry { id = "existing-player", displayName = "CURRENT PLAYER", ready = true },
+            new CharacterEntry { id = "charD", displayName = "STARS & STRIPES", ready = true, sceneSuffix = "_StarsStripes" }
+        };
         [SerializeField] internal CourseEntry[] courses = {
             new CourseEntry { title = "THE SPLASHDOWN GAUNTLET", sceneName = SceneNames.CourseGauntlet, ready = true },
             new CourseEntry { title = "COURSE 2", sceneName = "", ready = false }
@@ -127,7 +132,20 @@ namespace BikiniWipeout
             selectedCourse = index; startingCourse = true; ShowCharacter();
         }
         private void ShowCharacterDirect() { startingCourse = false; ShowCharacter(); }
-        private bool IsCharacterAvailable(int index) { return characters != null && index >= 0 && index < characters.Length && characters[index] != null && characters[index].ready && characters[index].id == "existing-player"; }
+        private bool IsCharacterAvailable(int index) { return characters != null && index >= 0 && index < characters.Length && characters[index] != null && characters[index].ready && (string.IsNullOrEmpty(characters[index].sceneSuffix) || AnyVariantLoadable(characters[index].sceneSuffix)); }
+        private bool AnyVariantLoadable(string suffix)
+        {
+            if (courses == null) return false;
+            foreach (CourseEntry c in courses) if (c != null && c.ready && !string.IsNullOrEmpty(c.sceneName) && Application.CanStreamedLevelBeLoaded(c.sceneName + suffix)) return true;
+            return false;
+        }
+        /// <summary>Scene to load for a course with the selected character; falls back to the base course scene.</summary>
+        private string ResolveCourseScene(CourseEntry course)
+        {
+            CharacterEntry c = characters != null && characterIndex >= 0 && characterIndex < characters.Length ? characters[characterIndex] : null;
+            if (c != null && !string.IsNullOrEmpty(c.sceneSuffix) && Application.CanStreamedLevelBeLoaded(course.sceneName + c.sceneSuffix)) return course.sceneName + c.sceneSuffix;
+            return course.sceneName;
+        }
         private void ShowCharacter() { RefreshCharacter(); Show(characterPanel, confirmButton); }
         private void RefreshCharacter()
         {
@@ -152,7 +170,7 @@ namespace BikiniWipeout
             PlayerPrefs.SetString(CharacterKey, characters[characterIndex].id); PlayerPrefs.Save();
             if (!startingCourse) { ShowMain(); return; }
             if (loading || courses == null || selectedCourse < 0 || selectedCourse >= courses.Length || courses[selectedCourse] == null || !courses[selectedCourse].Available) { ShowCourses(); return; }
-            loading = true; Time.timeScale = 1f; SceneManager.LoadScene(courses[selectedCourse].sceneName);
+            loading = true; Time.timeScale = 1f; SceneManager.LoadScene(ResolveCourseScene(courses[selectedCourse]));
         }
         public void StartCourse() { ShowCourses(); }
         private void ShowSettings() { Show(settingsPanel, settingsBackButton); }
