@@ -1,3 +1,4 @@
+using BikiniWipeout.Core;
 using UnityEngine;
 
 namespace BikiniWipeout
@@ -19,6 +20,7 @@ namespace BikiniWipeout
         private float yaw;
         private float pitch;
         private float currentDistance;
+        private ZoomController zoom;
         private float wipeoutBlend;
         private Vector3 pivot;
         private Vector3 pivotVelocity;
@@ -31,6 +33,31 @@ namespace BikiniWipeout
         public float Yaw => yaw;
         public float Pitch => pitch;
         public PlayerCharacter Target => target;
+
+        /// <summary>Current zoom distance before wipeout framing and collision are applied.</summary>
+        public float ZoomDistance => zoom != null ? zoom.Current : (config != null ? config.distance : 0f);
+
+        /// <summary>Distance the zoom is heading towards.</summary>
+        public float ZoomTargetDistance => zoom != null ? zoom.Target : ZoomDistance;
+
+        /// <summary>The distance the camera is actually at this frame (after collision and wipeout framing).</summary>
+        public float ActualDistance => currentDistance;
+
+        /// <summary>Sets the zoom target (clamped to the configured range).</summary>
+        public void SetZoomDistance(float distance, bool instant = false)
+        {
+            zoom.SetTarget(distance);
+            if (instant)
+            {
+                zoom.Snap();
+            }
+        }
+
+        /// <summary>Returns the zoom to the configured default distance.</summary>
+        public void ResetZoom()
+        {
+            SetZoomDistance(config.distance);
+        }
 
         private void Awake()
         {
@@ -47,6 +74,8 @@ namespace BikiniWipeout
             {
                 controlledCamera = GetComponent<Camera>();
             }
+
+            zoom = new ZoomController(config.zoomMinDistance, config.zoomMaxDistance, config.distance, config.zoomSmoothTime);
         }
 
         private void Start()
@@ -84,6 +113,7 @@ namespace BikiniWipeout
 
             float dt = Time.deltaTime;
             ReadLookInput();
+            UpdateZoom(dt);
 
             bool wipeout = target.Knockdown != null && target.Knockdown.IsDown;
             wipeoutBlend = Mathf.MoveTowards(wipeoutBlend, wipeout ? 1f : 0f, config.wipeoutBlendSpeed * dt);
@@ -105,8 +135,9 @@ namespace BikiniWipeout
             Quaternion rotation = Quaternion.Euler(pitch, yaw, 0f);
             Vector3 backward = rotation * Vector3.back;
 
+            // Player zoom (Phase 1 polish) combined with Astra's wipeout framing and minimum distance.
             float wantedDistance = Mathf.Max(config.minDistance,
-                config.distance * Mathf.Lerp(1f, config.wipeoutDistanceMultiplier, wipeoutBlend));
+                zoom.Current * Mathf.Lerp(1f, config.wipeoutDistanceMultiplier, wipeoutBlend));
             float allowedDistance = wantedDistance;
             if (Physics.SphereCast(pivot, config.collisionRadius, backward, out RaycastHit hit, wantedDistance,
                     GameLayers.CameraObstructionMask, QueryTriggerInteraction.Ignore))
@@ -147,7 +178,10 @@ namespace BikiniWipeout
             pitch = Mathf.Clamp(config.startPitch, config.minPitch, config.maxPitch);
             pivot = target.FocusPosition + Vector3.up * config.pivotHeightOffset;
             pivotVelocity = Vector3.zero;
-            currentDistance = config.distance;
+            // The player's chosen zoom survives respawns.
+            zoom.Configure(config.zoomMinDistance, config.zoomMaxDistance, config.zoomSmoothTime);
+            zoom.Snap();
+            currentDistance = zoom.Current;
             wipeoutBlend = 0f;
             initialized = true;
 
@@ -200,13 +234,39 @@ namespace BikiniWipeout
             }
             else
             {
+                // Response curve: small stick movements turn slowly for precise aiming, full deflection turns at full speed.
+                float magnitude = Mathf.Clamp01(look.magnitude);
+                Vector2 shaped = look.normalized * Mathf.Pow(magnitude, config.gamepadLookExponent);
                 float step = config.gamepadLookSpeed * Time.unscaledDeltaTime;
-                yawDelta = look.x * step;
-                pitchDelta = look.y * step;
+                yawDelta = shaped.x * step;
+                pitchDelta = shaped.y * step;
             }
 
             yaw = Mathf.Repeat(yaw + yawDelta, 360f);
             pitch = Mathf.Clamp(pitch + (config.invertY ? pitchDelta : -pitchDelta), config.minPitch, config.maxPitch);
+        }
+
+        private void UpdateZoom(float dt)
+        {
+            // Limits and smoothing come from the config asset every frame so they can be tuned live.
+            zoom.Configure(config.zoomMinDistance, config.zoomMaxDistance, config.zoomSmoothTime);
+
+            ICharacterInput input = target.Input;
+            if (LookEnabled && input != null)
+            {
+                float amount = input.Zoom;
+                if (input.ZoomIsScroll)
+                {
+                    zoom.AddNotches(ZoomController.NormalizeScroll(amount), config.scrollZoomStep);
+                }
+                else
+                {
+                    zoom.AddContinuous(amount, config.heldZoomSpeed, Time.unscaledDeltaTime);
+                }
+            }
+
+            // Zoom keeps easing in real time, so it never freezes mid-way if the game is paused.
+            zoom.Update(Time.unscaledDeltaTime);
         }
     }
 }

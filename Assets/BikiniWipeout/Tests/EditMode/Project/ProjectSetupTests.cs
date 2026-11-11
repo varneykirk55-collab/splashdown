@@ -92,6 +92,50 @@ namespace BikiniWipeout.Tests
         }
 
         [Test]
+        public void ZoomAndGamepad_BindingsExistInBothInputSources()
+        {
+            InputActionMap defaults = PlayerInputReader.CreateDefaultMap();
+            var asset = AssetDatabase.LoadAssetAtPath<InputActionAsset>(Foundation1Builder.InputActionsPath);
+            try
+            {
+                foreach (InputActionMap map in new[] { defaults, asset.FindActionMap(PlayerInputReader.ActionMapName) })
+                {
+                    var paths = new System.Collections.Generic.List<string>();
+                    foreach (InputBinding binding in map.FindAction(PlayerInputReader.ZoomActionName).bindings)
+                    {
+                        paths.Add(binding.path);
+                    }
+
+                    CollectionAssert.Contains(paths, "<Mouse>/scroll/y");
+                    CollectionAssert.Contains(paths, "<Gamepad>/dpad/up");
+                    CollectionAssert.Contains(paths, "<Gamepad>/dpad/down");
+                    CollectionAssert.Contains(paths, "<Keyboard>/minus");
+
+                    var gamepadActions = new System.Collections.Generic.HashSet<string>();
+                    foreach (InputAction action in map.actions)
+                    {
+                        foreach (InputBinding binding in action.bindings)
+                        {
+                            if (binding.path.StartsWith("<Gamepad>"))
+                            {
+                                gamepadActions.Add(action.name);
+                            }
+                        }
+                    }
+
+                    foreach (string name in new[] { "Move", "Look", "Jump", "Sprint", "Pause", "Zoom" })
+                    {
+                        Assert.IsTrue(gamepadActions.Contains(name), name + " needs a gamepad binding");
+                    }
+                }
+            }
+            finally
+            {
+                defaults.Dispose();
+            }
+        }
+
+        [Test]
         public void PlaceholderAudioClips_AreImported()
         {
             string[] guids = AssetDatabase.FindAssets("t:AudioClip", new[] { Foundation1Builder.PlaceholderAudioFolder });
@@ -104,7 +148,7 @@ namespace BikiniWipeout.Tests
             foreach (string name in new[]
                      {
                          PlayerInputReader.MoveActionName, PlayerInputReader.LookActionName, PlayerInputReader.JumpActionName,
-                         PlayerInputReader.RunActionName, PlayerInputReader.PauseActionName
+                         PlayerInputReader.RunActionName, PlayerInputReader.PauseActionName, PlayerInputReader.ZoomActionName
                      })
             {
                 InputAction action = map.FindAction(name);

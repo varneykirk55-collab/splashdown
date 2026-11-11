@@ -1,6 +1,7 @@
 using System;
 using BikiniWipeout.Core;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace BikiniWipeout
@@ -96,6 +97,7 @@ namespace BikiniWipeout
                 checkpoints.CheckpointActivated += OnCheckpointActivated;
             }
 
+            InputSystem.onDeviceChange += OnDeviceChange;
             subscribed = true;
             ApplyControlState();
             AudioManager.PlayMusic(music);
@@ -106,6 +108,8 @@ namespace BikiniWipeout
         {
             if (subscribed)
             {
+                InputSystem.onDeviceChange -= OnDeviceChange;
+
                 if (player != null && player.Knockdown != null)
                 {
                     player.Knockdown.KnockedDown -= OnPlayerKnockedDown;
@@ -203,6 +207,17 @@ namespace BikiniWipeout
         {
             Time.timeScale = paused ? 0f : 1f;
             ApplyControlState();
+        }
+
+        /// <summary>If the controller being played with is unplugged mid-run, pause instead of leaving the player stranded.</summary>
+        private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+        {
+            bool lost = change == InputDeviceChange.Disconnected || change == InputDeviceChange.Removed;
+            if (lost && device is Gamepad && InputDeviceTracker.UsingGamepad && !Session.IsPaused &&
+                (Session.Phase == CoursePhase.Countdown || Session.Phase == CoursePhase.Running))
+            {
+                SetPaused(true);
+            }
         }
 
         private void OnCountdownSecond(int second)

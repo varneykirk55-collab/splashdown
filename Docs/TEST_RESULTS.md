@@ -1,3 +1,10 @@
+# Phase 3 — current verification record
+
+See [PHASE_3.md](PHASE_3.md#tests). Summary: all six assemblies compile against Unity 6000.6.6f1 with
+0 errors and 0 warnings; engine-free tests pass 122 / 122 (including 10 course-layout completability
+tests). Nothing was run inside the Unity editor: the Course 1 generator, the 2 new EditMode tests and
+the 9 new PlayMode tests are compiled only, and no visual, physics, audio or performance playtest exists.
+
 # Phase 2A — current verification record
 
 Date: 2026-11-10. Branch: `astra/phase-2a-ragdoll-camera`.
@@ -50,11 +57,11 @@ Date: 2026-11-10 · Target: Unity 6000.6.6f1 (revision d20c9ac777da)
 | --- | --- | --- |
 | Unity 6000.6.6f1 available | Not installed in the authoring environment | Linux editor build downloaded to scratch space for its assemblies only |
 | C# compilation, all 6 assemblies | **PASS — 0 errors, 0 warnings** | Roslyn + engine assemblies shipped in 6000.6.6f1 (see below) |
-| Core gameplay logic unit tests | **PASS — 82 / 82** | NUnit 3.14 under .NET 8, outside Unity |
+| Core gameplay logic unit tests | **PASS — 101 / 101** | NUnit 3.14 under .NET 8, outside Unity |
 | Project opens in the Unity editor | **NOT RUN** | Editor cannot start without a licence |
 | Content generation (`Foundation1Builder`) | **NOT RUN** | Compiles; never executed |
 | EditMode project / generated-content tests | **NOT RUN** | Written and compiled only |
-| PlayMode end-to-end tests (13) | **NOT RUN** | Written and compiled only |
+| PlayMode end-to-end tests (14) | **NOT RUN** | Written and compiled only |
 | Visual, physics and audio playtesting | **NOT DONE** | The game has never been executed or observed |
 
 Nothing in the bottom half of this table should be read as passing. The first time the project is
@@ -98,7 +105,7 @@ prove Unity's own asmdef resolution, serialization, or any runtime behaviour.
 ```
 Test Run Summary
   Overall result: Passed
-  Test Count: 82, Passed: 82, Failed: 0, Warnings: 0, Inconclusive: 0, Skipped: 0
+  Test Count: 101, Passed: 101, Failed: 0, Warnings: 0, Inconclusive: 0, Skipped: 0
 ```
 
 | Suite | Covers |
@@ -109,6 +116,7 @@ Test Run Summary
 | `ImpactEvaluatorTests` | None / shove / knockdown thresholds, launch-speed floor and cap, force multiplier |
 | `RespawnGuardTests` | Hazard cooldown, pending-respawn lockout, loop detection and checkpoint fallback |
 | `PathTimelineTests` | Ping-pong and loop timelines, determinism, periodicity, easing |
+| `ZoomControllerTests` | Wheel/held zoom, limits, smoothing without overshoot, scroll normalization (raw ±120 and normalized ±1), live re-clamping |
 | `VolumeSettingsTests`, `TimeFormatterTests`, `BestTimeRecordTests`, `MovementMathTests` | Clamping, persistence, formatting, records, helpers |
 
 The same files run inside Unity as EditMode tests.
@@ -133,9 +141,9 @@ In this order, on a machine with Unity 6000.6.6f1:
 
 1. Open the project; confirm the Console shows `Foundation 1 content is ready` with no errors.
 2. **Bikini Wipeout > Validate Project** — expect 0 errors.
-3. Test Runner > EditMode (expect the 82 core tests plus project/content checks to pass).
-4. Test Runner > PlayMode — 13 scripted end-to-end tests: scene wiring, audio init, countdown/timer,
-   pause, walk/run/camera, jump, moving-platform carry, knockdown → settle → recover (with a physics
+3. Test Runner > EditMode (expect the 101 core tests plus project/content checks to pass).
+4. Test Runner > PlayMode — 14 scripted end-to-end tests: scene wiring, audio init, countdown/timer,
+   pause, walk/run/camera, zoom (wheel, held, limits, ignored while paused), jump, moving-platform carry, knockdown → settle → recover (with a physics
    sanity check on every bone each frame), sweeper hit, water respawn, checkpoint respawn, finish
    screen, restart.
 5. Play the course by hand. Things only a person can judge and that are most likely to need tuning:
@@ -143,6 +151,12 @@ In this order, on a machine with Unity 6000.6.6f1:
    sweeper, ball timing, platform spacing, camera feel, audio levels.
 
 ## Known risks (unverified behaviour)
+
+- **Gamepad and zoom (added after the first report):** no controller was ever connected and nothing
+  was run. Mouse-wheel units differ by platform; `ZoomController.NormalizeScroll` accepts both raw
+  (±120) and normalized (±1) values and is unit tested, but real wheel and touchpad feel is untested.
+  Rumble, auto-pause on disconnect and the keyboard/gamepad hint switching depend on live
+  device events and have only been compiled.
 
 - **Content builder** (`Foundation1Builder`): ~1,800 lines of editor code that has never executed.
   If a step throws, the error names the step; fix and rerun "Build ... (Missing Only)".

@@ -221,5 +221,55 @@ def main():
     write("music_course_loop", music(132, course_chords, course_melody, bright=True), 0.5)
 
 
+def arena_sounds():
+    """Phase 3 additions. Appended after the original sounds so those stay byte-identical."""
+    # Ball bounce: rubbery 'boing' with a pitch drop.
+    d = 0.32
+    f = np.concatenate([np.linspace(170, 320, int(RATE * 0.04)), np.linspace(320, 120, int(RATE * d) - int(RATE * 0.04))])
+    s = tone(f, d, "soft") * env(len(f), 0.003, 9)
+    s += 0.25 * lowpass(noise(d), 500) * env(len(f), 0.001, 30)
+    write("sfx_ball_bounce", fade_edges(s), 0.8)
+
+    # Mechanism whoosh: band of noise that swells and fades as an arm passes.
+    d = 0.55
+    n = noise(d)
+    x = t(d)
+    swell = np.sin(np.pi * x / d) ** 2
+    body = lowpass(n, 1800) - lowpass(n, 300)
+    write("sfx_mechanism_whoosh", fade_edges(body * swell, 0.02), 0.6)
+
+    # Confetti pop.
+    d = 0.5
+    s = (lowpass(noise(d), 5000) - lowpass(noise(d), 900)) * env(int(RATE * d), 0.001, 14)
+    s += tone(np.linspace(900, 300, int(RATE * d)), d) * env(int(RATE * d), 0.001, 30) * 0.6
+    write("sfx_confetti_pop", fade_edges(s), 0.75)
+
+    # Crowd cheer: broadband roar that swells, with a few whistle-like chirps.
+    d = 3.2
+    n = noise(d)
+    x = t(d)
+    roar = (lowpass(n, 2600) - lowpass(n, 350)) * (np.clip(x / 0.5, 0, 1) * np.exp(-0.75 * np.clip(x - 1.2, 0, None)))
+    wobble = 0.75 + 0.25 * np.sin(2 * np.pi * 5.3 * x + np.sin(2 * np.pi * 0.7 * x) * 3)
+    s = roar * wobble
+    for start, f0 in [(0.35, 1900), (0.9, 2300), (1.5, 2050)]:
+        seg = tone(np.linspace(f0, f0 * 1.35, int(RATE * 0.28)), 0.28) * env(int(RATE * 0.28), 0.03, 7) * 0.12
+        i = int(RATE * start)
+        s[i:i + len(seg)] += seg
+    write("sfx_crowd_cheer", fade_edges(s, 0.03), 0.8)
+
+    # Arena ambience loop: steady crowd murmur. Built from periodic modulation so the loop point is seamless.
+    d = 8.0
+    n = noise(d)
+    x = t(d)
+    murmur = lowpass(n, 1100) - lowpass(n, 180)
+    mod = 0.7 + 0.15 * np.sin(2 * np.pi * x / d * 3) + 0.15 * np.sin(2 * np.pi * x / d * 7 + 1.1)
+    s = murmur * mod
+    k = int(RATE * 0.5)                      # crossfade the tail into the head
+    ramp = np.linspace(0, 1, k)
+    s[:k] = s[:k] * ramp + s[-k:] * (1 - ramp)
+    write("amb_arena_crowd_loop", s[:-k], 0.35)
+
+
 if __name__ == "__main__":
     main()
+    arena_sounds()

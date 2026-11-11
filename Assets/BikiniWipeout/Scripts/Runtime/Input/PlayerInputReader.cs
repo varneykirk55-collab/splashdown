@@ -17,6 +17,7 @@ namespace BikiniWipeout
         public const string JumpActionName = "Jump";
         public const string RunActionName = "Sprint";
         public const string PauseActionName = "Pause";
+        public const string ZoomActionName = "Zoom";
 
         [Tooltip("Input actions asset containing a 'Player' map. Optional: falls back to project-wide actions, then to built-in defaults.")]
         [SerializeField] internal InputActionAsset actionsAsset;
@@ -29,6 +30,7 @@ namespace BikiniWipeout
         private InputAction jumpAction;
         private InputAction runAction;
         private InputAction pauseAction;
+        private InputAction zoomAction;
 
         public Vector2 Move
         {
@@ -51,6 +53,17 @@ namespace BikiniWipeout
             {
                 InputControl control = lookAction != null ? lookAction.activeControl : null;
                 return control == null || control.device is Pointer;
+            }
+        }
+
+        public float Zoom => zoomAction != null ? zoomAction.ReadValue<float>() : 0f;
+
+        public bool ZoomIsScroll
+        {
+            get
+            {
+                InputControl control = zoomAction != null ? zoomAction.activeControl : null;
+                return control != null && control.device is Mouse;
             }
         }
 
@@ -122,6 +135,8 @@ namespace BikiniWipeout
             jumpAction = map.FindAction(JumpActionName);
             runAction = map.FindAction(RunActionName);
             pauseAction = map.FindAction(PauseActionName);
+            // Zoom is optional: an older custom actions asset without it simply cannot zoom.
+            zoomAction = map.FindAction(ZoomActionName);
 
             if (moveAction == null || lookAction == null || jumpAction == null || runAction == null || pauseAction == null)
             {
@@ -168,6 +183,19 @@ namespace BikiniWipeout
             pause.AddBinding("<Keyboard>/escape");
             pause.AddBinding("<Keyboard>/p");
             pause.AddBinding("<Gamepad>/start");
+
+            InputAction zoom = defaults.AddAction(ZoomActionName, InputActionType.Value);
+            zoom.expectedControlType = "Axis";
+            zoom.AddBinding("<Mouse>/scroll/y");
+            zoom.AddCompositeBinding("1DAxis")
+                .With("Positive", "<Keyboard>/equals")
+                .With("Negative", "<Keyboard>/minus");
+            zoom.AddCompositeBinding("1DAxis")
+                .With("Positive", "<Keyboard>/numpadPlus")
+                .With("Negative", "<Keyboard>/numpadMinus");
+            zoom.AddCompositeBinding("1DAxis")
+                .With("Positive", "<Gamepad>/dpad/up")
+                .With("Negative", "<Gamepad>/dpad/down");
 
             return defaults;
         }

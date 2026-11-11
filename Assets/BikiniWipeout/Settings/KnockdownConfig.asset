@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 579764f16d6fdeec0ba2b4afeb257fb6, type: 3}
+  m_Name: KnockdownConfig
+  m_EditorClassIdentifier: BikiniWipeout.Runtime::BikiniWipeout.KnockdownConfig
+  impact:
+    MinShoveSpeed: 0.6
+    KnockdownSpeed: 2.5
+    VelocityTransfer: 1.15
+    MinLaunchSpeed: 4.5
+    MaxLaunchSpeed: 13
+  upwardLaunchRatio: 0.4
+  shoveScale: 1
+  timings:
+    MinRagdollTime: 1.1
+    MaxRagdollTime: 4.5
+    SettleTime: 0.35
+    RecoveryDuration: 0.9
+    PostRecoveryImmunity: 1
+  settleSpeed: 0.7
+  settleAngularSpeed: 1.5
+  recoverySupportDistance: 0.8
+  respawnImmunity: 1.5
+  groundProbeHeight: 1.2
+  groundProbeDepth: 2
+  safeSearchRadius: 1.6
+  recoveryRetryDelay: 0.3
+  maxRecoveryAttempts: 8

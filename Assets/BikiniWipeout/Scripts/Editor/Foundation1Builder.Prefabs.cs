@@ -174,6 +174,10 @@ namespace BikiniWipeout.EditorTools
             audio.knockdown = knockdown;
             audio.ragdoll = ragdoll;
 
+            var feedback = root.AddComponent<GamepadFeedback>();
+            feedback.knockdown = knockdown;
+            feedback.motor = motor;
+
             var character = root.AddComponent<PlayerCharacter>();
             var respawner = root.AddComponent<PlayerRespawner>();
             respawner.character = character;

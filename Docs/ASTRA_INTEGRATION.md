@@ -158,7 +158,11 @@ function of time via `Core.PathTimeline`).
 - Orbit camera following `PlayerCharacter.FocusPosition` (chest height when standing, **hips while
   ragdolled**), sphere-cast collision, snap-behind on respawn.
 - While `Knockdown.IsRagdolled` it blends to a wider, lazier framing.
-- **Tuning:** `Settings/CameraConfig.asset` — distance, pivot offset, FOV, sensitivities, pitch limits,
+- **Zoom:** `Core/ZoomController` holds the target and smoothed distance (wheel notches or held
+  d-pad/keys); `ThirdPersonCamera` feeds it from `ICharacterInput.Zoom` / `ZoomIsScroll`, ignores it
+  while `LookEnabled` is false (pause, results), and multiplies the result by the wipeout framing.
+  API: `ZoomDistance`, `SetZoomDistance`, `ResetZoom`.
+- **Tuning:** `Settings/CameraConfig.asset` — default distance, zoom range/step/speed/smoothing, pivot offset, FOV, sensitivities (incl. `gamepadLookExponent`), pitch limits,
   follow smoothing, collision radius, and the wipeout block (`wipeoutDistanceMultiplier`,
   `wipeoutFovBoost`, `wipeoutFollowSmoothTime`, `wipeoutBlendSpeed`).
 - **Extension points:** impact shake / slow-motion can subscribe to `KnockdownController.KnockedDown`;
@@ -211,6 +215,10 @@ rebuild, either stop using the rebuild command or port the change into the build
   `AudioLibrary`; master via `AudioListener.volume`, music/SFX gains in `Core.VolumeSettings`.
   No `AudioMixer` yet — `VolumeSettings.LinearToDecibels` is there for when one is added.
 - **Input:** `Settings/Input/BikiniWipeoutControls.inputactions` (also the project-wide actions asset).
+  The `Player` map has Move, Look, Jump, Sprint, Pause and Zoom with keyboard/mouse and gamepad
+  bindings; `PlayerInputReader.CreateDefaultMap` mirrors it as a fallback.
+- **Controller support:** `InputDeviceTracker` (last-used device, drives `ControlHints`),
+  `GamepadFeedback` (rumble on knockdown/shove/landing), pause on gamepad disconnect in `CourseManager`.
 
 ## 6. Suggested first Astra tasks
 

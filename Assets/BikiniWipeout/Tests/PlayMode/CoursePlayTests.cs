@@ -13,6 +13,8 @@ namespace BikiniWipeout.Tests
         public Vector2 Move { get; set; }
         public Vector2 Look { get; set; }
         public bool LookIsPointerDelta => true;
+        public float Zoom { get; set; }
+        public bool ZoomIsScroll { get; set; }
         public bool RunHeld { get; set; }
         public bool JumpHeld { get; set; }
         public bool JumpPressedThisFrame { get; set; }
@@ -246,6 +248,51 @@ namespace BikiniWipeout.Tests
             Vector3 newOffset = player.transform.position - platform.transform.position;
             Assert.Less((newOffset - offset).magnitude, 0.35f, "Player should ride along with the platform.");
             Assert.IsTrue(player.Motor.IsGrounded);
+        }
+
+        [UnityTest]
+        public IEnumerator Zoom_ChangesCameraDistance_WithinLimits()
+        {
+            yield return WaitForRunStart();
+            ThirdPersonCamera cam = Camera.main.GetComponent<ThirdPersonCamera>();
+            CameraConfig config = cam.config;
+            float start = cam.ZoomDistance;
+            Assert.AreEqual(config.distance, start, 0.05f);
+
+            // Mouse wheel: three notches in (raw Windows units).
+            input.ZoomIsScroll = true;
+            input.Zoom = 360f;
+            yield return null;
+            input.Zoom = 0f;
+            yield return new WaitForSeconds(0.6f);
+            Assert.Less(cam.ZoomDistance, start - 1.5f, "Wheel should zoom in.");
+            Assert.GreaterOrEqual(cam.ZoomDistance, config.zoomMinDistance - 0.001f);
+
+            // Held d-pad: zoom out for long enough to hit the limit, which must clamp.
+            input.ZoomIsScroll = false;
+            input.Zoom = -1f;
+            yield return new WaitForSeconds(3f);
+            input.Zoom = 0f;
+            yield return new WaitForSeconds(0.6f);
+            Assert.AreEqual(config.zoomMaxDistance, cam.ZoomDistance, 0.05f);
+
+            // Zoomed all the way out: the camera must still be looking at the player.
+            Transform t = Camera.main.transform;
+            Assert.Greater(Vector3.Dot(t.forward, (player.FocusPosition - t.position).normalized), 0.8f);
+
+            // Zoom is ignored while paused.
+            float before = cam.ZoomTargetDistance;
+            course.SetPaused(true);
+            input.ZoomIsScroll = true;
+            input.Zoom = 480f;
+            yield return new WaitForSecondsRealtime(0.2f);
+            input.Zoom = 0f;
+            Assert.AreEqual(before, cam.ZoomTargetDistance, 0.0001f);
+            course.SetPaused(false);
+
+            cam.ResetZoom();
+            yield return new WaitForSeconds(1f);
+            Assert.AreEqual(config.distance, cam.ZoomDistance, 0.05f);
         }
 
         // ------------------------------------------------------------------ knockdown and ragdoll

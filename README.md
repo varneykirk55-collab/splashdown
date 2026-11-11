@@ -18,6 +18,14 @@ ragdoll, recover, fall in the water, respawn at checkpoints, and finish with a r
 > passes its unit tests, but **the game has not been run or playtested**. See
 > [Docs/TEST_RESULTS.md](Docs/TEST_RESULTS.md) for exactly what was and was not verified.
 
+## Phase 3 — Course 1: The Splashdown Gauntlet
+
+A full five-section course in a stadium arena (Launch Pad → Big Bounce → Spin City → Chaos Crossing →
+Final Splash). It generates itself on first open as `Assets/BikiniWipeout/Scenes/Course_SplashdownGauntlet.unity`,
+or via **Bikini Wipeout → Course 1 → Build Splashdown Gauntlet (Missing Only)**. Open that scene and press Play.
+Full details, the course map, test status and known risks: [Docs/PHASE_3.md](Docs/PHASE_3.md).
+Like everything else here it compiles and passes its logic tests but **has not yet been run in Unity**.
+
 ## Open and play
 
 1. Install **Unity 6000.6.6f1** (Unity Hub > Installs > Install Editor > Archive) with Windows build support.
@@ -39,9 +47,22 @@ and commit them. "Missing Only" never overwrites your edits; "Rebuild (Overwrite
 | --- | --- | --- |
 | Move | W A S D / arrow keys | Left stick |
 | Look | Mouse | Right stick |
-| Run (hold) | Left Shift | Left stick press |
+| Zoom in / out | Mouse wheel, or `=` / `-` (also numpad + / -) | D-pad up / down |
+| Run (hold) | Left Shift | Left stick press or left trigger |
 | Jump | Space | South button (A / Cross) |
 | Pause / resume | Esc or P | Start |
+| Menus | Mouse | D-pad / left stick to move, South button to select |
+
+Controller notes: any gamepad the Input System supports works (Xbox, PlayStation, Switch Pro, generic).
+The on-screen control legend switches between keyboard and gamepad wording depending on which you
+touched last; the controller rumbles on wipeouts, shoves and hard landings (only while a gamepad is
+the active device; switch it off with `Enable Rumble` on the player's `Gamepad Feedback`); and
+the game pauses if the controller you are playing with is unplugged. Right-stick look uses a response
+curve for fine aiming (`Gamepad Look Exponent` in `CameraConfig`).
+
+Zoom range, wheel step, held-zoom speed and smoothing are in `Settings/CameraConfig.asset`
+(`Zoom Min/Max Distance`, `Scroll Zoom Step`, `Held Zoom Speed`, `Zoom Smooth Time`). The zoom
+you choose is kept across respawns.
 
 Walking is the default; hold Run to run. To invert that, tick **Run By Default** on
 `Assets/BikiniWipeout/Settings/PlayerMovementConfig.asset`.

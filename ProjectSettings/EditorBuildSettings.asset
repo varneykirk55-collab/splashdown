@@ -4,6 +4,15 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/BikiniWipeout/Scenes/MainMenu.unity
+    guid: b7ec78f6a07d9a74090a138bdb8b28e4
+  - enabled: 1
+    path: Assets/BikiniWipeout/Scenes/Course_Foundation1.unity
+    guid: 323643b64b481c242a7364d086058614
+  - enabled: 1
+    path: Assets/BikiniWipeout/Scenes/Course_SplashdownGauntlet.unity
+    guid: 8cc2aacbec7d2264496b3ce622b4261c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: e8ae06260405a9a22eeaa02688a4e784, type: 3}
