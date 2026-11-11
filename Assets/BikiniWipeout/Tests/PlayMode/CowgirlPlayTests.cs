@@ -459,6 +459,80 @@ namespace BikiniWipeout.Tests
             Assert.That(FootClearance(), Is.InRange(-0.05f, 0.25f), "After recovery: feet back on the ground.");
         }
 
+        /// <summary>
+        /// Phase 2C: the mesh must stay on the capsule through takeoff, flight and landing. Before the fix the landing
+        /// clip kept its authored mid-course offset and put her body 2.8 m ahead of the capsule, and the jump clip
+        /// dropped her body 8–13 cm at takeoff.
+        /// </summary>
+        [UnityTest]
+        public IEnumerator Cowgirl_Jump_MeshStaysOnCapsule_NoSnap([Values(0f, 1f, 2f)] float mode)
+        {
+            yield return WaitForRunStart();
+            Vector3 dir = new Vector3(0.63f, 0f, 0.77f).normalized;
+            player.Motor.Teleport(new Vector3(-4.3f, 0.02f, -5.3f), Quaternion.LookRotation(dir));
+            yield return WaitUntil(() => player.Motor.IsGrounded, 2f, "grounded after teleport");
+            Vector3 camForward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up).normalized;
+            bool moving = mode > 0f;
+            input.Move = moving ? new Vector2(Vector3.Dot(dir, Vector3.Cross(Vector3.up, camForward)), Vector3.Dot(dir, camForward)).normalized : Vector2.zero;
+            input.RunHeld = mode > 1f;
+            yield return new WaitForSeconds(0.7f);
+
+            Transform root = player.transform, hips = animator.GetBoneTransform(HumanBodyBones.Hips);
+            var samples = new System.Collections.Generic.List<(float t, Vector3 p)>();
+            input.JumpPressedThisFrame = true; input.JumpHeld = true;
+            yield return null;
+            input.JumpPressedThisFrame = false;
+            bool left = false; float landedAt = -1f, end = Time.time + 3f;
+            while (Time.time < end && (landedAt < 0f || Time.time - landedAt < 0.6f))
+            {
+                left |= !player.Motor.IsGrounded;
+                if (left && player.Motor.IsGrounded && landedAt < 0f) landedAt = Time.time;
+                samples.Add((Time.time, root.InverseTransformPoint(hips.position)));
+                yield return null;
+            }
+
+            input.JumpHeld = false; input.Move = Vector2.zero; input.RunHeld = false;
+            Assert.Greater(landedAt, 0f, "Should land.");
+            float maxHorizontal = 0f, maxShift = 0f;
+            for (int i = 0; i < samples.Count; i++)
+            {
+                maxHorizontal = Mathf.Max(maxHorizontal, new Vector2(samples[i].p.x, samples[i].p.z).magnitude);
+                for (int j = i + 1; j < samples.Count && samples[j].t - samples[i].t <= 0.08f; j++)
+                    maxShift = Mathf.Max(maxShift, (samples[j].p - samples[i].p).magnitude);
+            }
+
+            Debug.Log($"[CowgirlJump] {(mode > 1f ? "sprint" : moving ? "walk" : "standing")}: hips max horizontal offset from capsule {maxHorizontal * 100f:F1} cm, " +
+                      $"largest body shift within 80 ms {maxShift * 100f:F1} cm");
+            Assert.Less(maxHorizontal, 0.2f, "Mesh must stay over the capsule (no teleport).");
+            Assert.Less(maxShift, 0.12f, "No visible snap of the body relative to the capsule.");
+        }
+
+        [UnityTest]
+        public IEnumerator Cowgirl_Sprint_PlaysFastRun_LegsAligned()
+        {
+            yield return WaitForRunStart();
+            Vector3 dir = new Vector3(0.63f, 0f, 0.77f).normalized;
+            player.Motor.Teleport(new Vector3(-4.3f, 0.02f, -5.3f), Quaternion.LookRotation(dir));
+            yield return WaitUntil(() => player.Motor.IsGrounded, 2f, "grounded after teleport");
+            Vector3 camForward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up).normalized;
+            input.Move = new Vector2(Vector3.Dot(dir, Vector3.Cross(Vector3.up, camForward)), Vector3.Dot(dir, camForward)).normalized;
+            input.RunHeld = true;
+            yield return new WaitForSeconds(0.8f);
+            float sprintWeight = 0f; int n = 0;
+            float end = Time.time + 0.6f;
+            while (Time.time < end)
+            {
+                yield return null; n++;
+                foreach (AnimatorClipInfo info in animator.GetCurrentAnimatorClipInfo(0))
+                    if (info.clip.name == "Cowgirl_Sprint") sprintWeight += info.weight;
+            }
+
+            input.Move = Vector2.zero; input.RunHeld = false;
+            sprintWeight /= n;
+            Debug.Log($"[CowgirlSprint] Fast Run weight at {player.Motor.Config.runSpeed:F1} m/s: {sprintWeight:P0}");
+            Assert.Greater(sprintWeight, 0.95f, "Sprinting should play the Fast Run, not a sped-up jog.");
+        }
+
         [UnityTest]
         public IEnumerator Cowgirl_Jumps_ThroughJumpAndFallStates()
         {

@@ -51,13 +51,13 @@ namespace BikiniWipeout.EditorTools
         {
             public readonly string File, Name;
             public readonly int First, Last; // 0 = whole take
-            public readonly bool Loop, BakeY, YFromFeet, RotationFromBody;
+            public readonly bool Loop, BakeY, YFromFeet, RotationFromBody, XZFromBody;
 
             public ClipDef(string file, string name, bool loop, bool bakeY, bool yFromFeet = false, int first = 0, int last = 0,
-                bool rotationFromBody = false)
+                bool rotationFromBody = false, bool xzFromBody = false)
             {
                 File = file; Name = name; Loop = loop; BakeY = bakeY; YFromFeet = yFromFeet; First = first; Last = last;
-                RotationFromBody = rotationFromBody;
+                RotationFromBody = rotationFromBody; XZFromBody = xzFromBody;
             }
         }
 
@@ -69,10 +69,18 @@ namespace BikiniWipeout.EditorTools
         {
             new ClipDef("Female Walk", "Cowgirl_Walk", loop: true, bakeY: true),
             new ClipDef("Slow Run", "Cowgirl_Run", loop: true, bakeY: true),
-            new ClipDef("Running Jump (1)", "Cowgirl_Jump", loop: false, bakeY: false),
-            // The running jump's own touchdown (feet contact ~f21, settles by f28): a light landing that flows back
-            // into running. Replaces the deep Jumping Down crouch stand-in.
-            new ClipDef("Running Jump (1)", "Cowgirl_Land", loop: false, bakeY: true, yFromFeet: true, first: 19, last: 28),
+            // Sprint: Mixamo Fast Run (5.5 m/s, 3.75 steps/s on her). Slow Run sped up 2.17x to the 6.5 m/s sprint was
+            // a 5.9 steps/s shuffle with almost no flight phase.
+            new ClipDef("Fast Run", "Cowgirl_Sprint", loop: true, bakeY: true),
+            // Running Jump (1) source frames: run-up f1-2, push-off f2-3, rise f3-11 (apex), fall f11-18, touchdown f19,
+            // settle f20-22, run-out f23+. Jump = push-off to apex (0.30 s; the motor's rise is ~0.34 s).
+            // XZ from the body (centre of mass): these cuts start mid-course (f19 is ~2.4 m from the file origin) and
+            // "Original" kept that authored offset, which displaced her mesh 2.8 m ahead of the capsule on landing.
+            new ClipDef("Running Jump (1)", "Cowgirl_Jump", loop: false, bakeY: false, first: 2, last: 11, xzFromBody: true),
+            // The running jump's own touchdown: a light landing that flows back into running. Height "Original" (the authored
+            // hip height, same floor as the run): touchdown starts at the extended-leg height and compresses as authored.
+            // ("From feet" started it 14 cm low, a visible drop at touchdown.)
+            new ClipDef("Running Jump (1)", "Cowgirl_Land", loop: false, bakeY: true, first: 19, last: 28, xzFromBody: true),
             new ClipDef("Idle", "Cowgirl_Idle", loop: true, bakeY: true),
             // Falling Idle is authored with the body yawed ~43°; root rotation from the body keeps her facing forward.
             new ClipDef("Falling Idle", "Cowgirl_Fall", loop: true, bakeY: false, rotationFromBody: true),
@@ -375,7 +383,7 @@ namespace BikiniWipeout.EditorTools
                         keepOriginalPositionY = !def.YFromFeet,
                         heightFromFeet = def.YFromFeet,
                         lockRootPositionXZ = false,
-                        keepOriginalPositionXZ = true,
+                        keepOriginalPositionXZ = !def.XZFromBody,
                     });
                 }
 
@@ -498,9 +506,11 @@ namespace BikiniWipeout.EditorTools
             AnimationClip walkSource = clips["Cowgirl_Walk"], runClip = clips["Cowgirl_Run"];
             float walkSpeed = NativeSpeed(walkSource, humanScale), runSpeed = NativeSpeed(runClip, humanScale);
             AnimationClip walkClip = WalkWithWeightShift(walkSource);
+            AnimationClip sprintClip = clips["Cowgirl_Sprint"];
+            float sprintSpeed = NativeSpeed(sprintClip, humanScale);
             var movement = AssetDatabase.LoadAssetAtPath<PlayerMovementConfig>(Root + "/Settings/PlayerMovementConfig.asset");
             float topSpeed = movement != null ? movement.runSpeed : 6.5f;
-            if (topSpeed <= runSpeed) topSpeed = runSpeed * 1.5f;
+            if (topSpeed <= sprintSpeed) topSpeed = sprintSpeed;
             // Brisk walk: the walk clip itself covers speeds up to BriskWalkCadence × its native speed (or the motor's
             // walk speed if lower), so walking paces show a clean walk instead of a half-walk/half-jog mix.
             float briskSpeed = Mathf.Min(walkSpeed * BriskWalkCadence, movement != null ? movement.walkSpeed : float.MaxValue);
@@ -518,10 +528,14 @@ namespace BikiniWipeout.EditorTools
             tree.AddChild(walkClip, walkSpeed);
             if (brisk) tree.AddChild(walkClip, briskSpeed);
             tree.AddChild(runClip, runSpeed);
-            tree.AddChild(runClip, topSpeed);
+            // Jog (Slow Run) → sprint (Fast Run) at their native speeds; the sprint is time-scaled up to the motor's
+            // run speed (×1.19 at 6.5 m/s) instead of stretching the jog ×2.17.
+            tree.AddChild(sprintClip, sprintSpeed);
+            bool scaledTop = topSpeed > sprintSpeed + 0.05f;
+            if (scaledTop) tree.AddChild(sprintClip, topSpeed);
             ChildMotion[] children = tree.children;
             if (brisk) children[1].timeScale = briskSpeed / walkSpeed;
-            children[children.Length - 1].timeScale = topSpeed / runSpeed;
+            if (scaledTop) children[children.Length - 1].timeScale = topSpeed / sprintSpeed;
             tree.children = children;
 
             walk.name = LocomotionState;
@@ -539,7 +553,7 @@ namespace BikiniWipeout.EditorTools
 
             machine.RemoveState(run);
             Debug.Log($"[Phase 2B] Locomotion: walk {walkSpeed:F2} m/s" + (brisk ? $", brisk walk {briskSpeed:F2} m/s (×{briskSpeed / walkSpeed:F2})" : "") +
-                      $", run {runSpeed:F2} m/s, top {topSpeed:F2} m/s (run ×{topSpeed / runSpeed:F2})");
+                      $", jog {runSpeed:F2} m/s, sprint {sprintSpeed:F2} m/s, top {topSpeed:F2} m/s (sprint ×{topSpeed / sprintSpeed:F2})");
         }
 
         /// <summary>Highest cadence the walk clip is played at before it hands over to the jog (×1.25 = brisk walk).</summary>
