@@ -76,6 +76,7 @@ namespace BikiniWipeout.EditorTools
             CheckAssets(report);
             CheckPrefabs(report);
             CheckScenes(report);
+            CheckCourse1(report);
             return report;
         }
 
@@ -275,6 +276,58 @@ namespace BikiniWipeout.EditorTools
                      })
             {
                 Check(report, AssetDatabase.LoadAssetAtPath<GameObject>(path) != null, "Prefab " + Path.GetFileName(path));
+            }
+        }
+
+        /// <summary>Phase 3 content. Skipped with a warning until Course 1 has been generated.</summary>
+        private static void CheckCourse1(Report report)
+        {
+            if (!Foundation1Builder.IsCourse1Built())
+            {
+                report.Warnings.Add("Course 1 has not been generated yet (Bikini Wipeout > Course 1 > Build Splashdown Gauntlet).");
+                return;
+            }
+
+            report.Passed.Add("Course 1 scene exists");
+            bool inBuild = false;
+            foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
+            {
+                inBuild |= scene.enabled && scene.path == Foundation1Builder.GauntletScenePath;
+            }
+
+            Check(report, inBuild, "Course 1 scene is in Build Settings");
+
+            foreach (string name in new[]
+                     {
+                         "ArenaWater", "SplashEffectArena", "ImpactBurst", "BouncingBallArena", "SweeperSmall", "SweeperLarge",
+                         "SweeperDouble", "RotatingBeam", "SpinPlatform", "Pendulum", "PistonWall", "SectionGate", "FinishGate"
+                     })
+            {
+                string path = Foundation1Builder.Course1PrefabFolder + "/" + name + ".prefab";
+                Check(report, AssetDatabase.LoadAssetAtPath<GameObject>(path) != null, "Course 1 prefab " + name);
+            }
+
+            var pendulum = AssetDatabase.LoadAssetAtPath<GameObject>(Foundation1Builder.Course1PrefabFolder + "/Pendulum.prefab");
+            Check(report, pendulum != null && pendulum.GetComponent<Pendulum>() != null &&
+                          pendulum.GetComponentInChildren<ImpactSource>(true) != null, "Pendulum prefab has a Pendulum and an ImpactSource");
+
+            var library = AssetDatabase.LoadAssetAtPath<AudioLibrary>(Foundation1Builder.AudioLibraryPath);
+            if (library != null)
+            {
+                foreach (AudioEventId id in new[]
+                         {
+                             AudioEventId.BallBounce, AudioEventId.MechanismWhoosh, AudioEventId.CrowdCheer,
+                             AudioEventId.ArenaAmbience, AudioEventId.ConfettiPop
+                         })
+                {
+                    Check(report, library.FindSfx(id) != null, "Audio library has an entry for " + id);
+                }
+            }
+
+            foreach (string texture in new[] { "Water_Caustics", "Crowd", "Target_Rings", "Checker", "Foam_Ring" })
+            {
+                Check(report, AssetDatabase.LoadAssetAtPath<Texture2D>(Foundation1Builder.ArenaTextureFolder + "/" + texture + ".png") != null,
+                    "Arena texture " + texture);
             }
         }
 

@@ -1,3 +1,10 @@
+# Phase 3 — current verification record
+
+See [PHASE_3.md](PHASE_3.md#tests). Summary: all six assemblies compile against Unity 6000.6.6f1 with
+0 errors and 0 warnings; engine-free tests pass 122 / 122 (including 10 course-layout completability
+tests). Nothing was run inside the Unity editor: the Course 1 generator, the 2 new EditMode tests and
+the 9 new PlayMode tests are compiled only, and no visual, physics, audio or performance playtest exists.
+
 # Phase 2A — current verification record
 
 Date: 2026-11-10. Branch: `astra/phase-2a-ragdoll-camera`.

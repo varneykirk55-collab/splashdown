@@ -18,6 +18,14 @@ ragdoll, recover, fall in the water, respawn at checkpoints, and finish with a r
 > passes its unit tests, but **the game has not been run or playtested**. See
 > [Docs/TEST_RESULTS.md](Docs/TEST_RESULTS.md) for exactly what was and was not verified.
 
+## Phase 3 — Course 1: The Splashdown Gauntlet
+
+A full five-section course in a stadium arena (Launch Pad → Big Bounce → Spin City → Chaos Crossing →
+Final Splash). It generates itself on first open as `Assets/BikiniWipeout/Scenes/Course_SplashdownGauntlet.unity`,
+or via **Bikini Wipeout → Course 1 → Build Splashdown Gauntlet (Missing Only)**. Open that scene and press Play.
+Full details, the course map, test status and known risks: [Docs/PHASE_3.md](Docs/PHASE_3.md).
+Like everything else here it compiles and passes its logic tests but **has not yet been run in Unity**.
+
 ## Open and play
 
 1. Install **Unity 6000.6.6f1** (Unity Hub > Installs > Install Editor > Archive) with Windows build support.

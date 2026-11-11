@@ -19,7 +19,16 @@ namespace BikiniWipeout
         UiClick = 9,
         UiHover = 10,
         CountdownTick = 11,
-        CountdownGo = 12
+        CountdownGo = 12,
+
+        // Phase 3 (arena and Course 1)
+        BallBounce = 13,
+        MechanismWhoosh = 14,
+        CrowdCheer = 15,
+
+        /// <summary>Looping crowd bed. Played by <see cref="ArenaAmbience"/>, not as a one-shot.</summary>
+        ArenaAmbience = 16,
+        ConfettiPop = 17
     }
 
     public enum MusicTrackId
