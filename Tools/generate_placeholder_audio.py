@@ -270,6 +270,86 @@ def arena_sounds():
     write("amb_arena_crowd_loop", s[:-k], 0.35)
 
 
+def cove_sounds():
+    """Course 2 (Chaos Cove) additions. Appended after everything else so earlier sounds stay byte-identical."""
+    # Spring bounce: a quick rising 'sproing' with a metallic flutter.
+    d = 0.42
+    n = int(RATE * d)
+    f = np.linspace(180, 520, n) * (1 + 0.08 * np.sin(2 * np.pi * 34 * t(d)))
+    s = tone(f, d, "soft") * env(n, 0.002, 8)
+    s += 0.3 * tone(np.linspace(360, 1040, n), d) * env(n, 0.002, 14)
+    write("sfx_spring_bounce", fade_edges(s), 0.8)
+
+    # Water jet: a hissing burst that opens fast and tails off.
+    d = 1.1
+    x = t(d)
+    nz = noise(d)
+    body = lowpass(nz, 4200) - lowpass(nz, 700)
+    shape = np.clip(x / 0.06, 0, 1) * np.exp(-1.6 * np.clip(x - 0.5, 0, None))
+    write("sfx_water_jet", fade_edges(body * shape, 0.02), 0.7)
+
+    # Bucket warning: two wooden creaks.
+    d = 0.7
+    n = int(RATE * d)
+    x = t(d)
+    creak = tone(np.linspace(240, 330, n) * (1 + 0.05 * np.sin(2 * np.pi * 23 * x)), d, "tri")
+    gate = (np.sin(2 * np.pi * 2.9 * x) > 0).astype(float)
+    write("sfx_bucket_creak", fade_edges(lowpass(creak * gate, 1500) * env(n, 0.01, 2.5), 0.01), 0.6)
+
+    # Bucket dump: a heavy slosh of water hitting the deck.
+    d = 1.3
+    x = t(d)
+    nz = noise(d)
+    slosh = (lowpass(nz, 3000) - 0.5 * lowpass(nz, 250)) * np.clip(x / 0.12, 0, 1) * np.exp(-2.6 * x)
+    thump = tone(np.linspace(130, 45, int(RATE * 0.35)), 0.35) * env(int(RATE * 0.35), 0.004, 9)
+    slosh[int(RATE * 0.1):int(RATE * 0.1) + len(thump)] += thump * 0.8
+    write("sfx_bucket_dump", fade_edges(slosh, 0.01), 0.9)
+
+    # Slide whoosh: soft rushing water, swelling and fading so repeats overlap smoothly.
+    d = 0.9
+    x = t(d)
+    nz = noise(d)
+    write("sfx_slide_whoosh", fade_edges((lowpass(nz, 2400) - lowpass(nz, 500)) * np.sin(np.pi * x / d) ** 1.5, 0.03), 0.55)
+
+    # Bridge crack: a short dry snap, the warning before a plank lets go.
+    d = 0.22
+    n = int(RATE * d)
+    s = (lowpass(noise(d), 6000) - lowpass(noise(d), 1200)) * env(n, 0.0005, 40)
+    s += tone(np.linspace(700, 260, n), d, "tri") * env(n, 0.001, 30) * 0.5
+    write("sfx_bridge_crack", fade_edges(s), 0.7)
+
+    # Bridge collapse: a falling tone with a rattle.
+    d = 0.7
+    n = int(RATE * d)
+    s = tone(np.linspace(300, 70, n), d, "tri") * env(n, 0.003, 5)
+    s += 0.4 * lowpass(noise(d), 1500) * env(n, 0.002, 7) * (0.6 + 0.4 * np.sin(2 * np.pi * 19 * t(d)))
+    write("sfx_bridge_collapse", fade_edges(s), 0.75)
+
+    # Inflatable boing: a big, low, rubbery thump for landing on a giant ball.
+    d = 0.5
+    n = int(RATE * d)
+    f = np.concatenate([np.linspace(90, 210, int(RATE * 0.05)), np.linspace(210, 70, n - int(RATE * 0.05))])
+    s = tone(f, d, "soft") * env(n, 0.004, 7) + 0.15 * lowpass(noise(d), 350) * env(n, 0.001, 20)
+    write("sfx_inflatable_boing", fade_edges(s), 0.85)
+
+    # Tropical water-park ambience loop: rushing water, slow swells and a few bird-like chirps. Seamless loop.
+    d = 10.0
+    x = t(d)
+    nz = noise(d)
+    water = (lowpass(nz, 3200) - lowpass(nz, 400)) * (0.55 + 0.12 * np.sin(2 * np.pi * x / d * 2) + 0.08 * np.sin(2 * np.pi * x / d * 5 + 0.7))
+    surf = lowpass(noise(d), 500) * (0.25 + 0.25 * np.sin(2 * np.pi * x / d * 1 - 1.2) ** 2)
+    s = water + surf
+    for start, f0 in [(1.3, 2600), (1.55, 3100), (4.2, 2900), (6.8, 2400), (7.0, 2750), (7.2, 3200)]:
+        seg = tone(np.linspace(f0, f0 * 1.25, int(RATE * 0.12)), 0.12) * env(int(RATE * 0.12), 0.02, 14) * 0.09
+        i = int(RATE * start)
+        s[i:i + len(seg)] += seg
+    k = int(RATE * 0.6)
+    ramp = np.linspace(0, 1, k)
+    s[:k] = s[:k] * ramp + s[-k:] * (1 - ramp)
+    write("amb_tropical_waterpark_loop", s[:-k], 0.35)
+
+
 if __name__ == "__main__":
     main()
     arena_sounds()
+    cove_sounds()
