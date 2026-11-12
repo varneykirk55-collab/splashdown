@@ -1,0 +1,11 @@
+SpinPlatform: renderers disabled=0, visuals=1 | size old=(8.50, 0.52, 8.50) new=(8.50, 0.52, 8.50) centreDelta=(0.00, 0.00, 0.00)
+Pendulum: renderers disabled=0, visuals=2 | size old=(9.80, 10.28, 1.82) new=(10.30, 10.55, 1.82) centreDelta=(0.00, 0.14, 0.00)
+PistonWall: renderers disabled=0, visuals=1 | size old=(4.22, 1.80, 1.40) new=(4.20, 1.80, 1.40) centreDelta=(0.00, 0.00, 0.00)
+BouncingBallArena: renderers disabled=0, visuals=1 | size old=(2.22, 2.20, 2.22) new=(2.22, 2.20, 2.22) centreDelta=(0.00, 0.00, 0.00)
+BouncePad: renderers disabled=0, head=SD_PadHead_R180
+FinalPad_1: renderers disabled=0, head=SD_PadHead_R150
+FinalPad_2: renderers disabled=0, head=SD_PadHead_R150
+FinalPad_3: renderers disabled=0, head=SD_PadHead_R150
+FinalPad_4: renderers disabled=0, head=SD_PadHead_R150
+LaunchPad_1: renderers disabled=0, head=SD_PadHead_4x3
+LaunchPad_2: renderers disabled=0, head=SD_PadHead_4x3

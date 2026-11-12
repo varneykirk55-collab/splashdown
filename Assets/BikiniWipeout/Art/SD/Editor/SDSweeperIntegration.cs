@@ -82,7 +82,7 @@ public static class SDSweeperIntegration
     }
 
     /// <summary>Point the FBX materials (matched by name) at the project SD_* URP materials, so prefabs never use FBX-embedded copies.</summary>
-    static void EnsureMaterialRemap(string fbxPath)
+    internal static void EnsureMaterialRemap(string fbxPath)
     {
         var imp = (ModelImporter)AssetImporter.GetAtPath(fbxPath);
         var map = imp.GetExternalObjectMap();
@@ -96,7 +96,7 @@ public static class SDSweeperIntegration
         if (changed) imp.SaveAndReimport();
     }
 
-    static void AddVisual(string name, Transform parent, Transform source)
+    internal static void AddVisual(string name, Transform parent, Transform source)
     {
         var go = new GameObject(name);
         go.transform.SetParent(parent, false);          // local pose = identity: FBX meshes are authored around the pivot
@@ -137,14 +137,14 @@ public static class SDSweeperIntegration
         File.WriteAllText(OutDir + "visuals_" + tag + ".txt", vis.ToString());
     }
 
-    static string Path(Transform t, Transform root)
+    internal static string Path(Transform t, Transform root)
     {
         var parts = new List<string>();
         for (; t != null && t != root; t = t.parent) parts.Insert(0, t.name);
         return root.name + (parts.Count > 0 ? "/" + string.Join("/", parts) : "");
     }
 
-    static void DumpTransform(Transform t, string indent, StringBuilder sb)
+    internal static void DumpTransform(Transform t, string indent, StringBuilder sb)
     {
         if (t.name.StartsWith(VisualPrefix)) return;   // new decorative objects are reported separately
         sb.AppendLine(indent + t.name + " layer=" + t.gameObject.layer + " active=" + t.gameObject.activeSelf
@@ -164,7 +164,7 @@ public static class SDSweeperIntegration
         foreach (Transform child in t) DumpTransform(child, indent + "  ", sb);
     }
 
-    static string Value(SerializedProperty p)
+    internal static string Value(SerializedProperty p)
     {
         switch (p.propertyType)
         {
@@ -256,7 +256,7 @@ public static class SDSweeperIntegration
         return (float)(s / (px.Length / 37 + 1));
     }
 
-    static Transform Find(Transform t, string name)
+    internal static Transform Find(Transform t, string name)
     {
         if (t.name == name) return t;
         foreach (Transform c in t) { var r = Find(c, name); if (r) return r; }

@@ -122,6 +122,19 @@ Imported `SD_Sweeper_Small`, `SD_Sweeper_Large`, `SD_JumpPad_Small`, `SD_BallMou
 - Both FBX files are remapped to the project materials in `Art/SD/Materials` (the apply tool now does this itself; a first pass had used FBX-embedded copies and was redone).
 - EditMode 157/157 and Course1PlayTests 9/9 pass. Screenshots: `ArtStaging/Integration/before_db_*.png` and `after_db_*.png`.
 
+## Jump pads, spin discs, pendulums, pistons, balls (2026-11-12, branch astra/pads-obstacles-integration)
+
+New Blender assets (all validated): `SD_PadHead_R150`, `SD_PadHead_R180`, `SD_PadHead_4x3` (pad tops), `SD_SpinDisc`, `SD_Pendulum` (gantry + arm), `SD_Ball`; `SD_PistonWall` was already built.
+
+- **Prefabs** (visual-only; primitive renderers disabled, never deleted): `SpinPlatform`, `Pendulum`, `PistonWall`, `BouncingBallArena`. The spin platform's dark `Support` column is left as is.
+- **Scene** `Course_SplashdownGauntlet.unity`: the 7 jump-pad objects (`BouncePad`, `FinalPad_1..4`, `LaunchPad_1..2`) each get an `SD_Visual_PadHead` child; their `Deck` and `Trim` renderers are disabled. The existing Deck colliders, dark support columns and foam rings are untouched. The scene diff is 7 new objects and 14 renderers disabled; object and collider counts are otherwise unchanged.
+- **Gameplay state:** a dump of every object and every non-renderer component in the whole scene, and of the four prefabs, is identical before and after.
+- **Bug found and fixed on the way:** the ball prefab's root is a unit sphere scaled 2.2, so the new ball mesh first came out twice as large. The tool now compensates for parent scale and prints a numeric old-vs-new size check (ball, spin disc, piston match exactly; pendulum is ~0.5 m wider across the post caps).
+- **Shading fix:** pad and disc tops showed a bowl-like gradient; cap edges are now marked sharp so the tops are flat.
+- EditMode 157/157, Course1PlayTests 9/9. Screenshots: `ArtStaging/Integration/before_ob_*.png` and `after_ob_*.png`.
+- **Caveat:** the pad changes live in the scene, so **Bikini Wipeout > Course 1 > Rebuild Splashdown Gauntlet** would regenerate the old pads. The prefab changes survive a rebuild.
+- **Not changed:** other walkable surfaces (islands, bridges, rests, checkpoints, start/finish), gates, water, the moving platforms and the dark support columns.
+
 ## Remaining
 
 - Import settings, material mapping, prefab swapping and collider checks are all open.

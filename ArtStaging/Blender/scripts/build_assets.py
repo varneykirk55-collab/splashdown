@@ -419,6 +419,105 @@ def SD_Support_Truss():
     return [o], dict(pivot="Origin = base centre; stack vertically at 3.0 m.", gameplay="1.4 x 1.4 foot, 3.0 m tall.", colliders="Box 1.0 x 3.0 x 1.0 (cap/foot are decorative).")
 
 
+# ------------------------------------------------------------------ pads, spin disc, pendulum, ball (Course 1 swap-ins)
+
+def make_pad_head_disc(radius, neck_r, name):
+    """Visual 'head' of a round jump pad: red cushion, blue inlay, short chrome neck that overlaps the existing support column.
+    Origin = centre of the walkable top (z=0). Walkable top matches the existing 1 m Deck collider top."""
+    cushion = cyl("cushion", radius, 0.45, (0, 0, -0.225), "SD_Red", 0.12, 5, 64, harden=True)
+    inlay = cyl("inlay", radius * 0.8, 0.07, (0, 0, -0.025), "SD_Blue", 0.02, 2, 64, harden=True)
+    collar = cyl("collar", neck_r * 1.12, 0.06, (0, 0, -0.48), "SD_Chrome", 0.01, 1, 48)
+    neck = cyl("neck", neck_r, 0.65, (0, 0, -0.775), "SD_Chrome", 0.01, 1, 48)
+    o = join([cushion, inlay, collar, neck], name)
+    finalize(o, pivot=(0, 0, 0))
+    return [o], dict(pivot="Origin = centre of walkable top (z=0); neck reaches z=-1.1 so it overlaps the existing support column (top at -1.0).",
+                     gameplay="Walkable radius %.2f m. VISUAL ONLY: keep the existing Deck MeshCollider, support column and foam ring." % radius,
+                     colliders="None. Existing Deck collider: cylinder r %.2f, 1.0 thick, top at pivot." % radius)
+
+
+@asset
+def SD_PadHead_R150():
+    return make_pad_head_disc(1.5, 0.6, "PadHead_R150")
+
+
+@asset
+def SD_PadHead_R180():
+    return make_pad_head_disc(1.8, 0.72, "PadHead_R180")
+
+
+@asset
+def SD_PadHead_4x3():
+    """Rectangular pad head 4 (X) x 3 (Z) with two chevrons pointing +Z (forward)."""
+    frame = box("frame", (4.0, 3.0, 0.45), (0, 0, -0.225), "SD_Red", 0.14, 5)
+    inlay = box("inlay", (3.3, 2.3, 0.06), (0, 0, -0.02), "SD_Blue", 0.02, 2)
+    parts = [frame, inlay]
+    for j in (0, 1):
+        parts.append(chevron("chev", 0, -0.45 + j * 0.85, 1.7, 0.95, 0.28, 0.0, 0.012))
+    parts.append(cyl("collar", 0.99, 0.06, (0, 0, -0.48), "SD_Chrome", 0.01, 1, 48))
+    parts.append(cyl("neck", 0.9, 0.65, (0, 0, -0.775), "SD_Chrome", 0.01, 1, 48))
+    o = join(parts, "PadHead_4x3")
+    finalize(o, pivot=(0, 0, 0))
+    return [o], dict(pivot="Origin = centre of walkable top (z=0). Chevrons point +Y in Blender = Unity +Z.",
+                     gameplay="4.0 (X) x 3.0 (Z) top. VISUAL ONLY: keep the existing Deck BoxCollider, support column and foam ring.",
+                     colliders="None. Existing Deck collider: box 4.0 x 1.0 x 3.0, top at pivot.")
+
+
+@asset
+def SD_SpinDisc():
+    """Rotating ridden disc (prefab SpinPlatform / child 'Disc'): r 4.0, top at origin. Rotates about Unity Y."""
+    cushion = cyl("cushion", 4.0, 0.5, (0, 0, -0.25), "SD_Red", 0.14, 5, 64, harden=True)
+    rim = cyl("rim", 4.25, 0.4, (0, 0, -0.3), "SD_Blue", 0.05, 3, 64, harden=True)
+    inlay = cyl("inlay", 3.4, 0.07, (0, 0, -0.025), "SD_Blue", 0.02, 2, 64, harden=True)
+    parts = [cushion, rim, inlay]
+    for k in range(4):
+        a = math.radians(k * 90)
+        cx, cy = -math.sin(a) * 2.48, math.cos(a) * 2.48
+        parts.append(box("spoke", (0.7, 2.4, 0.04), (cx, cy, 0.0), "SD_White" if k % 2 == 0 else "SD_Red", 0.01, 1, rot=(0, 0, a)))
+    parts.append(cyl("hub", 0.7, 0.04, (0, 0, 0.0), "SD_Chrome", 0.01, 1, 48))
+    o = join(parts, "Disc")
+    finalize(o, pivot=(0, 0, 0))
+    return [o], dict(pivot="Origin = disc centre at the walkable top; the whole mesh rotates about Unity Y with the prefab 'Disc' object.",
+                     gameplay="Radius 4.0 m (rim 4.25), 0.5 m thick; spokes/hub are flat markers (<= 2 cm). VISUAL ONLY.",
+                     colliders="None. Existing MeshCollider (convex cylinder r 4.0, top at pivot) stays.")
+
+
+@asset
+def SD_Pendulum():
+    """Pendulum gantry (static) and swinging arm. Origin = pivot at the crossbar. Arm hangs along -Z (Unity -Y), swings about Unity Z."""
+    parts = []
+    for sx in (-1, 1):
+        parts.append(cyl("post", 0.5, 10.0, (sx * 4.6, 0, -4.6), "SD_Blue", 0.03, 2, 32))
+        for zb in (-0.9, -1.7):
+            parts.append(cyl("pband", 0.535, 0.14, (sx * 4.6, 0, zb), "SD_Chrome", 0.01, 1, 32))
+        parts.append(sphere("pcap", 0.55, (sx * 4.6, 0, 0.4), "SD_Red", 32, 16))
+    cross = [capsule_x("cross", 9.8, 0.275, (0, 0, 0.4), "SD_Red")]
+    for bx in (-3.6, -1.2, 1.2, 3.6):
+        cross.append(cyl("cband", 0.29, 0.34, (bx, 0, 0.4), "SD_Blue", 0.01, 1, 32, rot=(0, math.radians(90), 0)))
+    gantry = join(parts + cross, "Gantry")
+    finalize(gantry, pivot=(0, 0, 0))
+    sleeve = cyl("sleeve", 0.24, 0.5, (0, 0, 0.12), "SD_Chrome", 0.01, 1, 32)
+    rod = cyl("rod", 0.16, 5.5, (0, 0, -2.75), "SD_Chrome", 0.0, 0, 24)
+    bob = sphere("bob", 0.9, (0, 0, -5.5), "SD_Red")
+    band = cyl("band", 0.912, 0.16, (0, 0, -5.5), "SD_White", 0.01, 1, 48)
+    cap = cyl("cap", 0.2, 0.2, (0, 0, -4.58), "SD_Chrome", 0.01, 1, 24)
+    arm = join([sleeve, rod, bob, band, cap], "Arm")
+    finalize(arm, pivot=(0, 0, 0))
+    return [gantry, arm], dict(pivot="Both origins = pivot point on the crossbar (prefab root / 'Arm' at local 0). Arm swings about Unity Z; hangs 5.5 m to the weight centre.",
+                               gameplay="Gantry posts at x=+-4.6 (r 0.5, y -9.6..0.4), crossbar 9.8 m at y 0.4. Weight r 0.9 (matches Pendulum). VISUAL ONLY.",
+                               colliders="None. Existing weight collider (sphere r 0.9) and trigger (r 1.0) stay.")
+
+
+@asset
+def SD_Ball():
+    """Arena ball visual: red sphere r 1.1 with white equator band (shows the roll). Origin = centre."""
+    ball = sphere("ball", 1.1, (0, 0, 0), "SD_Red", 64, 32)
+    band = cyl("band", 1.112, 0.14, (0, 0, 0), "SD_White", 0.01, 1, 64)
+    o = join([ball, band], "Ball")
+    finalize(o, pivot=(0, 0, 0))
+    return [o], dict(pivot="Origin = sphere centre.", gameplay="Radius 1.10 m, same as the BouncingBallArena SphereCollider. VISUAL ONLY. Band axis = Unity Y.",
+                     colliders="None. Existing SphereCollider r 1.1 on the prefab root stays.")
+
+
 # ------------------------------------------------------------------ driver
 
 def main():

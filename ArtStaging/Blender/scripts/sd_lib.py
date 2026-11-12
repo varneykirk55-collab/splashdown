@@ -39,7 +39,7 @@ def mat(name):
     return m
 
 
-def _finish(obj, bevel, segments, name, material):
+def _finish(obj, bevel, segments, name, material, harden=False):
     obj.name = name
     obj.data.name = name + "_mesh"
     bpy.context.view_layer.objects.active = obj
@@ -54,21 +54,33 @@ def _finish(obj, bevel, segments, name, material):
         bpy.ops.object.modifier_apply(modifier=mod.name)
     obj.data.materials.clear()
     obj.data.materials.append(mat(material))
-    bpy.ops.object.shade_smooth_by_angle(angle=math.radians(40))
+    if harden:
+        # Keep big flat caps (pad tops) truly flat while the bevel stays smooth: mark every edge of a cap n-gon sharp.
+        bm = bmesh.new()
+        bm.from_mesh(obj.data)
+        for f in bm.faces:
+            f.smooth = True
+            if len(f.verts) > 8:
+                for e in f.edges:
+                    e.smooth = False
+        bm.to_mesh(obj.data)
+        bm.free()
+    else:
+        bpy.ops.object.shade_smooth_by_angle(angle=math.radians(40))
     obj.select_set(False)
     return obj
 
 
-def box(name, size, loc=(0, 0, 0), material="SD_Red", bevel=0.05, segments=3, rot=(0, 0, 0)):
+def box(name, size, loc=(0, 0, 0), material="SD_Red", bevel=0.05, segments=3, rot=(0, 0, 0), harden=False):
     bpy.ops.mesh.primitive_cube_add(size=1, location=loc, rotation=rot)
     o = bpy.context.active_object
     o.scale = size
-    return _finish(o, bevel, segments, name, material)
+    return _finish(o, bevel, segments, name, material, harden)
 
 
-def cyl(name, radius, depth, loc=(0, 0, 0), material="SD_Red", bevel=0.04, segments=3, verts=32, rot=(0, 0, 0)):
+def cyl(name, radius, depth, loc=(0, 0, 0), material="SD_Red", bevel=0.04, segments=3, verts=32, rot=(0, 0, 0), harden=False):
     bpy.ops.mesh.primitive_cylinder_add(radius=radius, depth=depth, vertices=verts, location=loc, rotation=rot)
-    return _finish(bpy.context.active_object, bevel, segments, name, material)
+    return _finish(bpy.context.active_object, bevel, segments, name, material, harden)
 
 
 def sphere(name, radius, loc=(0, 0, 0), material="SD_Red", seg=48, rings=24):

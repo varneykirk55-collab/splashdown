@@ -1,0 +1,221 @@
+#### SpinPlatform
+SpinPlatform layer=10 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+  [RotatingSweeper]
+    armBody = Rigidbody:Disc
+    rotationSpeed = 30.0000
+    localAxis = (0.0000, 1.0000, 0.0000)
+    startAngle = 0.0000
+    playOnStart = True
+    impactForce = 0.0000
+    impactSource = null
+  Support layer=0 active=True pos=(0.0000, -4.5000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(2.8000, 4.0000, 2.8000)
+  Disc layer=10 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+    [Rigidbody]
+      m_Mass = 1.0000
+      m_LinearDamping = 0.0000
+      m_AngularDamping = 0.0500
+      m_CenterOfMass = (0.0000, 0.0000, 0.0000)
+      m_InertiaTensor = (1.0000, 1.0000, 1.0000)
+      m_InertiaRotation = (0.0000, 0.0000, 0.0000, 1.0000)
+      m_IncludeLayers = 0
+      m_ExcludeLayers = 0
+      m_ImplicitCom = True
+      m_ImplicitTensor = True
+      m_UseGravity = False
+      m_IsKinematic = True
+      m_Interpolate = 1
+      m_CollisionDetection = 0
+    Deck layer=10 active=True pos=(0.0000, -0.2500, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(8.0000, 0.2500, 8.0000)
+      [MeshCollider]
+        m_Material = null
+        m_IncludeLayers = 0
+        m_ExcludeLayers = 0
+        m_LayerOverridePriority = 0
+        m_IsTrigger = False
+        m_ProvidesContacts = False
+        m_Convex = True
+        m_CookingOptions = 30
+        m_Mesh = Mesh:Cylinder
+    Rim layer=10 active=True pos=(0.0000, -0.3000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(8.5000, 0.2000, 8.5000)
+    Spoke0 layer=10 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+      Mark layer=10 active=True pos=(0.0000, 0.0120, 2.4800) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.7000, 0.0200, 2.4000)
+    Spoke1 layer=10 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.7071, 0.0000, 0.7071) scale=(1.0000, 1.0000, 1.0000)
+      Mark layer=10 active=True pos=(0.0000, 0.0120, 2.4800) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.7000, 0.0200, 2.4000)
+    Spoke2 layer=10 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 1.0000, 0.0000, 0.0000) scale=(1.0000, 1.0000, 1.0000)
+      Mark layer=10 active=True pos=(0.0000, 0.0120, 2.4800) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.7000, 0.0200, 2.4000)
+    Spoke3 layer=10 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.7071, 0.0000, -0.7071) scale=(1.0000, 1.0000, 1.0000)
+      Mark layer=10 active=True pos=(0.0000, 0.0120, 2.4800) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.7000, 0.0200, 2.4000)
+#### Pendulum
+Pendulum layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+  [Pendulum]
+    armBody = Rigidbody:Arm
+    localAxis = (0.0000, 0.0000, 1.0000)
+    amplitude = 42.0000
+    period = 3.2000
+    startPhase = 0.0000
+    playOnStart = True
+    impactForce = 1.4000
+    impactSource = ImpactSource:Arm
+  PostLeft layer=0 active=True pos=(-4.6000, -4.6000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.5000, 5.0000, 0.5000)
+  PostRight layer=0 active=True pos=(4.6000, -4.6000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.5000, 5.0000, 0.5000)
+  Crossbar layer=0 active=True pos=(0.0000, 0.4000, 0.0000) rot=(0.0000, 0.0000, 0.7071, 0.7071) scale=(0.5500, 4.9000, 0.5500)
+  Arm layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+    [Rigidbody]
+      m_Mass = 1.0000
+      m_LinearDamping = 0.0000
+      m_AngularDamping = 0.0500
+      m_CenterOfMass = (0.0000, 0.0000, 0.0000)
+      m_InertiaTensor = (1.0000, 1.0000, 1.0000)
+      m_InertiaRotation = (0.0000, 0.0000, 0.0000, 1.0000)
+      m_IncludeLayers = 0
+      m_ExcludeLayers = 0
+      m_ImplicitCom = True
+      m_ImplicitTensor = True
+      m_UseGravity = False
+      m_IsKinematic = True
+      m_Interpolate = 1
+      m_CollisionDetection = 0
+    [ImpactSource]
+      forceMultiplier = 1.4000
+      kind = 0
+      body = Rigidbody:Arm
+      surfaceColliders = (Generic)
+      rehitInterval = 0.3500
+    [ProximityWhoosh]
+      tip = Transform:Weight
+      audioEvent = 14
+      radius = 4.5000
+      cooldown = 0.5000
+    Rod layer=9 active=True pos=(0.0000, -2.7500, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.1600, 2.7500, 0.1600)
+    Weight layer=9 active=True pos=(0.0000, -5.5000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.8000, 1.8000, 1.8000)
+      [SphereCollider]
+        m_Material = null
+        m_IncludeLayers = 0
+        m_ExcludeLayers = 0
+        m_LayerOverridePriority = 0
+        m_IsTrigger = False
+        m_ProvidesContacts = False
+        m_Radius = 0.5000
+        m_Center = (0.0000, 0.0000, 0.0000)
+      Band layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0100, 0.0900, 1.0100)
+    ImpactZone layer=9 active=True pos=(0.0000, -5.5000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+      [SphereCollider]
+        m_Material = null
+        m_IncludeLayers = 0
+        m_ExcludeLayers = 0
+        m_LayerOverridePriority = 0
+        m_IsTrigger = True
+        m_ProvidesContacts = False
+        m_Radius = 1.0000
+        m_Center = (0.0000, 0.0000, 0.0000)
+#### PistonWall
+PistonWall layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+  [Rigidbody]
+    m_Mass = 1.0000
+    m_LinearDamping = 0.0000
+    m_AngularDamping = 0.0500
+    m_CenterOfMass = (0.0000, 0.0000, 0.0000)
+    m_InertiaTensor = (1.0000, 1.0000, 1.0000)
+    m_InertiaRotation = (0.0000, 0.0000, 0.0000, 1.0000)
+    m_IncludeLayers = 0
+    m_ExcludeLayers = 0
+    m_ImplicitCom = True
+    m_ImplicitTensor = True
+    m_UseGravity = False
+    m_IsKinematic = True
+    m_Interpolate = 1
+    m_CollisionDetection = 0
+  [ImpactSource]
+    forceMultiplier = 1.2000
+    kind = 3
+    body = Rigidbody:PistonWall
+    surfaceColliders = (Generic)
+    rehitInterval = 0.3500
+  [MovingPlatform]
+    waypoints = (Generic)
+    speed = 3.2000
+    dwellTime = 1.1000
+    loopMode = 0
+    startTimeOffset = 0.0000
+    easeInOut = True
+    playOnStart = True
+  Block layer=9 active=True pos=(0.0000, 0.9500, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(4.0000, 1.7000, 1.3000)
+    [BoxCollider]
+      m_Material = null
+      m_IncludeLayers = 0
+      m_ExcludeLayers = 0
+      m_LayerOverridePriority = 0
+      m_IsTrigger = False
+      m_ProvidesContacts = False
+      m_Size = (1.0000, 1.0000, 1.0000)
+      m_Center = (0.0000, 0.0000, 0.0000)
+  FaceLeft layer=9 active=True pos=(-2.0500, 0.9500, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.1200, 1.8000, 1.4000)
+  FaceRight layer=9 active=True pos=(2.0500, 0.9500, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.1200, 1.8000, 1.4000)
+  ImpactZone layer=9 active=True pos=(0.0000, 0.9500, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+    [BoxCollider]
+      m_Material = null
+      m_IncludeLayers = 0
+      m_ExcludeLayers = 0
+      m_LayerOverridePriority = 0
+      m_IsTrigger = True
+      m_ProvidesContacts = False
+      m_Size = (4.2500, 1.7000, 1.5000)
+      m_Center = (0.0000, 0.0000, 0.0000)
+#### BouncingBallArena
+BouncingBallArena layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(2.2000, 2.2000, 2.2000)
+  [SphereCollider]
+    m_Material = null
+    m_IncludeLayers = 0
+    m_ExcludeLayers = 0
+    m_LayerOverridePriority = 0
+    m_IsTrigger = False
+    m_ProvidesContacts = False
+    m_Radius = 0.5000
+    m_Center = (0.0000, 0.0000, 0.0000)
+  [Rigidbody]
+    m_Mass = 8.0000
+    m_LinearDamping = 0.0000
+    m_AngularDamping = 0.6000
+    m_CenterOfMass = (0.0000, 0.0000, 0.0000)
+    m_InertiaTensor = (1.0000, 1.0000, 1.0000)
+    m_InertiaRotation = (0.0000, 0.0000, 0.0000, 1.0000)
+    m_IncludeLayers = 0
+    m_ExcludeLayers = 0
+    m_ImplicitCom = True
+    m_ImplicitTensor = True
+    m_UseGravity = True
+    m_IsKinematic = False
+    m_Interpolate = 1
+    m_CollisionDetection = 2
+  [ImpactSource]
+    forceMultiplier = 1.2500
+    kind = 2
+    body = Rigidbody:BouncingBallArena
+    surfaceColliders = (Generic)
+    rehitInterval = 0.3500
+  [BouncingBall]
+    bounceHeight = 1.8000
+    bounciness = 0.6000
+    patrolOffset = (3.0000, 0.0000, 0.0000)
+    travelSpeed = 2.4000
+    steering = 12.0000
+    startPhase = 0.0000
+    impactForce = 1.2500
+    impactSource = ImpactSource:BouncingBallArena
+    resetDistance = 9.0000
+  [CollisionSound]
+    audioEvent = 13
+    minSpeed = 2.0000
+    fullVolumeSpeed = 8.0000
+    cooldown = 0.1500
+  Band layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0100, 0.0700, 1.0100)
+  ImpactZone layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+    [SphereCollider]
+      m_Material = null
+      m_IncludeLayers = 0
+      m_ExcludeLayers = 0
+      m_LayerOverridePriority = 0
+      m_IsTrigger = True
+      m_ProvidesContacts = False
+      m_Radius = 0.5400
+      m_Center = (0.0000, 0.0000, 0.0000)

@@ -61,6 +61,64 @@
    "pass": true
   },
   {
+   "name": "SD_Ball",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 4476,
+   "verts": 2242,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "Ball": {
+     "size": [
+      2.224,
+      2.224,
+      2.2
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_White"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 115836,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "Ball": [
+      2.224,
+      2.2,
+      2.224
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
    "name": "SD_BallMount",
    "checks": {
     "reopens": true,
@@ -375,6 +433,184 @@
    "pass": true
   },
   {
+   "name": "SD_PadHead_4x3",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 1336,
+   "verts": 680,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "PadHead_4x3": {
+     "size": [
+      4.0,
+      3.0,
+      1.112
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Blue",
+      "SD_White",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 46988,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "PadHead_4x3": [
+      4.0,
+      1.112,
+      3.0
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_PadHead_R150",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 3056,
+   "verts": 1536,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "PadHead_R150": {
+     "size": [
+      3.0,
+      3.0,
+      1.11
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Blue",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 77996,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "PadHead_R150": [
+      3.0,
+      1.11,
+      3.0
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_PadHead_R180",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 3056,
+   "verts": 1536,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "PadHead_R180": {
+     "size": [
+      3.6,
+      3.6,
+      1.11
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Blue",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 77628,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "PadHead_R180": [
+      3.6,
+      1.11,
+      3.6
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
    "name": "SD_PaddedBarrier",
    "checks": {
     "reopens": true,
@@ -427,6 +663,87 @@
       3.0,
       1.4,
       0.55
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_Pendulum",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 8964,
+   "verts": 4522,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "Arm": {
+     "size": [
+      1.824,
+      1.824,
+      6.77
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Chrome",
+      "SD_Red",
+      "SD_White"
+     ]
+    },
+    "Gantry": {
+     "size": [
+      10.3,
+      1.1,
+      10.55
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Blue",
+      "SD_Chrome",
+      "SD_Red"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 217484,
+    "reimport_meshes": 2,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "Arm": [
+      1.824,
+      6.77,
+      1.824
+     ],
+     "Gantry": [
+      10.3,
+      10.55,
+      1.1
      ]
     }
    },
@@ -751,6 +1068,66 @@
    "pass": true
   },
   {
+   "name": "SD_SpinDisc",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 3872,
+   "verts": 1952,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "Disc": {
+     "size": [
+      8.5,
+      8.5,
+      0.52
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Blue",
+      "SD_White",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 95740,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "Disc": [
+      8.5,
+      0.52,
+      8.5
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
    "name": "SD_Support_Truss",
    "checks": {
     "reopens": true,
@@ -950,7 +1327,7 @@
    },
    "fbx": {
     "exists": true,
-    "bytes": 242284,
+    "bytes": 241932,
     "reimport_meshes": 2,
     "reimport_ok": true,
     "reimport_dims": {
@@ -1030,7 +1407,7 @@
    },
    "fbx": {
     "exists": true,
-    "bytes": 224972,
+    "bytes": 225212,
     "reimport_meshes": 2,
     "reimport_ok": true,
     "reimport_dims": {

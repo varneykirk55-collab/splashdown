@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = centre of walkable top (z=0). Chevrons point +Y in Blender = Unity +Z.",
+  "gameplay": "4.0 (X) x 3.0 (Z) top. VISUAL ONLY: keep the existing Deck BoxCollider, support column and foam ring.",
+  "colliders": "None. Existing Deck collider: box 4.0 x 1.0 x 3.0, top at pivot.",
+  "name": "SD_PadHead_4x3",
+  "blend": "src\\SD_PadHead_4x3.blend",
+  "fbx": "export\\SD_PadHead_4x3.fbx",
+  "objects": [
+    "PadHead_4x3"
+  ]
+}

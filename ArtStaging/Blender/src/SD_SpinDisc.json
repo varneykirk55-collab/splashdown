@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = disc centre at the walkable top; the whole mesh rotates about Unity Y with the prefab 'Disc' object.",
+  "gameplay": "Radius 4.0 m (rim 4.25), 0.5 m thick; spokes/hub are flat markers (<= 2 cm). VISUAL ONLY.",
+  "colliders": "None. Existing MeshCollider (convex cylinder r 4.0, top at pivot) stays.",
+  "name": "SD_SpinDisc",
+  "blend": "src\\SD_SpinDisc.blend",
+  "fbx": "export\\SD_SpinDisc.fbx",
+  "objects": [
+    "Disc"
+  ]
+}

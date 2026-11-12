@@ -1,0 +1,22 @@
+#### SpinPlatform
+SpinPlatform/Support enabled=True mats=DarkSupport@Materials/DarkSupport.mat
+SpinPlatform/Disc/Deck enabled=True mats=TargetRings@Materials/Arena/TargetRings.mat
+SpinPlatform/Disc/Rim enabled=True mats=SunYellow@Materials/SunYellow.mat
+SpinPlatform/Disc/Spoke0/Mark enabled=True mats=SunYellow@Materials/SunYellow.mat
+SpinPlatform/Disc/Spoke1/Mark enabled=True mats=Orange@Materials/Orange.mat
+SpinPlatform/Disc/Spoke2/Mark enabled=True mats=SunYellow@Materials/SunYellow.mat
+SpinPlatform/Disc/Spoke3/Mark enabled=True mats=Orange@Materials/Orange.mat
+#### Pendulum
+Pendulum/PostLeft enabled=True mats=PanelsBlueTeal@Materials/Arena/PanelsBlueTeal.mat
+Pendulum/PostRight enabled=True mats=PanelsYellowOrange@Materials/Arena/PanelsYellowOrange.mat
+Pendulum/Crossbar enabled=True mats=PanelsPinkPurple@Materials/Arena/PanelsPinkPurple.mat
+Pendulum/Arm/Rod enabled=True mats=DarkSupport@Materials/DarkSupport.mat
+Pendulum/Arm/Weight enabled=True mats=BallRed@Materials/Arena/BallRed.mat
+Pendulum/Arm/Weight/Band enabled=True mats=White@Materials/White.mat
+#### PistonWall
+PistonWall/Block enabled=True mats=StripesBlueYellow@Materials/Arena/StripesBlueYellow.mat
+PistonWall/FaceLeft enabled=True mats=SunYellow@Materials/SunYellow.mat
+PistonWall/FaceRight enabled=True mats=SunYellow@Materials/SunYellow.mat
+#### BouncingBallArena
+BouncingBallArena enabled=True mats=BallRed@Materials/Arena/BallRed.mat
+BouncingBallArena/Band enabled=True mats=White@Materials/White.mat

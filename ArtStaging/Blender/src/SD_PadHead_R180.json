@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = centre of walkable top (z=0); neck reaches z=-1.1 so it overlaps the existing support column (top at -1.0).",
+  "gameplay": "Walkable radius 1.80 m. VISUAL ONLY: keep the existing Deck MeshCollider, support column and foam ring.",
+  "colliders": "None. Existing Deck collider: cylinder r 1.80, 1.0 thick, top at pivot.",
+  "name": "SD_PadHead_R180",
+  "blend": "src\\SD_PadHead_R180.blend",
+  "fbx": "export\\SD_PadHead_R180.fbx",
+  "objects": [
+    "PadHead_R180"
+  ]
+}

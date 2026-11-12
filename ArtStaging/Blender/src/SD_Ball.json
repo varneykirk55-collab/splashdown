@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = sphere centre.",
+  "gameplay": "Radius 1.10 m, same as the BouncingBallArena SphereCollider. VISUAL ONLY. Band axis = Unity Y.",
+  "colliders": "None. Existing SphereCollider r 1.1 on the prefab root stays.",
+  "name": "SD_Ball",
+  "blend": "src\\SD_Ball.blend",
+  "fbx": "export\\SD_Ball.fbx",
+  "objects": [
+    "Ball"
+  ]
+}

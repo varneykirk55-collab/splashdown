@@ -1,0 +1,12 @@
+{
+  "pivot": "Both origins = pivot point on the crossbar (prefab root / 'Arm' at local 0). Arm swings about Unity Z; hangs 5.5 m to the weight centre.",
+  "gameplay": "Gantry posts at x=+-4.6 (r 0.5, y -9.6..0.4), crossbar 9.8 m at y 0.4. Weight r 0.9 (matches Pendulum). VISUAL ONLY.",
+  "colliders": "None. Existing weight collider (sphere r 0.9) and trigger (r 1.0) stay.",
+  "name": "SD_Pendulum",
+  "blend": "src\\SD_Pendulum.blend",
+  "fbx": "export\\SD_Pendulum.fbx",
+  "objects": [
+    "Gantry",
+    "Arm"
+  ]
+}
