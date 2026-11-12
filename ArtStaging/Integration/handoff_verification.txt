@@ -1,0 +1,36 @@
+Splashdown Course 1 handoff verification (read-only)
+PREFAB SweeperSmall: OK (2 visual(s))
+  missing refs: 0 missing object refs, 0 missing scripts
+PREFAB SweeperLarge: OK (2 visual(s))
+  missing refs: 0 missing object refs, 0 missing scripts
+PREFAB SweeperDouble: OK (2 visual(s))
+  missing refs: 0 missing object refs, 0 missing scripts
+PREFAB RotatingBeam: OK (2 visual(s))
+  missing refs: 0 missing object refs, 0 missing scripts
+PREFAB SpinPlatform: OK (1 visual(s))
+  missing refs: 0 missing object refs, 0 missing scripts
+PREFAB Pendulum: OK (2 visual(s))
+  missing refs: 0 missing object refs, 0 missing scripts
+PREFAB PistonWall: OK (1 visual(s))
+  missing refs: 0 missing object refs, 0 missing scripts
+PREFAB BouncingBallArena: OK (1 visual(s))
+  missing refs: 0 missing object refs, 0 missing scripts
+SCENE Course_SplashdownGauntlet roots=11
+  A_Sweeper_*: found 2 (expected 2), valid 2
+  C_Sweeper*: found 1 (expected 1), valid 1
+  C_Beam_*: found 2 (expected 2), valid 2
+  D_Beam*: found 1 (expected 1), valid 1
+  E_DoubleSweeper*: found 1 (expected 1), valid 1
+  SpinDisc_*: found 2 (expected 2), valid 2
+  D_Pendulum_*: found 5 (expected 5), valid 5
+  D_Piston_*: found 3 (expected 3), valid 3
+  B_Ball_*: found 3 (expected 3), valid 3
+  B_GiantBall_*: found 2 (expected 2), valid 2
+  pads valid: 7/7
+  scene missing refs: 0 missing object refs, 0 missing scripts
+  scene dirty=False (never saved by this tool)
+MATERIAL SD_Red: Universal Render Pipeline/Lit
+MATERIAL SD_Blue: Universal Render Pipeline/Lit
+MATERIAL SD_White: Universal Render Pipeline/Lit
+MATERIAL SD_Chrome: Universal Render Pipeline/Lit
+RESULT: ALL CHECKS PASSED
