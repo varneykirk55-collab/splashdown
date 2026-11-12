@@ -102,6 +102,16 @@ The Arm and Base come in as separate child objects, so a `RotatingSweeper` can d
 - **Not verified:** how they look. Batch mode cannot render, and the scratch project was Gamma colour space while Splashdown is Linear. The colour conversion is written to match in both, but compare against the previews in the real project. Chrome needs a skybox or reflection probe.
 - The `.mat` files were not added to the real project.
 
+## Real-project import check (2026-11-12, branch astra/blender-unity-import)
+
+Imported `SD_Sweeper_Small`, `SD_Sweeper_Large`, `SD_JumpPad_Small`, `SD_BallMount` plus the four materials into `Assets/BikiniWipeout/Art/SD/` (new folder; no existing asset, scene, prefab or setting changed — `git diff` on tracked files is empty). Checked in batch mode by `Art/SD/Editor/SDImportCheck.cs` (read-only; the Course 1 scene was opened but never saved). Output: `ArtStaging/SD_import_check.txt`.
+
+- Project is Linear colour space with URP (`PC_RPAsset`). All four materials use URP Lit; every FBX slot is remapped to the project's `Art/SD/Materials`.
+- Arm pivot: local (0, 0.5, 0) in both FBX and existing prefabs; placed at `A_Sweeper_1`'s transform the new Arm lands at the identical world position (0, 0.5, 43).
+- Length and height match the prefabs: Small 7.80 vs 7.87 m long, 1.82 m tall; Large 13.80 vs 13.87, 2.18 m tall.
+- **Footprint is wider than the prefab:** the new base disc is Ø 2.2 m (Large Ø 2.9); the prefab hub is about 0.9 m (Large 1.7 m). On `A_Sweeper_1`'s island 14 of 16 rim points of the disc have ground under them, so the disc overhangs the island edge a little. The base is only 0.28 m high and should have **no collider** on the skirt; keep the prefab hub collider. Decide whether the overhang is acceptable or the skirt should shrink.
+- **Not done:** no prefab or scene was switched to the new meshes, nothing was rendered or played, colliders were not compared in play, and the PlayMode tests were not run.
+
 ## Remaining
 
 - Import settings, material mapping, prefab swapping and collider checks are all open.
