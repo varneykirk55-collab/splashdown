@@ -1,0 +1,1066 @@
+{
+ "budget_tris": 25000,
+ "results": [
+  {
+   "name": "SD_BalanceBeam",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 3904,
+   "verts": 1984,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "BalanceBeam": {
+     "size": [
+      6.0,
+      0.8,
+      1.93
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Blue",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 99692,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "BalanceBeam": [
+      6.0,
+      1.93,
+      0.8
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_BallMount",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 4244,
+   "verts": 2138,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "Ball": {
+     "size": [
+      2.2,
+      2.2,
+      2.2
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      2.8
+     ],
+     "materials": [
+      "SD_Red"
+     ]
+    },
+    "BallMount": {
+     "size": [
+      1.5,
+      1.5,
+      1.88
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Blue",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 109964,
+    "reimport_meshes": 2,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "Ball": [
+      2.2,
+      2.2,
+      2.2
+     ],
+     "BallMount": [
+      1.5,
+      1.88,
+      1.5
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_Flag_Blue",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 1400,
+   "verts": 716,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "Flag_Blue": {
+     "size": [
+      1.08,
+      0.56,
+      2.78
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Chrome",
+      "SD_Blue",
+      "SD_White"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 46828,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "Flag_Blue": [
+      1.08,
+      2.78,
+      0.56
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_Flag_Red",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 1400,
+   "verts": 716,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "Flag_Red": {
+     "size": [
+      1.08,
+      0.56,
+      2.78
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Chrome",
+      "SD_Red",
+      "SD_White"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 46812,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "Flag_Red": [
+      1.08,
+      2.78,
+      0.56
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_JumpPad_Large",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 2864,
+   "verts": 1440,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "JumpPad_Large": {
+     "size": [
+      4.0,
+      4.0,
+      2.34
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Blue",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 77292,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "JumpPad_Large": [
+      4.0,
+      2.34,
+      4.0
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_JumpPad_Small",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 2864,
+   "verts": 1440,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "JumpPad_Small": {
+     "size": [
+      2.4,
+      2.4,
+      2.34
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Blue",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 77212,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "JumpPad_Small": [
+      2.4,
+      2.34,
+      2.4
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_PaddedBarrier",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 1756,
+   "verts": 888,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "PaddedBarrier": {
+     "size": [
+      3.0,
+      0.55,
+      1.4
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Blue"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 51372,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "PaddedBarrier": [
+      3.0,
+      1.4,
+      0.55
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_PendulumBob",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 2776,
+   "verts": 1394,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "PendulumBob": {
+     "size": [
+      1.822,
+      1.822,
+      1.91
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_White",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 78876,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "PendulumBob": [
+      1.822,
+      1.91,
+      1.822
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_PistonWall",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 1576,
+   "verts": 800,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "PistonWall": {
+     "size": [
+      4.2,
+      1.4,
+      1.8
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_White",
+      "SD_Blue"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 52252,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "PistonWall": [
+      4.2,
+      1.8,
+      1.4
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_Platform_4x4",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 2968,
+   "verts": 1536,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "Platform_4x4": {
+     "size": [
+      4.0,
+      4.0,
+      1.612
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Blue",
+      "SD_White",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 81260,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "Platform_4x4": [
+      4.0,
+      1.612,
+      4.0
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_Platform_8x4",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 3712,
+   "verts": 1912,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "Platform_8x4": {
+     "size": [
+      8.0,
+      4.0,
+      1.612
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Blue",
+      "SD_White",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 98108,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "Platform_8x4": [
+      8.0,
+      1.612,
+      4.0
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_Support_Truss",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 1960,
+   "verts": 976,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "Support_Truss": {
+     "size": [
+      1.4,
+      1.4,
+      3.0
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Blue",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 59324,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "Support_Truss": [
+      1.4,
+      3.0,
+      1.4
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_Sweeper_Large",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 10124,
+   "verts": 5102,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "Arm": {
+     "size": [
+      13.8,
+      0.6,
+      0.6
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Blue"
+     ]
+    },
+    "Base": {
+     "size": [
+      2.884,
+      2.884,
+      2.182
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Blue",
+      "SD_Red",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 243004,
+    "reimport_meshes": 2,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "Arm": [
+      13.8,
+      0.6,
+      0.6
+     ],
+     "Base": [
+      2.884,
+      2.182,
+      2.884
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_Sweeper_Small",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 9372,
+   "verts": 4718,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "Arm": {
+     "size": [
+      7.8,
+      0.6,
+      0.6
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Blue"
+     ]
+    },
+    "Base": {
+     "size": [
+      2.2,
+      2.2,
+      1.822
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Blue",
+      "SD_Red",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 224604,
+    "reimport_meshes": 2,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "Arm": [
+      7.8,
+      0.6,
+      0.6
+     ],
+     "Base": [
+      2.2,
+      1.822,
+      2.2
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_WaterEdge_Blue",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 536,
+   "verts": 272,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "WaterEdge_Blue": {
+     "size": [
+      2.0,
+      0.84,
+      0.48
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Blue",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 29132,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "WaterEdge_Blue": [
+      2.0,
+      0.48,
+      0.84
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_WaterEdge_Corner",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 1112,
+   "verts": 560,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "WaterEdge_Corner": {
+     "size": [
+      1.669,
+      1.669,
+      0.48
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 46028,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "WaterEdge_Corner": [
+      1.669,
+      0.48,
+      1.669
+     ]
+    }
+   },
+   "pass": true
+  },
+  {
+   "name": "SD_WaterEdge_Red",
+   "checks": {
+    "reopens": true,
+    "has_meshes": true,
+    "tri_budget": true,
+    "no_duplicate_verts": true,
+    "manifold": true,
+    "uv_layers": true,
+    "materials_assigned": true,
+    "all_faces_have_valid_material": true,
+    "scale_applied_positive": true,
+    "no_rotation": true,
+    "names_ok": true,
+    "palette_only": true,
+    "normals_outward": true,
+    "metadata_documented": true,
+    "fbx_exported": true,
+    "fbx_reimports": true
+   },
+   "tris": 536,
+   "verts": 272,
+   "non_manifold_edges": 0,
+   "duplicate_verts": 0,
+   "inverted": [],
+   "objects": {
+    "WaterEdge_Red": {
+     "size": [
+      2.0,
+      0.84,
+      0.48
+     ],
+     "pivot": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "materials": [
+      "SD_Red",
+      "SD_Chrome"
+     ]
+    }
+   },
+   "fbx": {
+    "exists": true,
+    "bytes": 29132,
+    "reimport_meshes": 1,
+    "reimport_ok": true,
+    "reimport_dims": {
+     "WaterEdge_Red": [
+      2.0,
+      0.48,
+      0.84
+     ]
+    }
+   },
+   "pass": true
+  }
+ ]
+}

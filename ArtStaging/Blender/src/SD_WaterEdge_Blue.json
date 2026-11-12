@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = base centre, water-facing side is local -Y. Tiles along X at 2.0 m.",
+  "gameplay": "2.0 x 0.84 x 0.54 m, alternate Red/Blue segments for the reference stripe.",
+  "colliders": "Box 2.0 x 0.54 x 0.84.",
+  "name": "SD_WaterEdge_Blue",
+  "blend": "src\\SD_WaterEdge_Blue.blend",
+  "fbx": "export\\SD_WaterEdge_Blue.fbx",
+  "objects": [
+    "WaterEdge_Blue"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = sphere centre (rod hangs 5.5 m above).",
+  "gameplay": "Radius 0.9 m (matches Pendulum weight).",
+  "colliders": "Sphere r 0.9; trigger r 1.0.",
+  "name": "SD_PendulumBob",
+  "blend": "src\\SD_PendulumBob.blend",
+  "fbx": "export\\SD_PendulumBob.fbx",
+  "objects": [
+    "PendulumBob"
+  ]
+}

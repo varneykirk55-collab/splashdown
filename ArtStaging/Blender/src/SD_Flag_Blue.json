@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = base centre on ground. Flag extends +X.",
+  "gameplay": "Decorative competition marker, 2.75 m tall. No collider needed (optional capsule r 0.1).",
+  "colliders": "Optional: base cylinder r 0.28 h 0.2.",
+  "name": "SD_Flag_Blue",
+  "blend": "src\\SD_Flag_Blue.blend",
+  "fbx": "export\\SD_Flag_Blue.fbx",
+  "objects": [
+    "Flag_Blue"
+  ]
+}

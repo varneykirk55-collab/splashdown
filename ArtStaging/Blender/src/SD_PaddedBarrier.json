@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = base centre. Tiles along local X with 3.0 m spacing.",
+  "gameplay": "3.0 x 0.55 x 1.4 m.",
+  "colliders": "Box 3.0 x 1.4 x 0.55.",
+  "name": "SD_PaddedBarrier",
+  "blend": "src\\SD_PaddedBarrier.blend",
+  "fbx": "export\\SD_PaddedBarrier.fbx",
+  "objects": [
+    "PaddedBarrier"
+  ]
+}

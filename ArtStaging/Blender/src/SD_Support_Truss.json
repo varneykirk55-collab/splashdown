@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = base centre; stack vertically at 3.0 m.",
+  "gameplay": "1.4 x 1.4 foot, 3.0 m tall.",
+  "colliders": "Box 1.0 x 3.0 x 1.0 (cap/foot are decorative).",
+  "name": "SD_Support_Truss",
+  "blend": "src\\SD_Support_Truss.blend",
+  "fbx": "export\\SD_Support_Truss.fbx",
+  "objects": [
+    "Support_Truss"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = centre of the arc on the ground; arc spans +X..+Y quadrant.",
+  "gameplay": "Inner radius 0.9 m, width 0.84 m, height 0.54 m.",
+  "colliders": "Use 3 short box colliders or a mesh collider (convex split).",
+  "name": "SD_WaterEdge_Corner",
+  "blend": "src\\SD_WaterEdge_Corner.blend",
+  "fbx": "export\\SD_WaterEdge_Corner.fbx",
+  "objects": [
+    "WaterEdge_Corner"
+  ]
+}

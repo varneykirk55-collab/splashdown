@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = centre of walkable top face (z=0); mesh extends ~2.4 m below.",
+  "gameplay": "Walkable disc radius 2.00 m, top at pivot height. Replace primitive cylinder only; keep the existing MeshCollider/CylinderCollider.",
+  "colliders": "Cylinder r 2.00, thickness 0.45 below pivot.",
+  "name": "SD_JumpPad_Large",
+  "blend": "src\\SD_JumpPad_Large.blend",
+  "fbx": "export\\SD_JumpPad_Large.fbx",
+  "objects": [
+    "JumpPad_Large"
+  ]
+}

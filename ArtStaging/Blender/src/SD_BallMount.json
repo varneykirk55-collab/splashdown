@@ -1,0 +1,12 @@
+{
+  "pivot": "Mount origin = base centre on floor. Ball origin = sphere centre (z=2.80 m above mount base).",
+  "gameplay": "Ball radius 1.10 m = existing BouncingBall sphere collider. Ball is a separate object so a Rigidbody can drive it; as supplied it is STATIONARY. Existing course balls bounce and patrol (BouncingBall.cs); that behaviour is untouched.",
+  "colliders": "Mount: box 1.5x1.5xH1.9. Ball: SphereCollider r=1.1.",
+  "name": "SD_BallMount",
+  "blend": "src\\SD_BallMount.blend",
+  "fbx": "export\\SD_BallMount.fbx",
+  "objects": [
+    "BallMount",
+    "Ball"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = centre of walkable top face (z=0). Chevrons point +Y in Blender = Unity +Z (forward).",
+  "gameplay": "8.0 x 4.0 m top, 0.4 m cushion. Chevrons are flat, decorative (no collision).",
+  "colliders": "Box 8.0 x 0.4 x 4.0 below pivot.",
+  "name": "SD_Platform_8x4",
+  "blend": "src\\SD_Platform_8x4.blend",
+  "fbx": "export\\SD_Platform_8x4.fbx",
+  "objects": [
+    "Platform_8x4"
+  ]
+}

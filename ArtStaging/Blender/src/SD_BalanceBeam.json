@@ -1,0 +1,11 @@
+{
+  "pivot": "Origin = centre of walkable top surface (z=0). Beam runs along local X (Unity X).",
+  "gameplay": "6.0 m long, 0.5 m wide, 0.36 m thick; two truss legs at x=+-2.3.",
+  "colliders": "Box 6.0 x 0.36 x 0.5 with top at pivot.",
+  "name": "SD_BalanceBeam",
+  "blend": "src\\SD_BalanceBeam.blend",
+  "fbx": "export\\SD_BalanceBeam.fbx",
+  "objects": [
+    "BalanceBeam"
+  ]
+}
