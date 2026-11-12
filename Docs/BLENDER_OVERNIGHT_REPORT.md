@@ -10,8 +10,9 @@ Date: 2026-11-11 · Blender 5.2.2 LTS (background mode) · Unity 6000.6.6f1 URP 
 
 - This pass produced **staged Blender source + FBX exports only**. Nothing was imported into Unity, no production
   asset, scene, prefab, script or material was changed, and no gameplay system was touched.
-- **No Unity import test was performed.** A Unity editor process was already running during the pass, so I did not start
-  a second instance (low-memory laptop). "Exports reimport into Blender" is *not* a Unity validation.
+- **Unity import test (added 2026-11-12):** `SD_Sweeper_Small.fbx` and `SD_JumpPad_Small.fbx` were imported in a throwaway project
+  (Unity 6000.6.6f1, batch mode, built-in pipeline, outside this repo). The other 15 FBX files have **not** been imported. Not tested: URP materials, colliders, the real course scenes, in-game behaviour.
+  (My first note said a Unity editor was running; that was wrong. It was a Unity Hub helper process.)
 - Art direction was taken from the approved reference image and Phase 3 documentation; I made no change of direction.
   Final visual approval is yours.
 
@@ -79,9 +80,24 @@ Colliders are **not** exported. The metadata JSON lists the collider shape to ke
 
 Previews: every asset rendered from a 3/4 view; one assembled board. Assembly is a plain layout, not a scene from the game.
 
+## Unity import test results (2 assets)
+
+| Check | Sweeper_Small | JumpPad_Small |
+| --- | --- | --- |
+| Imports without errors | Yes | Yes |
+| Root scale / rotation | 1 / 0 | 1 / 0 |
+| Orientation (Y-up) | Height on Y: base 1.82, arm at y = 0.5 | Top at y = +0.01, mesh down to −2.33 |
+| Arm pivot at rotation axis | Yes: `Arm` local position (0, 0.5, 0), local rotation 0 | n/a |
+| Bounds | Arm 7.8×0.6×0.6, Base 2.2×1.82×2.2 | 2.4×2.34×2.4 |
+| Triangles equal Blender | 3,728 + 5,644 = 9,372 | 2,864 |
+| Normals and UVs present | Yes | Yes |
+| Materials created | SD_Red, SD_Blue, SD_Chrome | SD_Red, SD_Blue, SD_Chrome |
+
+The Arm and Base come in as separate child objects, so a `RotatingSweeper` can drive Arm about Y. Licensing printed an access-token warning in the log; it did not affect the import.
+
 ## Remaining
 
-- **Not imported into Unity.** Import settings, material mapping, prefab swapping and collider checks are all open.
+- Import settings, material mapping, prefab swapping and collider checks are all open.
 - **Ramp / sloped landing from the reference** was not made. It would create a new walkable slope, which is a gameplay change.
 - **Pendulum gantry**, **spin disc**, **pistons' pusher faces**, **section and finish arches** were not made. `PendulumBob` and `PistonWall` are done.
 - **Sloped/curved water-edge variants** and a pool-corner inner radius beyond the one corner piece.
