@@ -78,8 +78,8 @@ def make_sweeper(reach):
     THK = 0.42
     ARM_Z = 0.5
     # static base
-    skirt = cyl("skirt", hubR + 0.65, 0.12, (0, 0, 0.06), "SD_Blue", 0.04, 3, 48)
-    drum = cyl("drum", hubR + 0.55, 0.16, (0, 0, 0.20), "SD_Red", 0.05, 3, 48)
+    skirt = cyl("skirt", hubR + 0.30, 0.12, (0, 0, 0.06), "SD_Blue", 0.04, 3, 48)
+    drum = cyl("drum", hubR + 0.22, 0.16, (0, 0, 0.20), "SD_Red", 0.05, 3, 48)
     col = cyl("col", hubR, 1.07, (0, 0, 0.28 + 0.535), "SD_Red", 0.05, 3, 48)
     band = cyl("band", hubR * 1.05, 0.22, (0, 0, 0.62), "SD_Blue", 0.02, 2, 48)
     collar = cyl("collar", hubR * 0.9, 0.08, (0, 0, 1.30), "SD_Chrome", 0.01, 2, 48)

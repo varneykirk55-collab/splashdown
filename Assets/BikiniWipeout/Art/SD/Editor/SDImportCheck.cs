@@ -72,6 +72,19 @@ public static class SDImportCheck
             sb.AppendLine("SD instance placed at same transform; Arm world pos=" + a.position + " vs existing Arm world pos=" + first.transform.Find("Arm").position);
             Object.DestroyImmediate(inst);
         }
+        foreach (var pr in new[] { ("A_Sweeper_1", "SD_Sweeper_Small"), ("A_Sweeper_2", "SD_Sweeper_Small"), ("C_Sweeper", "SD_Sweeper_Large") })
+        {
+            Transform st = null;
+            foreach (var go in scene.GetRootGameObjects()) { st = FindByNamePrefix(go.transform, pr.Item1); if (st) break; }
+            if (!st) { sb.AppendLine(pr.Item1 + ": not found"); continue; }
+            var bf = AssetDatabase.LoadAssetAtPath<GameObject>(Models + pr.Item2 + ".fbx");
+            float rad = bf.transform.Find("Base").GetComponent<MeshRenderer>().bounds.size.x * 0.5f; foreach (var rr in new[] { rad, rad + 0.35f }) {
+            Physics.SyncTransforms();
+            int ok = 0; const int M = 32;
+            for (int i = 0; i < M; i++) { float ang = i * Mathf.PI * 2f / M; var o = st.position + new Vector3(Mathf.Cos(ang), 0f, Mathf.Sin(ang)) * rr + Vector3.up * 3f; bool g = false; foreach (var h in Physics.RaycastAll(o, Vector3.down, 6f)) { if (h.collider.transform.IsChildOf(st)) continue; if (Mathf.Abs(h.point.y - st.position.y) < 0.15f) { g = true; break; } } if (g) ok++; }
+            sb.AppendLine("BASE FOOTPRINT " + pr.Item1 + " with " + pr.Item2 + " r=" + rr.ToString("0.00") + ": " + ok + "/" + M + " rim points supported");
+            }
+        }
         sb.AppendLine("scene dirty=" + scene.isDirty + " (not saved)");
         System.IO.File.WriteAllText("SD_import_check.txt", sb.ToString());
         Debug.Log(sb.ToString());

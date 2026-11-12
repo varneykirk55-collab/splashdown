@@ -5,18 +5,24 @@ SD_White: Universal Render Pipeline/Lit base=RGBA(0.964, 0.969, 0.982, 1.000)
 SD_Chrome: Universal Render Pipeline/Lit base=RGBA(0.896, 0.906, 0.926, 1.000)
 == SD_Sweeper_Small loaded=True
   Arm localPos=(0.00, 0.50, 0.00) bounds=(7.80, 0.60, 0.60) mats=SD_Red@Materials/SD_Red.mat,SD_Blue@Materials/SD_Blue.mat
-  Base localPos=(0.00, 0.00, 0.00) bounds=(2.20, 1.82, 2.20) mats=SD_Blue@Materials/SD_Blue.mat,SD_Red@Materials/SD_Red.mat,SD_Chrome@Materials/SD_Chrome.mat
+  Base localPos=(0.00, 0.00, 0.00) bounds=(1.50, 1.82, 1.50) mats=SD_Blue@Materials/SD_Blue.mat,SD_Red@Materials/SD_Red.mat,SD_Chrome@Materials/SD_Chrome.mat
 == SD_Sweeper_Large loaded=True
   Arm localPos=(0.00, 0.50, 0.00) bounds=(13.80, 0.60, 0.60) mats=SD_Red@Materials/SD_Red.mat,SD_Blue@Materials/SD_Blue.mat
-  Base localPos=(0.00, 0.00, 0.00) bounds=(2.88, 2.18, 2.88) mats=SD_Blue@Materials/SD_Blue.mat,SD_Red@Materials/SD_Red.mat,SD_Chrome@Materials/SD_Chrome.mat
+  Base localPos=(0.00, 0.00, 0.00) bounds=(2.18, 2.18, 2.18) mats=SD_Blue@Materials/SD_Blue.mat,SD_Red@Materials/SD_Red.mat,SD_Chrome@Materials/SD_Chrome.mat
 == SD_JumpPad_Small loaded=True
   SD_JumpPad_Small localPos=(0.00, 0.00, 0.00) bounds=(2.40, 2.34, 2.40) mats=SD_Red@Materials/SD_Red.mat,SD_Blue@Materials/SD_Blue.mat,SD_Chrome@Materials/SD_Chrome.mat
 == SD_BallMount loaded=True
   Ball localPos=(0.00, 2.80, 0.00) bounds=(2.20, 2.20, 2.20) mats=SD_Red@Materials/SD_Red.mat
   BallMount localPos=(0.00, 0.00, 0.00) bounds=(1.50, 1.88, 1.50) mats=SD_Blue@Materials/SD_Blue.mat,SD_Chrome@Materials/SD_Chrome.mat
-SweeperSmall prefab size=(7.87, 1.82, 0.94) armLocalPos=(0.00, 0.50, 0.00) | FBX size=(7.80, 1.82, 2.20) armLocalPos=(0.00, 0.50, 0.00)
-SweeperLarge prefab size=(13.87, 2.18, 1.66) armLocalPos=(0.00, 0.50, 0.00) | FBX size=(13.80, 2.18, 2.88) armLocalPos=(0.00, 0.50, 0.00)
+SweeperSmall prefab size=(7.87, 1.82, 0.94) armLocalPos=(0.00, 0.50, 0.00) | FBX size=(7.80, 1.82, 1.50) armLocalPos=(0.00, 0.50, 0.00)
+SweeperLarge prefab size=(13.87, 2.18, 1.66) armLocalPos=(0.00, 0.50, 0.00) | FBX size=(13.80, 2.18, 2.18) armLocalPos=(0.00, 0.50, 0.00)
 scene=Course_SplashdownGauntlet roots=11 firstSweeperSmall=A_Sweeper_1 at (0.00, 0.00, 43.00)
 SD base footprint (r=1.1) supported by ground at 14/16 rim points around the existing A_Sweeper_1 axis (axis y=0)
 SD instance placed at same transform; Arm world pos=(0.00, 0.50, 43.00) vs existing Arm world pos=(0.00, 0.50, 43.00)
+BASE FOOTPRINT A_Sweeper_1 with SD_Sweeper_Small r=0.75: 32/32 rim points supported
+BASE FOOTPRINT A_Sweeper_1 with SD_Sweeper_Small r=1.10: 32/32 rim points supported
+BASE FOOTPRINT A_Sweeper_2 with SD_Sweeper_Small r=0.75: 32/32 rim points supported
+BASE FOOTPRINT A_Sweeper_2 with SD_Sweeper_Small r=1.10: 32/32 rim points supported
+BASE FOOTPRINT C_Sweeper with SD_Sweeper_Large r=1.09: 32/32 rim points supported
+BASE FOOTPRINT C_Sweeper with SD_Sweeper_Large r=1.44: 32/32 rim points supported
 scene dirty=False (not saved)

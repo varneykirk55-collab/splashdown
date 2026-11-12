@@ -23,7 +23,7 @@ All files live under `ArtStaging/Blender/` (outside `Assets/`, so Unity will not
 | Asset (`SD_*`) | Replaces / supports | Tris | Key dimensions (m) | Pivot (origin) |
 | --- | --- | ---: | --- | --- |
 | `BallMount` (2 objects: `BallMount`, `Ball`) | Ball on support | 4,244 | Ball Ø 2.2, mount 1.5×1.5×1.88 | Mount: base centre. Ball: sphere centre |
-| `Sweeper_Small` (`Base`, `Arm`) | `SweeperSmall` (reach 3.6) | 9,372 | Arm span 7.8, tube Ø 0.42, hub r 0.45 H 1.35 | Base: axis on floor. Arm: rotation axis at z = 0.5 |
+| `Sweeper_Small` (`Base`, `Arm`) | `SweeperSmall` (reach 3.6) | 9,372 | Arm span 7.8, tube Ø 0.42, hub r 0.45 H 1.35, base Ø 1.5 | Base: axis on floor. Arm: rotation axis at z = 0.5 |
 | `Sweeper_Large` (`Base`, `Arm`) | `SweeperLarge` (reach 6.6) | 10,124 | Arm span 13.8, hub r 0.79 | same |
 | `JumpPad_Small` / `_Large` | Round pads | 2,864 each | Top Ø 2.4 / 4.0, 0.45 cushion, pillar below | Centre of walkable top (z = 0) |
 | `BalanceBeam` | Narrow beam | 3,904 | 6.0 × 0.5 × 0.36 top | Centre of walkable top |
@@ -88,7 +88,7 @@ Previews: every asset rendered from a 3/4 view; one assembled board. Assembly is
 | Root scale / rotation | 1 / 0 | 1 / 0 |
 | Orientation (Y-up) | Height on Y: base 1.82, arm at y = 0.5 | Top at y = +0.01, mesh down to −2.33 |
 | Arm pivot at rotation axis | Yes: `Arm` local position (0, 0.5, 0), local rotation 0 | n/a |
-| Bounds | Arm 7.8×0.6×0.6, Base 2.2×1.82×2.2 | 2.4×2.34×2.4 |
+| Bounds | Arm 7.8×0.6×0.6, Base Ø1.5, H 1.82 | 2.4×2.34×2.4 |
 | Triangles equal Blender | 3,728 + 5,644 = 9,372 | 2,864 |
 | Normals and UVs present | Yes | Yes |
 | Materials created | SD_Red, SD_Blue, SD_Chrome | SD_Red, SD_Blue, SD_Chrome |
@@ -109,7 +109,9 @@ Imported `SD_Sweeper_Small`, `SD_Sweeper_Large`, `SD_JumpPad_Small`, `SD_BallMou
 - Project is Linear colour space with URP (`PC_RPAsset`). All four materials use URP Lit; every FBX slot is remapped to the project's `Art/SD/Materials`.
 - Arm pivot: local (0, 0.5, 0) in both FBX and existing prefabs; placed at `A_Sweeper_1`'s transform the new Arm lands at the identical world position (0, 0.5, 43).
 - Length and height match the prefabs: Small 7.80 vs 7.87 m long, 1.82 m tall; Large 13.80 vs 13.87, 2.18 m tall.
-- **Footprint is wider than the prefab:** the new base disc is Ø 2.2 m (Large Ø 2.9); the prefab hub is about 0.9 m (Large 1.7 m). On `A_Sweeper_1`'s island 14 of 16 rim points of the disc have ground under them, so the disc overhangs the island edge a little. The base is only 0.28 m high and should have **no collider** on the skirt; keep the prefab hub collider. Decide whether the overhang is acceptable or the skirt should shrink.
+- **Base footprint (corrected):** the first version of this check reported that the Ø 2.2 m sweeper base overhung the island edge (14 of 16 rim points supported). That was a test error: the downward rays were hitting the sweeper's own arm collider and counting it as missing ground. With the sweeper's own colliders ignored, **every rim point has ground under it for both the old and the new radius** on `A_Sweeper_1`, `A_Sweeper_2` and `C_Sweeper` (32 of 32 each).
+- **Base shrunk anyway (requested):** skirt radius is now hub + 0.30 and drum hub + 0.22. Small base Ø 1.50 m (was 2.20), large Ø 2.18 m (was 2.88), still 1.82 / 2.18 m tall. This is closer to the existing prefab footprint (hub ≈ 0.9 / 1.7 m). Arm pivot, arm length and tri counts are unchanged (9,372 / 10,124); re-validated and re-imported.
+- Keep **no collider** on the skirt (0.28 m tall); keep the prefab hub collider.
 - **Not done:** no prefab or scene was switched to the new meshes, nothing was rendered or played, colliders were not compared in play, and the PlayMode tests were not run.
 
 ## Remaining
