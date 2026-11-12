@@ -1,0 +1,2 @@
+SweeperSmall: primitive renderers disabled=6, visuals added from SD_Sweeper_Small
+SweeperLarge: primitive renderers disabled=6, visuals added from SD_Sweeper_Large

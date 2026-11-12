@@ -1,0 +1,232 @@
+#### SweeperSmall
+SweeperSmall layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+  [RotatingSweeper]
+    armBody = Rigidbody:Arm
+    rotationSpeed = 55.0000
+    localAxis = (0.0000, 1.0000, 0.0000)
+    startAngle = 0.0000
+    playOnStart = True
+    impactForce = 1.4000
+    impactSource = ImpactSource:Arm
+  Hub layer=9 active=True pos=(0.0000, 0.6750, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.9000, 0.6750, 0.9000)
+    [CapsuleCollider]
+      m_Material = null
+      m_IncludeLayers = 0
+      m_ExcludeLayers = 0
+      m_LayerOverridePriority = 0
+      m_IsTrigger = False
+      m_ProvidesContacts = False
+      m_Radius = 0.5000
+      m_Height = 2.0000
+      m_Direction = 1
+      m_Center = (0.0000, 0.0000, 0.0000)
+  HubCap layer=9 active=True pos=(0.0000, 1.3500, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.9450, 0.9450, 0.9450)
+  Arm layer=9 active=True pos=(0.0000, 0.5000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+    [Rigidbody]
+      m_Mass = 1.0000
+      m_LinearDamping = 0.0000
+      m_AngularDamping = 0.0500
+      m_CenterOfMass = (0.0000, 0.0000, 0.0000)
+      m_InertiaTensor = (1.0000, 1.0000, 1.0000)
+      m_InertiaRotation = (0.0000, 0.0000, 0.0000, 1.0000)
+      m_IncludeLayers = 0
+      m_ExcludeLayers = 0
+      m_ImplicitCom = True
+      m_ImplicitTensor = True
+      m_UseGravity = False
+      m_IsKinematic = True
+      m_Interpolate = 1
+      m_CollisionDetection = 0
+    [ImpactSource]
+      forceMultiplier = 1.4000
+      kind = 1
+      body = Rigidbody:Arm
+      surfaceColliders = (Generic)
+      rehitInterval = 0.3500
+    [ProximityWhoosh]
+      tip = Transform:Pad
+      audioEvent = 14
+      radius = 4.0000
+      cooldown = 0.5000
+    Bar0 layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+      Tube layer=9 active=True pos=(2.0250, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.7071, 0.7071) scale=(0.4200, 1.7850, 0.4200)
+        [CapsuleCollider]
+          m_Material = null
+          m_IncludeLayers = 0
+          m_ExcludeLayers = 0
+          m_LayerOverridePriority = 0
+          m_IsTrigger = False
+          m_ProvidesContacts = False
+          m_Radius = 0.5000
+          m_Height = 2.0000
+          m_Direction = 1
+          m_Center = (0.0000, 0.0000, 0.0000)
+      Pad layer=9 active=True pos=(3.6000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.6720, 0.6720, 0.6720)
+        [SphereCollider]
+          m_Material = null
+          m_IncludeLayers = 0
+          m_ExcludeLayers = 0
+          m_LayerOverridePriority = 0
+          m_IsTrigger = False
+          m_ProvidesContacts = False
+          m_Radius = 0.5000
+          m_Center = (0.0000, 0.0000, 0.0000)
+      ImpactZone layer=9 active=True pos=(2.0250, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+        [BoxCollider]
+          m_Material = null
+          m_IncludeLayers = 0
+          m_ExcludeLayers = 0
+          m_LayerOverridePriority = 0
+          m_IsTrigger = True
+          m_ProvidesContacts = False
+          m_Size = (3.9060, 0.6200, 0.6200)
+          m_Center = (0.0000, 0.0000, 0.0000)
+    Bar1 layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 1.0000, 0.0000, 0.0000) scale=(1.0000, 1.0000, 1.0000)
+      Tube layer=9 active=True pos=(2.0250, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.7071, 0.7071) scale=(0.4200, 1.7850, 0.4200)
+        [CapsuleCollider]
+          m_Material = null
+          m_IncludeLayers = 0
+          m_ExcludeLayers = 0
+          m_LayerOverridePriority = 0
+          m_IsTrigger = False
+          m_ProvidesContacts = False
+          m_Radius = 0.5000
+          m_Height = 2.0000
+          m_Direction = 1
+          m_Center = (0.0000, 0.0000, 0.0000)
+      Pad layer=9 active=True pos=(3.6000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.6720, 0.6720, 0.6720)
+        [SphereCollider]
+          m_Material = null
+          m_IncludeLayers = 0
+          m_ExcludeLayers = 0
+          m_LayerOverridePriority = 0
+          m_IsTrigger = False
+          m_ProvidesContacts = False
+          m_Radius = 0.5000
+          m_Center = (0.0000, 0.0000, 0.0000)
+      ImpactZone layer=9 active=True pos=(2.0250, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+        [BoxCollider]
+          m_Material = null
+          m_IncludeLayers = 0
+          m_ExcludeLayers = 0
+          m_LayerOverridePriority = 0
+          m_IsTrigger = True
+          m_ProvidesContacts = False
+          m_Size = (3.9060, 0.6200, 0.6200)
+          m_Center = (0.0000, 0.0000, 0.0000)
+#### SweeperLarge
+SweeperLarge layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+  [RotatingSweeper]
+    armBody = Rigidbody:Arm
+    rotationSpeed = 75.0000
+    localAxis = (0.0000, 1.0000, 0.0000)
+    startAngle = 0.0000
+    playOnStart = True
+    impactForce = 1.6000
+    impactSource = ImpactSource:Arm
+  Hub layer=9 active=True pos=(0.0000, 0.6750, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.5840, 0.6750, 1.5840)
+    [CapsuleCollider]
+      m_Material = null
+      m_IncludeLayers = 0
+      m_ExcludeLayers = 0
+      m_LayerOverridePriority = 0
+      m_IsTrigger = False
+      m_ProvidesContacts = False
+      m_Radius = 0.5000
+      m_Height = 2.0000
+      m_Direction = 1
+      m_Center = (0.0000, 0.0000, 0.0000)
+  HubCap layer=9 active=True pos=(0.0000, 1.3500, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.6632, 1.6632, 1.6632)
+  Arm layer=9 active=True pos=(0.0000, 0.5000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+    [Rigidbody]
+      m_Mass = 1.0000
+      m_LinearDamping = 0.0000
+      m_AngularDamping = 0.0500
+      m_CenterOfMass = (0.0000, 0.0000, 0.0000)
+      m_InertiaTensor = (1.0000, 1.0000, 1.0000)
+      m_InertiaRotation = (0.0000, 0.0000, 0.0000, 1.0000)
+      m_IncludeLayers = 0
+      m_ExcludeLayers = 0
+      m_ImplicitCom = True
+      m_ImplicitTensor = True
+      m_UseGravity = False
+      m_IsKinematic = True
+      m_Interpolate = 1
+      m_CollisionDetection = 0
+    [ImpactSource]
+      forceMultiplier = 1.6000
+      kind = 1
+      body = Rigidbody:Arm
+      surfaceColliders = (Generic)
+      rehitInterval = 0.3500
+    [ProximityWhoosh]
+      tip = Transform:Pad
+      audioEvent = 14
+      radius = 5.9400
+      cooldown = 0.5000
+    Bar0 layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+      Tube layer=9 active=True pos=(3.6960, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.7071, 0.7071) scale=(0.4200, 3.1140, 0.4200)
+        [CapsuleCollider]
+          m_Material = null
+          m_IncludeLayers = 0
+          m_ExcludeLayers = 0
+          m_LayerOverridePriority = 0
+          m_IsTrigger = False
+          m_ProvidesContacts = False
+          m_Radius = 0.5000
+          m_Height = 2.0000
+          m_Direction = 1
+          m_Center = (0.0000, 0.0000, 0.0000)
+      Pad layer=9 active=True pos=(6.6000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.6720, 0.6720, 0.6720)
+        [SphereCollider]
+          m_Material = null
+          m_IncludeLayers = 0
+          m_ExcludeLayers = 0
+          m_LayerOverridePriority = 0
+          m_IsTrigger = False
+          m_ProvidesContacts = False
+          m_Radius = 0.5000
+          m_Center = (0.0000, 0.0000, 0.0000)
+      ImpactZone layer=9 active=True pos=(3.6960, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+        [BoxCollider]
+          m_Material = null
+          m_IncludeLayers = 0
+          m_ExcludeLayers = 0
+          m_LayerOverridePriority = 0
+          m_IsTrigger = True
+          m_ProvidesContacts = False
+          m_Size = (6.5640, 0.6200, 0.6200)
+          m_Center = (0.0000, 0.0000, 0.0000)
+    Bar1 layer=9 active=True pos=(0.0000, 0.0000, 0.0000) rot=(0.0000, 1.0000, 0.0000, 0.0000) scale=(1.0000, 1.0000, 1.0000)
+      Tube layer=9 active=True pos=(3.6960, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.7071, 0.7071) scale=(0.4200, 3.1140, 0.4200)
+        [CapsuleCollider]
+          m_Material = null
+          m_IncludeLayers = 0
+          m_ExcludeLayers = 0
+          m_LayerOverridePriority = 0
+          m_IsTrigger = False
+          m_ProvidesContacts = False
+          m_Radius = 0.5000
+          m_Height = 2.0000
+          m_Direction = 1
+          m_Center = (0.0000, 0.0000, 0.0000)
+      Pad layer=9 active=True pos=(6.6000, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(0.6720, 0.6720, 0.6720)
+        [SphereCollider]
+          m_Material = null
+          m_IncludeLayers = 0
+          m_ExcludeLayers = 0
+          m_LayerOverridePriority = 0
+          m_IsTrigger = False
+          m_ProvidesContacts = False
+          m_Radius = 0.5000
+          m_Center = (0.0000, 0.0000, 0.0000)
+      ImpactZone layer=9 active=True pos=(3.6960, 0.0000, 0.0000) rot=(0.0000, 0.0000, 0.0000, 1.0000) scale=(1.0000, 1.0000, 1.0000)
+        [BoxCollider]
+          m_Material = null
+          m_IncludeLayers = 0
+          m_ExcludeLayers = 0
+          m_LayerOverridePriority = 0
+          m_IsTrigger = True
+          m_ProvidesContacts = False
+          m_Size = (6.5640, 0.6200, 0.6200)
+          m_Center = (0.0000, 0.0000, 0.0000)

@@ -1,0 +1,18 @@
+#### SweeperSmall
+SweeperSmall/Hub enabled=False mats=SunYellow
+SweeperSmall/HubCap enabled=False mats=StripesRedWhite
+SweeperSmall/Arm/Bar0/Tube enabled=False mats=StripesRedWhite
+SweeperSmall/Arm/Bar0/Pad enabled=False mats=SunYellow
+SweeperSmall/Arm/Bar1/Tube enabled=False mats=StripesRedWhite
+SweeperSmall/Arm/Bar1/Pad enabled=False mats=SunYellow
+SweeperSmall/Arm/SD_Visual_Arm enabled=True mats=SD_Red,SD_Blue
+SweeperSmall/SD_Visual_Base enabled=True mats=SD_Blue,SD_Red,SD_Chrome
+#### SweeperLarge
+SweeperLarge/Hub enabled=False mats=PanelsBlueTeal
+SweeperLarge/HubCap enabled=False mats=StripesRedWhite
+SweeperLarge/Arm/Bar0/Tube enabled=False mats=StripesRedWhite
+SweeperLarge/Arm/Bar0/Pad enabled=False mats=PanelsBlueTeal
+SweeperLarge/Arm/Bar1/Tube enabled=False mats=StripesRedWhite
+SweeperLarge/Arm/Bar1/Pad enabled=False mats=PanelsBlueTeal
+SweeperLarge/Arm/SD_Visual_Arm enabled=True mats=SD_Red,SD_Blue
+SweeperLarge/SD_Visual_Base enabled=True mats=SD_Blue,SD_Red,SD_Chrome
