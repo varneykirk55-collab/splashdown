@@ -197,6 +197,7 @@ namespace BikiniWipeout
             bool isNewBest = bestTime.Submit(time);
             LastResult = new CourseResult(time, Session.Wipeouts, Session.Falls, bestTime.BestSeconds, isNewBest);
             AudioManager.Play(AudioEventId.FinishCelebration);
+            AudioManager.PlayMusic(MusicTrackId.Results);
             Finished?.Invoke(LastResult);
         }
 

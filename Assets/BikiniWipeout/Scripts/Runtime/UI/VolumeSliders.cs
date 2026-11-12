@@ -11,6 +11,8 @@ namespace BikiniWipeout
         [SerializeField] internal Slider masterSlider;
         [SerializeField] internal Slider musicSlider;
         [SerializeField] internal Slider sfxSlider;
+        [Tooltip("Optional: announcer (commentary) volume.")]
+        [SerializeField] internal Slider announcerSlider;
 
         private bool listening;
 
@@ -22,6 +24,7 @@ namespace BikiniWipeout
                 SetWithoutNotify(masterSlider, volumes.Master);
                 SetWithoutNotify(musicSlider, volumes.Music);
                 SetWithoutNotify(sfxSlider, volumes.Sfx);
+                SetWithoutNotify(announcerSlider, volumes.Announcer);
             }
 
             if (!listening)
@@ -29,6 +32,7 @@ namespace BikiniWipeout
                 if (masterSlider != null) masterSlider.onValueChanged.AddListener(OnMasterChanged);
                 if (musicSlider != null) musicSlider.onValueChanged.AddListener(OnMusicChanged);
                 if (sfxSlider != null) sfxSlider.onValueChanged.AddListener(OnSfxChanged);
+                if (announcerSlider != null) announcerSlider.onValueChanged.AddListener(OnAnnouncerChanged);
                 listening = true;
             }
         }
@@ -40,6 +44,7 @@ namespace BikiniWipeout
                 if (masterSlider != null) masterSlider.onValueChanged.RemoveListener(OnMasterChanged);
                 if (musicSlider != null) musicSlider.onValueChanged.RemoveListener(OnMusicChanged);
                 if (sfxSlider != null) sfxSlider.onValueChanged.RemoveListener(OnSfxChanged);
+                if (announcerSlider != null) announcerSlider.onValueChanged.RemoveListener(OnAnnouncerChanged);
                 listening = false;
             }
 
@@ -57,6 +62,11 @@ namespace BikiniWipeout
         private void OnMusicChanged(float value)
         {
             if (AudioManager.Instance != null) AudioManager.Instance.Volumes.Music = value;
+        }
+
+        private void OnAnnouncerChanged(float value)
+        {
+            if (AudioManager.Instance != null) AudioManager.Instance.Volumes.Announcer = value;
         }
 
         private void OnSfxChanged(float value)

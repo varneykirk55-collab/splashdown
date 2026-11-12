@@ -146,18 +146,20 @@ namespace BikiniWipeout.EditorTools
             return slider;
         }
 
-        /// <summary>Master / music / effects sliders stacked downwards from <paramref name="top"/>.</summary>
+        /// <summary>Master / music / effects / announcer sliders stacked downwards from <paramref name="top"/>.</summary>
         private static void BuildVolumeControls(Transform parent, Vector2 top, float width)
         {
             RectTransform container = UiRect("Volume", parent, Center, Center, Center, top, new Vector2(width, 240f));
-            Slider master = UiSlider("MasterVolume", container, "MASTER VOLUME", new Vector2(0f, 60f), width);
-            Slider music = UiSlider("MusicVolume", container, "MUSIC", new Vector2(0f, -20f), width);
-            Slider sfx = UiSlider("SfxVolume", container, "SOUND EFFECTS", new Vector2(0f, -100f), width);
+            Slider master = UiSlider("MasterVolume", container, "MASTER VOLUME", new Vector2(0f, 90f), width);
+            Slider music = UiSlider("MusicVolume", container, "MUSIC", new Vector2(0f, 20f), width);
+            Slider sfx = UiSlider("SfxVolume", container, "SOUND EFFECTS", new Vector2(0f, -50f), width);
+            Slider announcer = UiSlider("AnnouncerVolume", container, "ANNOUNCERS", new Vector2(0f, -120f), width);
 
             var binder = container.gameObject.AddComponent<VolumeSliders>();
             binder.masterSlider = master;
             binder.musicSlider = music;
             binder.sfxSlider = sfx;
+            binder.announcerSlider = announcer;
         }
 
         // ------------------------------------------------------------------ gameplay UI

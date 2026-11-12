@@ -53,6 +53,8 @@ namespace BikiniWipeout
     {
         None = 0,
         MainMenu = 1,
-        Course = 2
+        Course = 2,
+        /// <summary>Course-complete screen.</summary>
+        Results = 3
     }
 }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4308999550786245472}
   - component: {fileID: 2099348433049979079}
+  - component: {fileID: 8784840254168589208}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -46,4 +47,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: BikiniWipeout.Runtime::BikiniWipeout.AudioManager
   library: {fileID: 11400000, guid: d6e5e7d5878fe6a4392ecdd7933a60fc, type: 2}
   sfxVoices: 12
+  musicFadeSeconds: 1.5
+  duckLevel: 0.35
+  duckAttackSeconds: 0.15
+  duckReleaseSeconds: 0.9
   persistAcrossScenes: 1
+--- !u!114 &8784840254168589208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2727541245931086399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 226fd4163e2aba14aa018f612345f61e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BikiniWipeout.Runtime::BikiniWipeout.CommentaryDirector
+  library: {fileID: 11400000, guid: 3c2f88dacd7d22f4dadef413056e8c12, type: 2}
+  launchSourceSpeed: 6
+  repeatedFailureCount: 3
+  repeatedFailureWindow: 90
+  interruptFadeSeconds: 0.12

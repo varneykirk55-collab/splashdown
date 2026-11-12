@@ -16,14 +16,17 @@ namespace BikiniWipeout.Core
         public const string MasterKey = "bw.audio.master";
         public const string MusicKey = "bw.audio.music";
         public const string SfxKey = "bw.audio.sfx";
+        public const string AnnouncerKey = "bw.audio.announcer";
 
         public const float DefaultMaster = 1f;
         public const float DefaultMusic = 0.6f;
         public const float DefaultSfx = 0.9f;
+        public const float DefaultAnnouncer = 1f;
 
         private float master = DefaultMaster;
         private float music = DefaultMusic;
         private float sfx = DefaultSfx;
+        private float announcer = DefaultAnnouncer;
 
         public event Action Changed;
 
@@ -45,6 +48,12 @@ namespace BikiniWipeout.Core
             set => Set(ref sfx, value);
         }
 
+        public float Announcer
+        {
+            get => announcer;
+            set => Set(ref announcer, value);
+        }
+
         /// <summary>
         /// Per-category gain. Master is applied separately on the listener, so these are not
         /// pre-multiplied by it.
@@ -53,10 +62,14 @@ namespace BikiniWipeout.Core
 
         public float SfxGain => sfx;
 
+        public float AnnouncerGain => announcer;
+
         /// <summary>Final audible level of each category, for display and tests.</summary>
         public float EffectiveMusic => master * music;
 
         public float EffectiveSfx => master * sfx;
+
+        public float EffectiveAnnouncer => master * announcer;
 
         public void Load(IKeyValueStore store)
         {
@@ -68,6 +81,7 @@ namespace BikiniWipeout.Core
             master = Clamp01(store.GetFloat(MasterKey, DefaultMaster));
             music = Clamp01(store.GetFloat(MusicKey, DefaultMusic));
             sfx = Clamp01(store.GetFloat(SfxKey, DefaultSfx));
+            announcer = Clamp01(store.GetFloat(AnnouncerKey, DefaultAnnouncer));
             Changed?.Invoke();
         }
 
@@ -81,6 +95,7 @@ namespace BikiniWipeout.Core
             store.SetFloat(MasterKey, master);
             store.SetFloat(MusicKey, music);
             store.SetFloat(SfxKey, sfx);
+            store.SetFloat(AnnouncerKey, announcer);
             store.Save();
         }
 

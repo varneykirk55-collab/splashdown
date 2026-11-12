@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8bf23f634fe7bc46b640755b6546107, type: 3}
+  m_Name: CommentaryLibrary
+  m_EditorClassIdentifier: BikiniWipeout.Runtime::BikiniWipeout.CommentaryLibrary
+  exchanges:
+  - id: 01_trolley
+    setup:
+      speaker: 0
+      clip: {fileID: 8300000, guid: 01333aa4c2e32bd4da24d6f5c33d4e00, type: 3}
+      transcript: She's airborne with the grace of a shopping trolley pushed off a cliff.
+    response:
+      speaker: 1
+      clip: {fileID: 8300000, guid: a58d8000850b35645bc0a1469ef99e7c, type: 3}
+      transcript: And the trolley had a better landing.
+    topics: 00000000010000000200000003000000i
+    weight: 1
+    enabled: 1
+    notes: 'Airborne: best for violent launches.'
+  - id: 02_crowd_on_fire
+    setup:
+      speaker: 1
+      clip: {fileID: 8300000, guid: 37ea422265c41e141870ff42a6660c55, type: 3}
+      transcript: The crowd is on its feet!
+    response:
+      speaker: 0
+      clip: {fileID: 8300000, guid: 8f273ae952b67c0418c9e6bf4a22279b, type: 3}
+      transcript: Mostly because the seats are on fire.
+    topics: 070000000800000009000000i
+    weight: 1
+    enabled: 1
+    notes: Alex sets up, John delivers the punchline. Crowd/celebration line.
+  - id: 03_netting_fish
+    setup:
+      speaker: 0
+      clip: {fileID: 8300000, guid: 641c7c606264f9a40b53f99b04db7835, type: 3}
+      transcript: She's tangled in the netting like a very enthusiastic fish.
+    response:
+      speaker: 1
+      clip: {fileID: 8300000, guid: b342c661c1ac82f4390078ee17f738f3, type: 3}
+      transcript: Except the fish isn't crying.
+    topics: 04000000i
+    weight: 1
+    enabled: 0
+    notes: 'DISABLED: refers to netting, and no net exists on any course. Enable if a net/entanglement hazard is added (or accept it for water falls).'
+  - id: 04_medical
+    setup:
+      speaker: 0
+      clip: {fileID: 8300000, guid: c8aea59b93953a645b08e4cbfecd96fb, type: 3}
+      transcript: Medical attention is on the way.
+    response:
+      speaker: 1
+      clip: {fileID: 8300000, guid: e3d324e6857b06d47bdc1afd356b5a4a, type: 3}
+      transcript: So is the coroner, just in case.
+    topics: 01000000020000000300000006000000i
+    weight: 1
+    enabled: 1
+    notes: Hard hits and repeated failure.
+  - id: 05_athleticism
+    setup:
+      speaker: 0
+      clip: {fileID: 8300000, guid: be51a2f3a892ee7499ef57c8cdf8265f, type: 3}
+      transcript: That was a spectacular display of athleticism!
+    response:
+      speaker: 1
+      clip: {fileID: 8300000, guid: 816a34b8a1e5d694d8208e823eff9991, type: 3}
+      transcript: Athleticism's a strong word for what just happened.
+    topics: 000000000100000002000000i
+    weight: 1
+    enabled: 1
+    notes: Spectacular wipeouts.
+  - id: 06_judges
+    setup:
+      speaker: 0
+      clip: {fileID: 8300000, guid: 444fbfabf2a854545b8edacd6be32a8a, type: 3}
+      transcript: The judges are deliberating.
+    response:
+      speaker: 1
+      clip: {fileID: 8300000, guid: 42c374590ce673e4392cf04a503e03c0, type: 3}
+      transcript: They're deciding if that counts as a wipeout or a cry for help.
+    topics: 060000000800000009000000i
+    weight: 1
+    enabled: 1
+    notes: Repeated failure / end of run / quiet filler.
+  - id: 07_waving
+    setup:
+      speaker: 0
+      clip: {fileID: 8300000, guid: de2e22204ce80b84d9d3e5d7b97a5847, type: 3}
+      transcript: She's waving to the audience!
+    response:
+      speaker: 1
+      clip: {fileID: 8300000, guid: 3ecdf3d43c75f65418b576885ffa93e9, type: 3}
+      transcript: That's not waving. That's a distress signal with better lighting.
+    topics: 05000000i
+    weight: 1
+    enabled: 1
+    notes: Getting back up / respawning. There is no swimming mechanic, so no swimming line is used.
+  - id: 08_water_lovely
+    setup:
+      speaker: 0
+      clip: {fileID: 8300000, guid: 262b39cfa07e366409216d0b152c96c6, type: 3}
+      transcript: The water's lovely this time of year!
+    response:
+      speaker: 1
+      clip: {fileID: 8300000, guid: 8ec6e6473cfb35a4f93fb19754aa8d49, type: 3}
+      transcript: She didn't ask for a weather report.
+    topics: 04000000i
+    weight: 1
+    enabled: 1
+    notes: Water falls.
+  - id: 09_replay
+    setup:
+      speaker: 0
+      clip: {fileID: 8300000, guid: a6b753d23a8e79d4aa163b71e1ce3159, type: 3}
+      transcript: The replay shows it all in glorious detail.
+    response:
+      speaker: 1
+      clip: {fileID: 8300000, guid: bc708b7fb63e7e0478dd0b9eecdaeb4a, type: 3}
+      transcript: '"Glorious" isn''t the word her lawyer''s using.'
+    topics: 00000000010000000200000006000000i
+    weight: 1
+    enabled: 1
+    notes: Aftermath of a big wipeout. The game has no replay feature; the line is TV-show framing.
+  - id: 10_sign_off
+    setup:
+      speaker: 0
+      clip: {fileID: 8300000, guid: b506769c31dded24aab4283e3e3c7c40, type: 3}
+      transcript: And that's Splashdown for today.
+    response:
+      speaker: 1
+      clip: {fileID: 8300000, guid: 88af21ed0a79db3448f5663dcccfabd0, type: 3}
+      transcript: Tune in next week when someone actually survives!
+    topics: 08000000i
+    weight: 3
+    enabled: 1
+    notes: 'Sign-off: course completion.'
+  settings:
+    silenceBetweenExchanges: 1.2
+    responseDelayMin: 0.25
+    responseDelayMax: 0.5
+    exchangeRepeatCooldown: 90
+    pendingMaxAge: 5
+    backgroundAfterQuiet: 35
+    backgroundCooldown: 70
+    defaultTopicCooldown: 8
