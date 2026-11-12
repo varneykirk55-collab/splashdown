@@ -95,6 +95,13 @@ Previews: every asset rendered from a 3/4 view; one assembled board. Assembly is
 
 The Arm and Base come in as separate child objects, so a `RotatingSweeper` can drive Arm about Y. Licensing printed an access-token warning in the log; it did not affect the import.
 
+## URP materials (added 2026-11-12)
+
+- `ArtStaging/Unity/Materials/SD_Red|Blue|White|Chrome.mat` (URP Lit), generator `ArtStaging/Unity/Editor/SDMaterials.cs`, notes in `ArtStaging/Unity/README.md`.
+- Tested in the scratch project with URP 17.6.0 (the version the game uses): all four use `Universal Render Pipeline/Lit` and the shader reports supported. Remapping the two imported FBX files assigned the SD_* materials to every slot (4 remaps each, no embedded materials left).
+- **Not verified:** how they look. Batch mode cannot render, and the scratch project was Gamma colour space while Splashdown is Linear. The colour conversion is written to match in both, but compare against the previews in the real project. Chrome needs a skybox or reflection probe.
+- The `.mat` files were not added to the real project.
+
 ## Remaining
 
 - Import settings, material mapping, prefab swapping and collider checks are all open.
