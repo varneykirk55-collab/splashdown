@@ -1,0 +1,40 @@
+#### SweeperSmall
+SweeperSmall/Hub enabled=False mats=SunYellow@Materials/SunYellow.mat
+SweeperSmall/HubCap enabled=False mats=StripesRedWhite@Materials/Arena/StripesRedWhite.mat
+SweeperSmall/Arm/Bar0/Tube enabled=False mats=StripesRedWhite@Materials/Arena/StripesRedWhite.mat
+SweeperSmall/Arm/Bar0/Pad enabled=False mats=SunYellow@Materials/SunYellow.mat
+SweeperSmall/Arm/Bar1/Tube enabled=False mats=StripesRedWhite@Materials/Arena/StripesRedWhite.mat
+SweeperSmall/Arm/Bar1/Pad enabled=False mats=SunYellow@Materials/SunYellow.mat
+SweeperSmall/Arm/SD_Visual_Arm enabled=True mats=SD_Red@Art/SD/Materials/SD_Red.mat,SD_Blue@Art/SD/Materials/SD_Blue.mat
+SweeperSmall/SD_Visual_Base enabled=True mats=SD_Blue@Art/SD/Materials/SD_Blue.mat,SD_Red@Art/SD/Materials/SD_Red.mat,SD_Chrome@Art/SD/Materials/SD_Chrome.mat
+#### SweeperLarge
+SweeperLarge/Hub enabled=False mats=PanelsBlueTeal@Materials/Arena/PanelsBlueTeal.mat
+SweeperLarge/HubCap enabled=False mats=StripesRedWhite@Materials/Arena/StripesRedWhite.mat
+SweeperLarge/Arm/Bar0/Tube enabled=False mats=StripesRedWhite@Materials/Arena/StripesRedWhite.mat
+SweeperLarge/Arm/Bar0/Pad enabled=False mats=PanelsBlueTeal@Materials/Arena/PanelsBlueTeal.mat
+SweeperLarge/Arm/Bar1/Tube enabled=False mats=StripesRedWhite@Materials/Arena/StripesRedWhite.mat
+SweeperLarge/Arm/Bar1/Pad enabled=False mats=PanelsBlueTeal@Materials/Arena/PanelsBlueTeal.mat
+SweeperLarge/Arm/SD_Visual_Arm enabled=True mats=SD_Red@Art/SD/Materials/SD_Red.mat,SD_Blue@Art/SD/Materials/SD_Blue.mat
+SweeperLarge/SD_Visual_Base enabled=True mats=SD_Blue@Art/SD/Materials/SD_Blue.mat,SD_Red@Art/SD/Materials/SD_Red.mat,SD_Chrome@Art/SD/Materials/SD_Chrome.mat
+#### SweeperDouble
+SweeperDouble/Hub enabled=False mats=PanelsYellowOrange@Materials/Arena/PanelsYellowOrange.mat
+SweeperDouble/HubCap enabled=False mats=StripesRedWhite@Materials/Arena/StripesRedWhite.mat
+SweeperDouble/Arm/Bar0/Tube enabled=False mats=StripesRedWhite@Materials/Arena/StripesRedWhite.mat
+SweeperDouble/Arm/Bar0/Pad enabled=False mats=PanelsYellowOrange@Materials/Arena/PanelsYellowOrange.mat
+SweeperDouble/Arm/Bar1/Tube enabled=False mats=StripesRedWhite@Materials/Arena/StripesRedWhite.mat
+SweeperDouble/Arm/Bar1/Pad enabled=False mats=PanelsYellowOrange@Materials/Arena/PanelsYellowOrange.mat
+SweeperDouble/Arm/HighBar2/Tube enabled=False mats=StripesRedWhite@Materials/Arena/StripesRedWhite.mat
+SweeperDouble/Arm/HighBar2/Pad enabled=False mats=PanelsYellowOrange@Materials/Arena/PanelsYellowOrange.mat
+SweeperDouble/Arm/HighBar3/Tube enabled=False mats=StripesRedWhite@Materials/Arena/StripesRedWhite.mat
+SweeperDouble/Arm/HighBar3/Pad enabled=False mats=PanelsYellowOrange@Materials/Arena/PanelsYellowOrange.mat
+SweeperDouble/Arm/SD_Visual_Arm enabled=True mats=SD_Red@Art/SD/Materials/SD_Red.mat,SD_Blue@Art/SD/Materials/SD_Blue.mat
+SweeperDouble/SD_Visual_Base enabled=True mats=SD_Blue@Art/SD/Materials/SD_Blue.mat,SD_Red@Art/SD/Materials/SD_Red.mat,SD_Chrome@Art/SD/Materials/SD_Chrome.mat
+#### RotatingBeam
+RotatingBeam/Hub enabled=False mats=HotPink@Materials/HotPink.mat
+RotatingBeam/HubCap enabled=False mats=StripesBlueYellow@Materials/Arena/StripesBlueYellow.mat
+RotatingBeam/Arm/Bar0/Tube enabled=False mats=StripesBlueYellow@Materials/Arena/StripesBlueYellow.mat
+RotatingBeam/Arm/Bar0/Pad enabled=False mats=HotPink@Materials/HotPink.mat
+RotatingBeam/Arm/Bar1/Tube enabled=False mats=StripesBlueYellow@Materials/Arena/StripesBlueYellow.mat
+RotatingBeam/Arm/Bar1/Pad enabled=False mats=HotPink@Materials/HotPink.mat
+RotatingBeam/Arm/SD_Visual_Arm enabled=True mats=SD_Blue@Art/SD/Materials/SD_Blue.mat,SD_Red@Art/SD/Materials/SD_Red.mat
+RotatingBeam/SD_Visual_Base enabled=True mats=SD_Blue@Art/SD/Materials/SD_Blue.mat,SD_Red@Art/SD/Materials/SD_Red.mat,SD_Chrome@Art/SD/Materials/SD_Chrome.mat

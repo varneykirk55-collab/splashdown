@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<test-run id="2" testcasecount="9" result="Passed" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-12 15:27:15Z" end-time="2026-11-12 15:27:57Z" duration="41.6035892">
-  <test-suite type="TestSuite" id="1059" name="Bikini Wipeout" fullname="Bikini Wipeout" runstate="Runnable" testcasecount="47" result="Passed" start-time="2026-11-12 15:27:15Z" end-time="2026-11-12 15:27:57Z" duration="41.603589" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+<test-run id="2" testcasecount="9" result="Passed" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-12 15:37:57Z" end-time="2026-11-12 15:38:39Z" duration="41.6926826">
+  <test-suite type="TestSuite" id="1059" name="Bikini Wipeout" fullname="Bikini Wipeout" runstate="Runnable" testcasecount="47" result="Passed" start-time="2026-11-12 15:37:57Z" end-time="2026-11-12 15:38:39Z" duration="41.692683" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
     <properties>
       <property name="platform" value="PlayMode" />
     </properties>
-    <test-suite type="Assembly" id="1053" name="BikiniWipeout.Tests.PlayMode.dll" fullname="C:/Users/aresg/OneDrive/Documents/Splashdown-Astra/Library/ScriptAssemblies/BikiniWipeout.Tests.PlayMode.dll" runstate="Runnable" testcasecount="47" result="Passed" start-time="2026-11-12 15:27:15Z" end-time="2026-11-12 15:27:57Z" duration="41.578396" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <test-suite type="Assembly" id="1053" name="BikiniWipeout.Tests.PlayMode.dll" fullname="C:/Users/aresg/OneDrive/Documents/Splashdown-Astra/Library/ScriptAssemblies/BikiniWipeout.Tests.PlayMode.dll" runstate="Runnable" testcasecount="47" result="Passed" start-time="2026-11-12 15:37:57Z" end-time="2026-11-12 15:38:39Z" duration="41.673145" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
       <properties>
-        <property name="_PID" value="24304" />
+        <property name="_PID" value="23860" />
         <property name="_APPDOMAIN" value="Unity Child Domain" />
         <property name="platform" value="PlayMode" />
         <property name="EditorOnly" value="False" />
       </properties>
-      <test-suite type="TestSuite" id="1054" name="BikiniWipeout" fullname="BikiniWipeout" runstate="Runnable" testcasecount="47" result="Passed" start-time="2026-11-12 15:27:15Z" end-time="2026-11-12 15:27:57Z" duration="41.575819" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <test-suite type="TestSuite" id="1054" name="BikiniWipeout" fullname="BikiniWipeout" runstate="Runnable" testcasecount="47" result="Passed" start-time="2026-11-12 15:37:57Z" end-time="2026-11-12 15:38:39Z" duration="41.670230" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
         <properties />
-        <test-suite type="TestSuite" id="1055" name="Tests" fullname="BikiniWipeout.Tests" runstate="Runnable" testcasecount="47" result="Passed" start-time="2026-11-12 15:27:15Z" end-time="2026-11-12 15:27:57Z" duration="41.573826" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <test-suite type="TestSuite" id="1055" name="Tests" fullname="BikiniWipeout.Tests" runstate="Runnable" testcasecount="47" result="Passed" start-time="2026-11-12 15:37:57Z" end-time="2026-11-12 15:38:39Z" duration="41.668287" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
           <properties />
-          <test-suite type="TestFixture" id="1010" name="Course1PlayTests" fullname="BikiniWipeout.Tests.Course1PlayTests" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-11-12 15:27:15Z" end-time="2026-11-12 15:27:57Z" duration="41.568445" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <test-suite type="TestFixture" id="1010" name="Course1PlayTests" fullname="BikiniWipeout.Tests.Course1PlayTests" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-11-12 15:37:57Z" end-time="2026-11-12 15:38:39Z" duration="41.652604" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
             <properties />
-            <test-case id="1015" name="EveryCheckpoint_Activates_AndRespawnsThePlayerThere_WithoutALoop" fullname="BikiniWipeout.Tests.Course1PlayTests.EveryCheckpoint_Activates_AndRespawnsThePlayerThere_WithoutALoop" methodname="EveryCheckpoint_Activates_AndRespawnsThePlayerThere_WithoutALoop" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="1277072628" result="Passed" start-time="2026-11-12 15:27:15Z" end-time="2026-11-12 15:27:31Z" duration="15.889785" asserts="0">
+            <test-case id="1015" name="EveryCheckpoint_Activates_AndRespawnsThePlayerThere_WithoutALoop" fullname="BikiniWipeout.Tests.Course1PlayTests.EveryCheckpoint_Activates_AndRespawnsThePlayerThere_WithoutALoop" methodname="EveryCheckpoint_Activates_AndRespawnsThePlayerThere_WithoutALoop" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="286701749" result="Passed" start-time="2026-11-12 15:37:57Z" end-time="2026-11-12 15:38:13Z" duration="15.918748" asserts="0">
               <properties>
                 <property name="_JOINTYPE" value="UnityCombinatorial" />
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1013" name="EveryLayoutSurface_HasSolidGround" fullname="BikiniWipeout.Tests.Course1PlayTests.EveryLayoutSurface_HasSolidGround" methodname="EveryLayoutSurface_HasSolidGround" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="1400166116" result="Passed" start-time="2026-11-12 15:27:31Z" end-time="2026-11-12 15:27:31Z" duration="0.182773" asserts="0">
+            <test-case id="1013" name="EveryLayoutSurface_HasSolidGround" fullname="BikiniWipeout.Tests.Course1PlayTests.EveryLayoutSurface_HasSolidGround" methodname="EveryLayoutSurface_HasSolidGround" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="1948048826" result="Passed" start-time="2026-11-12 15:38:13Z" end-time="2026-11-12 15:38:13Z" duration="0.193776" asserts="0">
               <properties>
                 <property name="_JOINTYPE" value="UnityCombinatorial" />
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1018" name="Finish_StopsTheTimer_ShowsResults_AndCelebrates" fullname="BikiniWipeout.Tests.Course1PlayTests.Finish_StopsTheTimer_ShowsResults_AndCelebrates" methodname="Finish_StopsTheTimer_ShowsResults_AndCelebrates" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="1152071757" result="Passed" start-time="2026-11-12 15:27:31Z" end-time="2026-11-12 15:27:35Z" duration="3.837642" asserts="0">
+            <test-case id="1018" name="Finish_StopsTheTimer_ShowsResults_AndCelebrates" fullname="BikiniWipeout.Tests.Course1PlayTests.Finish_StopsTheTimer_ShowsResults_AndCelebrates" methodname="Finish_StopsTheTimer_ShowsResults_AndCelebrates" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="311195924" result="Passed" start-time="2026-11-12 15:38:13Z" end-time="2026-11-12 15:38:17Z" duration="3.823677" asserts="0">
               <properties>
                 <property name="_JOINTYPE" value="UnityCombinatorial" />
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1014" name="Obstacles_AreMoving" fullname="BikiniWipeout.Tests.Course1PlayTests.Obstacles_AreMoving" methodname="Obstacles_AreMoving" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="712654178" result="Passed" start-time="2026-11-12 15:27:35Z" end-time="2026-11-12 15:27:40Z" duration="4.818218" asserts="0">
+            <test-case id="1014" name="Obstacles_AreMoving" fullname="BikiniWipeout.Tests.Course1PlayTests.Obstacles_AreMoving" methodname="Obstacles_AreMoving" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="870613715" result="Passed" start-time="2026-11-12 15:38:17Z" end-time="2026-11-12 15:38:22Z" duration="4.852342" asserts="0">
               <properties>
                 <property name="_JOINTYPE" value="UnityCombinatorial" />
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1016" name="Pendulum_KnocksThePlayerDown_AndControlReturns" fullname="BikiniWipeout.Tests.Course1PlayTests.Pendulum_KnocksThePlayerDown_AndControlReturns" methodname="Pendulum_KnocksThePlayerDown_AndControlReturns" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="1994181099" result="Passed" start-time="2026-11-12 15:27:40Z" end-time="2026-11-12 15:27:45Z" duration="5.214482" asserts="0">
+            <test-case id="1016" name="Pendulum_KnocksThePlayerDown_AndControlReturns" fullname="BikiniWipeout.Tests.Course1PlayTests.Pendulum_KnocksThePlayerDown_AndControlReturns" methodname="Pendulum_KnocksThePlayerDown_AndControlReturns" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="1945765663" result="Passed" start-time="2026-11-12 15:38:22Z" end-time="2026-11-12 15:38:27Z" duration="5.192341" asserts="0">
               <properties>
                 <property name="_JOINTYPE" value="UnityCombinatorial" />
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1012" name="Player_SpawnsOnTheStartPlatform_AndCountdownRuns" fullname="BikiniWipeout.Tests.Course1PlayTests.Player_SpawnsOnTheStartPlatform_AndCountdownRuns" methodname="Player_SpawnsOnTheStartPlatform_AndCountdownRuns" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="1371534772" result="Passed" start-time="2026-11-12 15:27:45Z" end-time="2026-11-12 15:27:48Z" duration="3.141245" asserts="0">
+            <test-case id="1012" name="Player_SpawnsOnTheStartPlatform_AndCountdownRuns" fullname="BikiniWipeout.Tests.Course1PlayTests.Player_SpawnsOnTheStartPlatform_AndCountdownRuns" methodname="Player_SpawnsOnTheStartPlatform_AndCountdownRuns" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="1033097847" result="Passed" start-time="2026-11-12 15:38:27Z" end-time="2026-11-12 15:38:30Z" duration="3.188264" asserts="0">
               <properties>
                 <property name="_JOINTYPE" value="UnityCombinatorial" />
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1011" name="Scene_HasAllFiveSections_Wired" fullname="BikiniWipeout.Tests.Course1PlayTests.Scene_HasAllFiveSections_Wired" methodname="Scene_HasAllFiveSections_Wired" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="1022897650" result="Passed" start-time="2026-11-12 15:27:48Z" end-time="2026-11-12 15:27:48Z" duration="0.142020" asserts="0">
+            <test-case id="1011" name="Scene_HasAllFiveSections_Wired" fullname="BikiniWipeout.Tests.Course1PlayTests.Scene_HasAllFiveSections_Wired" methodname="Scene_HasAllFiveSections_Wired" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="581798913" result="Passed" start-time="2026-11-12 15:38:30Z" end-time="2026-11-12 15:38:30Z" duration="0.173623" asserts="0">
               <properties>
                 <property name="_JOINTYPE" value="UnityCombinatorial" />
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1019" name="SectionGate_AnnouncesItsSection" fullname="BikiniWipeout.Tests.Course1PlayTests.SectionGate_AnnouncesItsSection" methodname="SectionGate_AnnouncesItsSection" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="1873361469" result="Passed" start-time="2026-11-12 15:27:48Z" end-time="2026-11-12 15:27:52Z" duration="3.174062" asserts="0">
+            <test-case id="1019" name="SectionGate_AnnouncesItsSection" fullname="BikiniWipeout.Tests.Course1PlayTests.SectionGate_AnnouncesItsSection" methodname="SectionGate_AnnouncesItsSection" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="1247859564" result="Passed" start-time="2026-11-12 15:38:30Z" end-time="2026-11-12 15:38:33Z" duration="3.138527" asserts="0">
               <properties>
                 <property name="_JOINTYPE" value="UnityCombinatorial" />
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1017" name="SpinDisc_CarriesThePlayerAround" fullname="BikiniWipeout.Tests.Course1PlayTests.SpinDisc_CarriesThePlayerAround" methodname="SpinDisc_CarriesThePlayerAround" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="1435725991" result="Passed" start-time="2026-11-12 15:27:52Z" end-time="2026-11-12 15:27:57Z" duration="5.129406" asserts="0">
+            <test-case id="1017" name="SpinDisc_CarriesThePlayerAround" fullname="BikiniWipeout.Tests.Course1PlayTests.SpinDisc_CarriesThePlayerAround" methodname="SpinDisc_CarriesThePlayerAround" classname="BikiniWipeout.Tests.Course1PlayTests" runstate="Runnable" seed="779811929" result="Passed" start-time="2026-11-12 15:38:33Z" end-time="2026-11-12 15:38:39Z" duration="5.129295" asserts="0">
               <properties>
                 <property name="_JOINTYPE" value="UnityCombinatorial" />
                 <property name="retryIteration" value="0" />

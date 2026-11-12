@@ -1,0 +1,2 @@
+SweeperDouble: primitive renderers disabled=0, visuals added from SD_Sweeper_Double
+RotatingBeam: primitive renderers disabled=0, visuals added from SD_RotatingBeam

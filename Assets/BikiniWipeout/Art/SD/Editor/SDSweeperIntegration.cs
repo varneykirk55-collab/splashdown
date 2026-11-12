@@ -24,17 +24,29 @@ public static class SDSweeperIntegration
         ("SweeperLarge", "SD_Sweeper_Large"),
     };
 
+    static readonly (string prefab, string fbx)[] DbPairs =
+    {
+        ("SweeperDouble", "SD_Sweeper_Double"),
+        ("RotatingBeam", "SD_RotatingBeam"),
+    };
+
+    static (string prefab, string fbx)[] AllPairs() { var l = new List<(string, string)>(Pairs); l.AddRange(DbPairs); return l.ToArray(); }
+
     public static void RunBefore() { DumpBefore(); ShootBefore(); }
     public static void RunAfter() { Apply(); DumpAfter(); ShootAfter(); }
 
     // ------------------------------------------------------------------ apply
 
-    public static void Apply()
+    public static void Apply() { Apply(Pairs, "apply_log.txt"); }
+    public static void ApplyDoubleAndBeam() { Apply(DbPairs, "apply_log_double_beam.txt"); }
+
+    static void Apply((string prefab, string fbx)[] pairs, string logName)
     {
         var log = new StringBuilder();
-        foreach (var pair in Pairs)
+        foreach (var pair in pairs)
         {
             string path = PrefabFolder + pair.prefab + ".prefab";
+            EnsureMaterialRemap(ModelFolder + pair.fbx + ".fbx");
             var fbx = AssetDatabase.LoadAssetAtPath<GameObject>(ModelFolder + pair.fbx + ".fbx");
             if (fbx == null) throw new System.Exception("Missing " + pair.fbx);
             Transform fbxBase = fbx.transform.Find("Base"), fbxArm = fbx.transform.Find("Arm");
@@ -65,8 +77,23 @@ public static class SDSweeperIntegration
         }
         AssetDatabase.SaveAssets();
         Directory.CreateDirectory(OutDir);
-        File.WriteAllText(OutDir + "apply_log.txt", log.ToString());
+        File.WriteAllText(OutDir + logName, log.ToString());
         Debug.Log(log.ToString());
+    }
+
+    /// <summary>Point the FBX materials (matched by name) at the project SD_* URP materials, so prefabs never use FBX-embedded copies.</summary>
+    static void EnsureMaterialRemap(string fbxPath)
+    {
+        var imp = (ModelImporter)AssetImporter.GetAtPath(fbxPath);
+        var map = imp.GetExternalObjectMap();
+        bool changed = false;
+        foreach (var n in new[] { "SD_Red", "SD_Blue", "SD_White", "SD_Chrome" })
+        {
+            var id = new AssetImporter.SourceAssetIdentifier(typeof(Material), n);
+            var m = AssetDatabase.LoadAssetAtPath<Material>("Assets/BikiniWipeout/Art/SD/Materials/" + n + ".mat");
+            if (m != null && (!map.ContainsKey(id) || map[id] != m)) { imp.AddRemap(id, m); changed = true; }
+        }
+        if (changed) imp.SaveAndReimport();
     }
 
     static void AddVisual(string name, Transform parent, Transform source)
@@ -91,7 +118,7 @@ public static class SDSweeperIntegration
     {
         Directory.CreateDirectory(OutDir);
         var sb = new StringBuilder();
-        foreach (var pair in Pairs)
+        foreach (var pair in AllPairs())
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabFolder + pair.prefab + ".prefab");
             sb.AppendLine("#### " + pair.prefab);
@@ -100,12 +127,12 @@ public static class SDSweeperIntegration
         File.WriteAllText(OutDir + "gameplay_" + tag + ".txt", sb.ToString());
         // visual-only report
         var vis = new StringBuilder();
-        foreach (var pair in Pairs)
+        foreach (var pair in AllPairs())
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabFolder + pair.prefab + ".prefab");
             vis.AppendLine("#### " + pair.prefab);
             foreach (var r in prefab.GetComponentsInChildren<MeshRenderer>(true))
-                vis.AppendLine(Path(r.transform, prefab.transform) + " enabled=" + r.enabled + " mats=" + string.Join(",", System.Array.ConvertAll(r.sharedMaterials, m => m ? m.name : "null")));
+                vis.AppendLine(Path(r.transform, prefab.transform) + " enabled=" + r.enabled + " mats=" + string.Join(",", System.Array.ConvertAll(r.sharedMaterials, m => m ? m.name + "@" + AssetDatabase.GetAssetPath(m).Replace("Assets/BikiniWipeout/", "") : "null")));
         }
         File.WriteAllText(OutDir + "visuals_" + tag + ".txt", vis.ToString());
     }
@@ -163,7 +190,21 @@ public static class SDSweeperIntegration
     public static void ShootBefore() { Shoot("before"); }
     public static void ShootAfter() { Shoot("after"); }
 
-    static void Shoot(string tag)
+    public static void RunBeforeDB() { Dump("db_before"); Shoot("before_db", DbViews); }
+    public static void RunAfterDB() { ApplyDoubleAndBeam(); Dump("db_after"); Shoot("after_db", DbViews); }
+
+    static readonly (string, Vector3, float, string)[] DbViews =
+    {
+        ("C_Beam_1", new Vector3(-5.5f, 4.5f, 7f), 0.8f, "C_Beam_1_backlit"),
+        ("C_Beam_1", new Vector3(7f, 5.5f, -8.5f), 0.8f, "C_Beam_1_sunside"),
+        ("D_Beam", new Vector3(7f, 5.5f, -8.5f), 0.8f, "D_Beam_sunside"),
+        ("E_DoubleSweeper", new Vector3(-14f, 11f, 16f), 1.5f, "E_DoubleSweeper_backlit"),
+        ("E_DoubleSweeper", new Vector3(14f, 11f, -16f), 1.5f, "E_DoubleSweeper_sunside"),
+    };
+
+    static void Shoot(string tag) { Shoot(tag, null); }
+
+    static void Shoot(string tag, (string, Vector3, float, string)[] customViews)
     {
         Directory.CreateDirectory(OutDir);
         var scene = EditorSceneManager.OpenScene("Assets/BikiniWipeout/Scenes/Course_SplashdownGauntlet.unity", OpenSceneMode.Single);
@@ -176,6 +217,7 @@ public static class SDSweeperIntegration
             ("C_Sweeper", new Vector3(-12f, 9f, 16f), 1.0f, "C_Sweeper_backlit"),
             ("C_Sweeper", new Vector3(13f, 9f, -15f), 1.0f, "C_Sweeper_sunside"),
         };
+        if (customViews != null) views = customViews;
         foreach (var v in views)
         {
             Transform target = null;

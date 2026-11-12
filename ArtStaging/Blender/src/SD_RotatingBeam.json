@@ -1,0 +1,12 @@
+{
+  "pivot": "Base origin = axis on floor. Arm origin = rotation axis at z=0.5 m (matches the prefab 'Arm' child at local y 0.5). Rotate Arm about Unity Y.",
+  "gameplay": "reach 2.80 m, hub radius 0.45 m, hub height 1.35, tube thickness 0.42 m, tip pads r 0.30 (prefab 0.34). Two opposed low bars. Rotation axis Y.",
+  "colliders": "Hub: cylinder r 0.45, H 1.35. Bars: capsule r 0.21 along the bar, length 2.77. Pads: sphere r 0.34. Keep the prefab colliders.",
+  "name": "SD_RotatingBeam",
+  "blend": "src\\SD_RotatingBeam.blend",
+  "fbx": "export\\SD_RotatingBeam.fbx",
+  "objects": [
+    "Base",
+    "Arm"
+  ]
+}

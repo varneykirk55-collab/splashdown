@@ -1,0 +1,12 @@
+{
+  "pivot": "Base origin = axis on floor. Arm origin = rotation axis at z=0.5 m (matches the prefab 'Arm' child at local y 0.5). Rotate Arm about Unity Y.",
+  "gameplay": "reach 7.20 m, hub radius 0.85 m, hub height 2.85, tube thickness 0.42 m, tip pads r 0.30 (prefab 0.34). Two low bars at y 0.5 + two high bars at y 2.35 (90/270 deg). Rotation axis Y.",
+  "colliders": "Hub: cylinder r 0.85, H 2.85. Bars: capsule r 0.21 along the bar, length 6.77. Pads: sphere r 0.34. Keep the prefab colliders.",
+  "name": "SD_Sweeper_Double",
+  "blend": "src\\SD_Sweeper_Double.blend",
+  "fbx": "export\\SD_Sweeper_Double.fbx",
+  "objects": [
+    "Base",
+    "Arm"
+  ]
+}

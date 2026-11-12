@@ -1,0 +1,6 @@
+C_Beam_1_backlit rendered from (53.00, 4.50, 117.30) avg=0.707
+C_Beam_1_sunside rendered from (65.50, 5.50, 101.80) avg=0.698
+D_Beam_sunside rendered from (83.50, 5.50, 49.80) avg=0.699
+E_DoubleSweeper_backlit rendered from (62.50, 11.00, 49.20) avg=0.676
+E_DoubleSweeper_sunside rendered from (90.50, 11.00, 17.20) avg=0.736
+scene dirty=False (never saved)

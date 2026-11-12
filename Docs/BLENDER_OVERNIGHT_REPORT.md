@@ -114,6 +114,14 @@ Imported `SD_Sweeper_Small`, `SD_Sweeper_Large`, `SD_JumpPad_Small`, `SD_BallMou
 - Keep **no collider** on the skirt (0.28 m tall); keep the prefab hub collider.
 - **Not done:** no prefab or scene was switched to the new meshes, nothing was rendered or played, colliders were not compared in play, and the PlayMode tests were not run.
 
+## Double sweeper and rotating beam (2026-11-12, branch astra/double-sweeper-beam-integration)
+
+- New Blender assets `SD_Sweeper_Double` (reach 7.2, hub 0.85 r, 2.85 m tall, two low bars at y 0.5 plus two high bars at y 2.35 on the same rotating `Arm`; 15,176 tris) and `SD_RotatingBeam` (reach 2.8, hub 0.45 r, blue bars with red bands; 9,372 tris). Both pass the validator.
+- Integrated into `SweeperDouble.prefab` and `RotatingBeam.prefab` the same way as the small and large sweepers: new `SD_Visual_Base` / `SD_Visual_Arm` children without colliders, primitive renderers disabled (10 and 6), nothing deleted.
+- Gameplay dump of all four sweeper prefabs: identical before and after. Scene, scripts, settings and the other prefabs are untouched.
+- Both FBX files are remapped to the project materials in `Art/SD/Materials` (the apply tool now does this itself; a first pass had used FBX-embedded copies and was redone).
+- EditMode 157/157 and Course1PlayTests 9/9 pass. Screenshots: `ArtStaging/Integration/before_db_*.png` and `after_db_*.png`.
+
 ## Remaining
 
 - Import settings, material mapping, prefab swapping and collider checks are all open.

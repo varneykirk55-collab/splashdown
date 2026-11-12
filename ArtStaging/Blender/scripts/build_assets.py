@@ -43,11 +43,11 @@ def chevron(name, cx, cy, w, h, t, z, thick, material="SD_White", flip=False):
     return poly_slab(name, pts, thick, z, material)
 
 
-def banded_bar(name, length, radius, bands, band_w, loc, rot_z=0.0):
+def banded_bar(name, length, radius, bands, band_w, loc, rot_z=0.0, body="SD_Red", band_mat="SD_Blue"):
     """Red capsule bar along X with blue bands; origin at loc. Returns objects (unjoined)."""
-    parts = [capsule_x(name + "_body", length, radius, (0, 0, 0), "SD_Red")]
+    parts = [capsule_x(name + "_body", length, radius, (0, 0, 0), body)]
     for bx in bands:
-        parts.append(cyl(name + "_band", radius * 1.025, band_w, (bx, 0, 0), "SD_Blue", bevel=0.01, segments=1, verts=24,
+        parts.append(cyl(name + "_band", radius * 1.025, band_w, (bx, 0, 0), band_mat, bevel=0.01, segments=1, verts=24,
                          rot=(0, math.radians(90), 0)))
     return parts
 
@@ -73,46 +73,51 @@ def SD_BallMount():
                       colliders="Mount: box 1.5x1.5xH1.9. Ball: SphereCollider r=1.1.")
 
 
-def make_sweeper(reach):
+def make_sweeper(reach, high=False, swap=False):
+    """Rotating sweeper. high=True adds two bars at 2.35 m (prefab 'SweeperDouble'); swap=True swaps bar colours (blue bars, red bands)."""
     hubR = max(0.45, min(0.85, reach * 0.12))   # same formula as Foundation1Builder.CreateSweeperVariant
     THK = 0.42
     ARM_Z = 0.5
+    HIGH_Z = 2.35
+    hubH = HIGH_Z + 0.5 if high else 1.35     # prefab hub height
+    body_m, band_m = ("SD_Blue", "SD_Red") if swap else ("SD_Red", "SD_Blue")
     # static base
     skirt = cyl("skirt", hubR + 0.30, 0.12, (0, 0, 0.06), "SD_Blue", 0.04, 3, 48)
     drum = cyl("drum", hubR + 0.22, 0.16, (0, 0, 0.20), "SD_Red", 0.05, 3, 48)
-    col = cyl("col", hubR, 1.07, (0, 0, 0.28 + 0.535), "SD_Red", 0.05, 3, 48)
+    col = cyl("col", hubR, hubH - 0.28, (0, 0, 0.28 + (hubH - 0.28) / 2), "SD_Red", 0.05, 3, 48)
     band = cyl("band", hubR * 1.05, 0.22, (0, 0, 0.62), "SD_Blue", 0.02, 2, 48)
-    collar = cyl("collar", hubR * 0.9, 0.08, (0, 0, 1.30), "SD_Chrome", 0.01, 2, 48)
-    dome = sphere("dome", hubR * 1.05, (0, 0, 1.35), "SD_Red", 48, 24)
-    base = join([skirt, drum, col, band, collar, dome], "Base")
+    collar = cyl("collar", hubR * 0.9, 0.08, (0, 0, hubH - 0.05), "SD_Chrome", 0.01, 2, 48)
+    dome = sphere("dome", hubR * 1.05, (0, 0, hubH), "SD_Red", 48, 24)
+    parts_b = [skirt, drum, col, band, collar, dome]
+    if high:
+        parts_b.append(cyl("band2", hubR * 1.05, 0.22, (0, 0, hubH - 0.55), "SD_Blue", 0.02, 2, 48))
+    base = join(parts_b, "Base")
     finalize(base, pivot=(0, 0, 0))
     # rotating arm: origin at the rotation axis, height 0.5 (matches prefab 'Arm' child)
     length = reach - hubR
-    bars = []
-    for i in range(2):
+    specs = [(0, ARM_Z), (180, ARM_Z)] + ([(90, HIGH_Z), (270, HIGH_Z)] if high else [])
+    bars, pads = [], []
+    for i, (ang, z) in enumerate(specs):
         tube_len = length + THK
         centre = hubR + length / 2
         nb = max(2, int(tube_len // 1.0))
         bands = [-tube_len / 2 + tube_len * (k + 0.5) / nb for k in range(nb) if k % 2 == 1]
-        parts = banded_bar("bar", tube_len, THK / 2, bands, 0.34, (0, 0, 0))
-        b = join(parts, "bar%d" % i)
-        b.location = (0, 0, 0)
+        parts = banded_bar("bar", tube_len, THK / 2, bands, 0.34, (0, 0, 0), body=body_m, band_mat=band_m)
+        bar = join(parts, "bar%d" % i)
+        bar.location = (0, 0, 0)
         bpy.context.view_layer.update()
-        # move bar so it spans hubR-.21 .. reach+.21 along +X, then rotate 180 for the second
-        b.data.transform(Matrix.Translation((centre, 0, ARM_Z)))
-        if i:
-            b.data.transform(Matrix.Rotation(math.pi, 4, "Z"))
-        bars.append(b)
-    pads = []
-    for i in range(2):
-        s = 1 if i == 0 else -1
-        pads.append(sphere("pad", 0.30, (s * reach, 0, ARM_Z), "SD_Blue", 24, 12))
+        bar.data.transform(Matrix.Translation((centre, 0, z)))
+        if ang:
+            bar.data.transform(Matrix.Rotation(math.radians(ang), 4, "Z"))
+        bars.append(bar)
+        r = math.radians(ang)
+        pads.append(sphere("pad", 0.30, (math.cos(r) * reach, math.sin(r) * reach, z), band_m, 24, 12))
     arm = join(bars + pads, "Arm")
     finalize(arm, pivot=(0, 0, ARM_Z))
     return [base, arm], dict(
         pivot="Base origin = axis on floor. Arm origin = rotation axis at z=0.5 m (matches the prefab 'Arm' child at local y 0.5). Rotate Arm about Unity Y.",
-        gameplay="reach %.2f m, hub radius %.2f m, tube thickness 0.42 m, tip pads r 0.30 (prefab 0.34). Two opposed bars. Rotation axis Y." % (reach, hubR),
-        colliders="Hub: cylinder r %.2f, H 1.35. Bars: capsule r 0.21 along X, length %.2f. Pads: sphere r 0.34." % (hubR, length + THK))
+        gameplay="reach %.2f m, hub radius %.2f m, hub height %.2f, tube thickness 0.42 m, tip pads r 0.30 (prefab 0.34). %s Rotation axis Y." % (reach, hubR, hubH, "Two low bars at y 0.5 + two high bars at y 2.35 (90/270 deg)." if high else "Two opposed low bars."),
+        colliders="Hub: cylinder r %.2f, H %.2f. Bars: capsule r 0.21 along the bar, length %.2f. Pads: sphere r 0.34. Keep the prefab colliders." % (hubR, hubH, length + THK))
 
 
 @asset
@@ -123,6 +128,16 @@ def SD_Sweeper_Small():
 @asset
 def SD_Sweeper_Large():
     return make_sweeper(6.6)
+
+
+@asset
+def SD_Sweeper_Double():
+    return make_sweeper(7.2, high=True)
+
+
+@asset
+def SD_RotatingBeam():
+    return make_sweeper(2.8, swap=True)
 
 
 def make_jump_pad(radius, name_hint):
