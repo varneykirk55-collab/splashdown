@@ -1,0 +1,7 @@
+NEAR Deck (SpinnerIsland) bounds=(11.0, 1.0, 20.0) center=(0.0, -0.5, 47.7) mat=PanelsPinkPurple/Universal Render Pipeline/Lit cast=On
+NEAR SD_Visual_Arm (Arm) bounds=(7.8, 0.6, 0.6) center=(0.0, 0.5, 43.0) mat=SD_Red/Universal Render Pipeline/Lit cast=On
+NEAR SD_Visual_Base (A_Sweeper_1) bounds=(1.5, 1.8, 1.5) center=(0.0, 0.9, 43.0) mat=SD_Blue/Universal Render Pipeline/Lit cast=On
+NEAR Trim (SpinnerIsland) bounds=(11.6, 0.5, 20.6) center=(0.0, -0.5, 47.7) mat=SunYellow/Universal Render Pipeline/Lit cast=On
+RENDER default groundPixel=RGBA(1.000, 0.486, 0.522, 1.000)
+RENDER warm2x groundPixel=RGBA(0.914, 0.694, 1.000, 1.000)
+RENDER noShadows groundPixel=RGBA(0.914, 0.694, 1.000, 1.000)

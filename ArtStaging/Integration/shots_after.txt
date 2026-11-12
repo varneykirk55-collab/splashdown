@@ -1,3 +1,5 @@
-A_Sweeper_1 rendered from (-6.50, 5.00, 51.50) avg=0.728
-C_Sweeper rendered from (53.50, 9.00, 95.30) avg=0.688
+A_Sweeper_1_backlit rendered from (-6.50, 5.00, 51.50) avg=0.756
+A_Sweeper_1_sunside rendered from (8.70, 6.30, 32.80) avg=0.701
+C_Sweeper_backlit rendered from (28.50, 9.00, 126.30) avg=0.717
+C_Sweeper_sunside rendered from (53.50, 9.00, 95.30) avg=0.688
 scene dirty=False (never saved)

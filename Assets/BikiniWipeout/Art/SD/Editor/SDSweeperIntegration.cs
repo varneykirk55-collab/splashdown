@@ -171,8 +171,10 @@ public static class SDSweeperIntegration
         // name, camera offset from the sweeper, look-at height
         var views = new[]
         {
-            ("A_Sweeper_1", new Vector3(-6.5f, 5.0f, 8.5f), 0.9f),
-            ("C_Sweeper", new Vector3(13f, 9f, -15f), 1.0f),
+            ("A_Sweeper_1", new Vector3(-6.5f, 5.0f, 8.5f), 0.9f, "A_Sweeper_1_backlit"),
+            ("A_Sweeper_1", new Vector3(8.7f, 6.3f, -10.2f), 0.9f, "A_Sweeper_1_sunside"),
+            ("C_Sweeper", new Vector3(-12f, 9f, 16f), 1.0f, "C_Sweeper_backlit"),
+            ("C_Sweeper", new Vector3(13f, 9f, -15f), 1.0f, "C_Sweeper_sunside"),
         };
         foreach (var v in views)
         {
@@ -190,14 +192,15 @@ public static class SDSweeperIntegration
 
             var rt = new RenderTexture(1280, 720, 24, RenderTextureFormat.ARGB32);
             cam.targetTexture = rt;
+            for (int w = 0; w < 4; w++) cam.Render(); // warm-up: first frames in a batch session are not valid (flat colour flood)
             cam.Render();
             RenderTexture.active = rt;
             var tex = new Texture2D(1280, 720, TextureFormat.RGB24, false);
             tex.ReadPixels(new Rect(0, 0, 1280, 720), 0, 0);
             tex.Apply();
             RenderTexture.active = null;
-            File.WriteAllBytes(OutDir + tag + "_" + v.Item1 + ".png", tex.EncodeToPNG());
-            log.AppendLine(v.Item1 + " rendered from " + camGo.transform.position + " avg=" + Average(tex).ToString("F3"));
+            File.WriteAllBytes(OutDir + tag + "_" + v.Item4 + ".png", tex.EncodeToPNG());
+            log.AppendLine(v.Item4 + " rendered from " + camGo.transform.position + " avg=" + Average(tex).ToString("F3"));
             Object.DestroyImmediate(tex); rt.Release(); Object.DestroyImmediate(rt); Object.DestroyImmediate(camGo);
         }
         log.AppendLine("scene dirty=" + scene.isDirty + " (never saved)");

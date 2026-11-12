@@ -1,0 +1,17 @@
+ambientMode=Trilight sky=RGBA(0.780, 0.900, 1.000, 1.000) equator=RGBA(0.860, 0.840, 0.800, 1.000) ground=RGBA(0.300, 0.620, 0.660, 1.000) intensity=1
+skybox=ArenaSky/Skybox/Procedural defaultReflectionMode=Skybox customReflection=none reflIntensity=1
+fog=True RGBA(0.700, 0.880, 1.000, 1.000)
+A_Sweeper_1=(0.00, 0.00, 43.00) C_Sweeper=(40.50, 0.00, 110.30)
+LIGHT Sun type=Directional color=RGBA(1.000, 0.960, 0.840, 1.000) intensity=1.45 range=10 shadows=Soft pos=(0.00, 0.00, 0.00) rot=(52.00, 322.00, 0.00) dist(A)=43.0 dist(C)=117.5 enabled=True
+CAMERA Main Camera enabled=True
+pipeline=PC_RPAsset colorSpace=Linear
+MAT A_Sweeper_1/SD_Visual_Arm SD_Red shader=Universal Render Pipeline/Lit base=RGBA(0.906, 0.221, 0.293, 1.000) metal=0 smooth=0.74 specHighlights=1 envReflections=1 emission=False tex=none
+MAT A_Sweeper_1/SD_Visual_Arm SD_Blue shader=Universal Render Pipeline/Lit base=RGBA(0.221, 0.437, 0.931, 1.000) metal=0 smooth=0.74 specHighlights=1 envReflections=1 emission=False tex=none
+MAT A_Sweeper_1/SD_Visual_Base SD_Blue shader=Universal Render Pipeline/Lit base=RGBA(0.221, 0.437, 0.931, 1.000) metal=0 smooth=0.74 specHighlights=1 envReflections=1 emission=False tex=none
+MAT A_Sweeper_1/SD_Visual_Base SD_Red shader=Universal Render Pipeline/Lit base=RGBA(0.906, 0.221, 0.293, 1.000) metal=0 smooth=0.74 specHighlights=1 envReflections=1 emission=False tex=none
+MAT A_Sweeper_1/SD_Visual_Base SD_Chrome shader=Universal Render Pipeline/Lit base=RGBA(0.896, 0.906, 0.926, 1.000) metal=1 smooth=0.8 specHighlights=1 envReflections=1 emission=False tex=none
+MAT C_Sweeper/SD_Visual_Arm SD_Red shader=Universal Render Pipeline/Lit base=RGBA(0.906, 0.221, 0.293, 1.000) metal=0 smooth=0.74 specHighlights=1 envReflections=1 emission=False tex=none
+MAT C_Sweeper/SD_Visual_Arm SD_Blue shader=Universal Render Pipeline/Lit base=RGBA(0.221, 0.437, 0.931, 1.000) metal=0 smooth=0.74 specHighlights=1 envReflections=1 emission=False tex=none
+MAT C_Sweeper/SD_Visual_Base SD_Blue shader=Universal Render Pipeline/Lit base=RGBA(0.221, 0.437, 0.931, 1.000) metal=0 smooth=0.74 specHighlights=1 envReflections=1 emission=False tex=none
+MAT C_Sweeper/SD_Visual_Base SD_Red shader=Universal Render Pipeline/Lit base=RGBA(0.906, 0.221, 0.293, 1.000) metal=0 smooth=0.74 specHighlights=1 envReflections=1 emission=False tex=none
+MAT C_Sweeper/SD_Visual_Base SD_Chrome shader=Universal Render Pipeline/Lit base=RGBA(0.896, 0.906, 0.926, 1.000) metal=1 smooth=0.8 specHighlights=1 envReflections=1 emission=False tex=none
