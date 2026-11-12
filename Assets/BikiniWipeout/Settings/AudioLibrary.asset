@@ -136,10 +136,14 @@ MonoBehaviour:
     minInterval: 0.3
   music:
   - id: 1
-    clip: {fileID: 8300000, guid: 8237e89ccfc3f0748ad4a8a37eba44ec, type: 3}
-    volume: 0.8
+    clip: {fileID: 8300000, guid: dcc69cde403e74f47916281863f51f9a, type: 3}
+    volume: 0.7
     loop: 1
   - id: 2
-    clip: {fileID: 8300000, guid: 4d43f5f41127fc64cb0c85f9998b62a7, type: 3}
-    volume: 0.8
+    clip: {fileID: 8300000, guid: c3e2d08462734ff4cb3f9c7bdeb5099b, type: 3}
+    volume: 0.6
+    loop: 1
+  - id: 3
+    clip: {fileID: 8300000, guid: 4fc84db169126f14fbe2c1c4af4a13b1, type: 3}
+    volume: 0.7
     loop: 1

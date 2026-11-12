@@ -21,6 +21,16 @@ namespace BikiniWipeout
         [Tooltip("Maximum number of sound effects that can overlap.")]
         [SerializeField, Range(1, 32)] internal int sfxVoices = 12;
 
+        [Header("Music")]
+        [Tooltip("Seconds to crossfade when the music track changes.")]
+        [SerializeField, Min(0f)] internal float musicFadeSeconds = 1.5f;
+
+        [Tooltip("Music level (0..1 of normal) while an announcer line is speaking.")]
+        [SerializeField, Range(0f, 1f)] internal float duckLevel = 0.35f;
+
+        [SerializeField, Min(0.01f)] internal float duckAttackSeconds = 0.15f;
+        [SerializeField, Min(0.01f)] internal float duckReleaseSeconds = 0.9f;
+
         [Tooltip("Keep one manager alive across scene loads so music continues seamlessly.")]
         [SerializeField] internal bool persistAcrossScenes = true;
 
@@ -32,7 +42,15 @@ namespace BikiniWipeout
         private readonly List<string> missingClips = new List<string>();
         private AudioSource[] sfxSources;
         private AudioSource musicSource;
+        private AudioSource fadingSource;
+        private AudioSource fadeSourceA;
+        private AudioSource fadeSourceB;
         private AudioLibrary.MusicEntry currentMusic;
+        private AudioLibrary.MusicEntry fadingMusic;
+        private float musicLevel = 1f;
+        private float fadingLevel;
+        private float duckCurrent = 1f;
+        private bool announcerSpeaking;
         private IKeyValueStore store;
         private int nextVoice;
 
@@ -44,6 +62,23 @@ namespace BikiniWipeout
         public bool IsInitialized { get; private set; }
         public AudioLibrary Library => library;
         public MusicTrackId CurrentMusicTrack => currentMusic != null ? currentMusic.id : MusicTrackId.None;
+
+        /// <summary>Current ducking multiplier applied to music (1 = no ducking).</summary>
+        public float MusicDuckFactor => duckCurrent;
+
+        /// <summary>The music level actually being sent to the speakers right now (excluding master).</summary>
+        public float CurrentMusicVolume => musicSource != null ? musicSource.volume : 0f;
+
+        public bool IsAnnouncerSpeaking => announcerSpeaking;
+
+        /// <summary>Lets the Commentary Director duck the music while an announcer is speaking.</summary>
+        public static void SetAnnouncerSpeaking(bool speaking)
+        {
+            if (Instance != null)
+            {
+                Instance.announcerSpeaking = speaking;
+            }
+        }
 
         /// <summary>Events and tracks that had no clip when the manager started.</summary>
         public IReadOnlyList<string> MissingClips => missingClips;
@@ -120,6 +155,30 @@ namespace BikiniWipeout
 
             ReportMissingClips();
             IsInitialized = true;
+        }
+
+        private void Update()
+        {
+            // Unscaled: music keeps fading and ducking while the game is paused.
+            float dt = Time.unscaledDeltaTime;
+            float duckTarget = announcerSpeaking ? duckLevel : 1f;
+            float duckTime = announcerSpeaking ? duckAttackSeconds : duckReleaseSeconds;
+            duckCurrent = Mathf.MoveTowards(duckCurrent, duckTarget, dt / duckTime * Mathf.Max(0.0001f, 1f - duckLevel));
+
+            float fadeStep = musicFadeSeconds > 0f ? dt / musicFadeSeconds : 1f;
+            musicLevel = Mathf.MoveTowards(musicLevel, 1f, fadeStep);
+            if (fadingSource != null)
+            {
+                fadingLevel = Mathf.MoveTowards(fadingLevel, 0f, fadeStep);
+                if (fadingLevel <= 0f)
+                {
+                    fadingSource.Stop();
+                    fadingSource.clip = null;
+                    fadingMusic = null;
+                }
+            }
+
+            ApplyVolumes();
         }
 
         private void OnDestroy()
@@ -210,32 +269,51 @@ namespace BikiniWipeout
 
         private void PlayMusicInternal(MusicTrackId track)
         {
-            if (track == MusicTrackId.None)
+            AudioLibrary.MusicEntry entry = track != MusicTrackId.None && library != null ? library.FindMusic(track) : null;
+            if (entry != null && entry.clip == null)
             {
-                musicSource.Stop();
-                musicSource.clip = null;
-                currentMusic = null;
+                entry = null;
+            }
+
+            if (entry != null && currentMusic == entry && musicSource.isPlaying)
+            {
                 return;
             }
 
-            AudioLibrary.MusicEntry entry = library != null ? library.FindMusic(track) : null;
-            if (entry == null || entry.clip == null)
+            // Whatever was still fading out is cut; the playing track becomes the fade-out and the track
+            // on the other source fades in. With no fade time (or nothing playing) it simply switches.
+            AudioSource outgoing = musicSource;
+            AudioSource free = outgoing == fadeSourceA ? fadeSourceB : fadeSourceA;
+            if (fadingSource != null)
             {
-                // Missing music was already reported at startup; stop whatever belonged to the previous scene.
-                musicSource.Stop();
-                musicSource.clip = null;
-                currentMusic = null;
-                return;
+                fadingSource.Stop();
+                fadingSource.clip = null;
+                fadingSource = null;
+                fadingMusic = null;
             }
 
-            if (currentMusic == entry && musicSource.isPlaying)
+            if (currentMusic != null && outgoing.isPlaying && musicFadeSeconds > 0f)
             {
-                return;
+                fadingSource = outgoing;
+                fadingMusic = currentMusic;
+                fadingLevel = musicLevel;
+                musicSource = free;
+            }
+            else
+            {
+                outgoing.Stop();
+                outgoing.clip = null;
             }
 
             currentMusic = entry;
+            if (entry == null)
+            {
+                return;
+            }
+
             musicSource.clip = entry.clip;
             musicSource.loop = entry.loop;
+            musicLevel = fadingSource != null ? 0f : 1f;
             ApplyVolumes();
             musicSource.Play();
         }
@@ -246,20 +324,20 @@ namespace BikiniWipeout
             AudioListener.volume = Volumes.Master;
             if (musicSource != null)
             {
-                musicSource.volume = (currentMusic != null ? currentMusic.volume : 1f) * Volumes.MusicGain;
+                musicSource.volume = (currentMusic != null ? currentMusic.volume : 1f) * Volumes.MusicGain * musicLevel * duckCurrent;
+            }
+
+            if (fadingSource != null)
+            {
+                fadingSource.volume = (fadingMusic != null ? fadingMusic.volume : 1f) * Volumes.MusicGain * fadingLevel * duckCurrent;
             }
         }
 
         private void CreateSources()
         {
-            var musicObject = new GameObject("Music");
-            musicObject.transform.SetParent(transform, false);
-            musicSource = musicObject.AddComponent<AudioSource>();
-            musicSource.playOnAwake = false;
-            musicSource.loop = true;
-            musicSource.spatialBlend = 0f;
-            // Music and UI feedback keep playing while the game is paused.
-            musicSource.ignoreListenerPause = true;
+            fadeSourceA = CreateMusicSource("Music");
+            fadeSourceB = CreateMusicSource("MusicB");
+            musicSource = fadeSourceA;
 
             sfxSources = new AudioSource[Mathf.Max(1, sfxVoices)];
             for (int i = 0; i < sfxSources.Length; i++)
@@ -275,6 +353,19 @@ namespace BikiniWipeout
                 source.dopplerLevel = 0f;
                 sfxSources[i] = source;
             }
+        }
+
+        private AudioSource CreateMusicSource(string objectName)
+        {
+            var musicObject = new GameObject(objectName);
+            musicObject.transform.SetParent(transform, false);
+            AudioSource source = musicObject.AddComponent<AudioSource>();
+            source.playOnAwake = false;
+            source.loop = true;
+            source.spatialBlend = 0f;
+            // Music and UI feedback keep playing while the game is paused.
+            source.ignoreListenerPause = true;
+            return source;
         }
 
         private AudioSource NextVoice()
